@@ -3,11 +3,12 @@ package hu.pizza.pizzaproject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,10 +29,30 @@ public class HomepageController {
 
     public void menuItemPizzaAdatok(ActionEvent actionEvent) {
         //TODO: Pizza tábla megjelenítés
+        adatokBoxClear();
+        ListView lista = new ListView();
+        adatokBox.getChildren().add(lista);
+        Text text = new Text();
+        text.setText("Pizza adatok");
+        adatokBox.getChildren().add(text);
     }
 
     public void menuItemFelhasznalok(ActionEvent actionEvent) {
         //TODO: Felhasználók tábla megjelenítés
+        adatokBoxClear();
+        TableView lista = new TableView();
+
+        TableColumn<String ,String> column1 =
+                new TableColumn<>("Id");
+
+        column1.setCellValueFactory(
+                new PropertyValueFactory<>("Id"));
+
+        lista.getColumns().add(column1);
+        adatokBox.getChildren().add(lista);
+        Text text = new Text();
+        text.setText("Felhasználó adatok");
+        adatokBox.getChildren().add(text);
     }
 
     public void menuItemElozmenyek(ActionEvent actionEvent) {
@@ -71,5 +92,9 @@ public class HomepageController {
 
     public void torlesClick(ActionEvent actionEvent) {
         //TODO: pizza/ember törlése
+    }
+
+    private void adatokBoxClear(){
+        adatokBox.getChildren().clear();
     }
 }
