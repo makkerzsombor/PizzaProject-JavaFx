@@ -2,13 +2,17 @@ package hu.pizza.pizzaproject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,38 +32,153 @@ public class HomepageController {
     }
 
     public void menuItemPizzaAdatok(ActionEvent actionEvent) {
-        //TODO: Pizza tábla megjelenítés
         adatokBoxClear();
-        ListView lista = new ListView();
-        adatokBox.getChildren().add(lista);
+
+        // Tábla cím
         Text text = new Text();
         text.setText("Pizza adatok");
         adatokBox.getChildren().add(text);
-    }
+        adatokBox.setAlignment(Pos.CENTER);
 
-    public void menuItemFelhasznalok(ActionEvent actionEvent) {
-        //TODO: Felhasználók tábla megjelenítés
-        adatokBoxClear();
+        // TableView hozzáadás
         TableView lista = new TableView();
 
-        TableColumn<String ,String> column1 =
+        // id
+        TableColumn<String ,Integer> column1 =
                 new TableColumn<>("Id");
 
         column1.setCellValueFactory(
                 new PropertyValueFactory<>("Id"));
 
+        // pizza_name
+        TableColumn<String ,String> column2 =
+                new TableColumn<>("Pizza Name");
+
+        column2.setCellValueFactory(
+                new PropertyValueFactory<>("Pizza_name"));
+
+        // picture
+        TableColumn<String ,String> column3 =
+                new TableColumn<>("Picture");
+
+        column3.setCellValueFactory(
+                new PropertyValueFactory<>("Picture"));
+
+        // description
+        TableColumn<String ,String> column4 =
+                new TableColumn<>("Description");
+
+        column4.setCellValueFactory(
+                new PropertyValueFactory<>("Description"));
+
+        // rating
+        TableColumn<String ,Float> column5 =
+                new TableColumn<>("Rating");
+
+        column5.setCellValueFactory(
+                new PropertyValueFactory<>("Rating"));
+
+        // price
+        TableColumn<String ,Float> column6 =
+                new TableColumn<>("Price");
+
+        column6.setCellValueFactory(
+                new PropertyValueFactory<>("Price"));
+
         lista.getColumns().add(column1);
+        lista.getColumns().add(column2);
+        lista.getColumns().add(column3);
+        lista.getColumns().add(column4);
+        lista.getColumns().add(column5);
+        lista.getColumns().add(column6);
+
+        //TODO: Pizzák lekérése backendből
+        Pizza pizza = new Pizza(1, "sajtos", "sajtospizza.png", "Finom sajtos pizza", 4.5, 2500);
+
+        lista.getItems().add(pizza);
+        lista.setMinHeight(630);
+        text.setFont(Font.font(15));
         adatokBox.getChildren().add(lista);
-        Text text = new Text();
-        text.setText("Felhasználó adatok");
-        adatokBox.getChildren().add(text);
     }
 
-    public void menuItemElozmenyek(ActionEvent actionEvent) {
-        //TODO: Elözmények tábla megjelenítés
+    public void menuItemFelhasznalok(ActionEvent actionEvent) {
+        adatokBoxClear();
+
+        // Tábla cím
+        Text text = new Text();
+        text.setText("Felhasználói adatok");
+        adatokBox.getChildren().add(text);
+        adatokBox.setAlignment(Pos.CENTER);
+
+        // TableView Hozzáadása
+        TableView lista = new TableView();
+
+        // Id
+        TableColumn<String ,Integer> column1 =
+                new TableColumn<>("Id");
+
+        column1.setCellValueFactory(
+                new PropertyValueFactory<>("Id"));
+
+        // Email
+        TableColumn<String ,String> column2 =
+                new TableColumn<>("Email");
+
+        column2.setCellValueFactory(
+                new PropertyValueFactory<>("Email"));
+
+        // Password
+        TableColumn<String ,String> column3 =
+                new TableColumn<>("Password");
+
+        column3.setCellValueFactory(
+                new PropertyValueFactory<>("Password"));
+
+        // Admin
+        TableColumn<String ,Boolean> column4=
+                new TableColumn<>("Admin");
+
+        column4.setCellValueFactory(
+                new PropertyValueFactory<>("Admin"));
+
+        // FirstName
+        TableColumn<String ,String> column5 =
+                new TableColumn<>("First Name");
+
+        column5.setCellValueFactory(
+                new PropertyValueFactory<>("first_name"));
+
+        // LastName
+        TableColumn<String ,String> column6 =
+                new TableColumn<>("Last Name");
+
+        column6.setCellValueFactory(
+                new PropertyValueFactory<>("last_name"));
+
+
+        lista.getColumns().add(column1);
+        lista.getColumns().add(column2);
+        lista.getColumns().add(column3);
+        lista.getColumns().add(column4);
+        lista.getColumns().add(column5);
+        lista.getColumns().add(column6);
+
+        //TODO:  Userek lekérése backendből
+        User user = new User(1, "example@gmail.com", "Ez egy titkosított jelszó", true, "Makker", "Zsombor");
+
+        lista.getItems().add(user);
+        lista.setMinHeight(630);
+        text.setFont(Font.font(15));
+        adatokBox.getChildren().add(lista);
+    }
+
+    public void menuItemStatusz(ActionEvent actionEvent) {
+        //TODO: Státusz még megbeszélésre szorul
     }
 
     public void kilepesClick(ActionEvent actionEvent) {
+        //TODO: Esetleges token eldobása
+
         // Visszalépés a login windowra
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
         Scene scene = null;

@@ -23,7 +23,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                       <MenuItem mnemonicParsing="false" onAction="#menuItemFelhasznalok" style="-fx-padding: 0 50 0 0;" text="Felhasználok" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#menuItemElozmenyek" style="-fx-padding: 0 50 0 0;" text="Előzmények" />
+                        <MenuItem mnemonicParsing="false" onAction="#menuItemStatusz" style="-fx-padding: 0 50 0 0;" text="Pizza Státusz" />
                     </items>
                      <HBox.margin>
                         <Insets left="30.0" top="35.0" />
@@ -62,7 +62,7 @@
                <children>
                   <TextField fx:id="keresoField" promptText="Név:">
                      <VBox.margin>
-                        <Insets top="100.0" />
+                        <Insets left="10.0" top="100.0" />
                      </VBox.margin>
                      <font>
                         <Font size="15.0" />
@@ -91,7 +91,10 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="adatokBox" prefHeight="668.0" prefWidth="824.0" />
+            <VBox fx:id="adatokBox" maxWidth="804.0" prefHeight="668.0" prefWidth="804.0">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin></VBox>
          </children>
       </HBox>
    </children>

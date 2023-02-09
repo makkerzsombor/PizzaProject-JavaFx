@@ -5,10 +5,10 @@ public class Pizza {
     private String pizza_name;
     private String picture;
     private String description;
-    private float rating;
+    private double rating;
     private int price;
 
-    public Pizza(int id, String pizza_name, String picture, String description, float rating, int price) {
+    public Pizza(int id, String pizza_name, String picture, String description, double rating, int price) {
         this.id = id;
         this.pizza_name = pizza_name;
         this.picture = picture;
@@ -52,11 +52,11 @@ public class Pizza {
         this.description = description;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
