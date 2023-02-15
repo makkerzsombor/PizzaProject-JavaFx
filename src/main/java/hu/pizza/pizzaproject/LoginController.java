@@ -56,7 +56,7 @@ public class LoginController {
     }
 
     public void loginClick(ActionEvent actionEvent) {
-        //TODO: Ellenörzés
+        //TODO: Backendbe kell egy admin login is
 
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
@@ -118,9 +118,6 @@ public class LoginController {
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        // token átvitele
-
 
         // Átlépés a másik windowra
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("homepage-view.fxml"));

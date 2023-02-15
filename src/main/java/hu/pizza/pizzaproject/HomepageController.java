@@ -38,40 +38,7 @@ public class HomepageController {
         //TODO: token fogadása.
         System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
 
-        /*CompletableFuture<HttpResponse<String>> loginResponseFuture = httpClient.sendAsync(loginRequest, HttpResponse.BodyHandlers.ofString());
-        String jwtToken = null;
-        try {
-            jwtToken = loginResponseFuture.thenApply(HttpResponse::body).get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
 
-        // Send a GET request to the /data endpoint with the JWT token to get the user information
-        HttpRequest dataRequest = null;
-        try {
-            dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(baseUrl + "/data"))
-                    .header("Authorization", "Bearer " + jwtToken)
-                    .GET()
-                    .build();
-            System.out.println(jwtToken);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        CompletableFuture<HttpResponse<String>> dataResponseFuture = httpClient.sendAsync(dataRequest, HttpResponse.BodyHandlers.ofString());
-        String userDataJson = null;
-        try {
-            userDataJson = dataResponseFuture.thenApply(HttpResponse::body).get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Print the user information
-        System.out.println(userDataJson);*/
     }
 
 
