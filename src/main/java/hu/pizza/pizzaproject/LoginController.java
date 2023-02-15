@@ -1,6 +1,8 @@
 package hu.pizza.pizzaproject;
 
 import com.google.gson.Gson;
+import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
+import hu.pizza.pizzaproject.Model.JwtToken;
 import hu.pizza.pizzaproject.Model.LoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +23,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class LoginController {
 
@@ -36,6 +36,8 @@ public class LoginController {
     private Button loginButton;
 
     private static final String LOGIN_API_URL = "http://localhost:8080/user";
+
+    private JwtToken Token = new JwtToken();
 
     @FXML
     private void initialize(){
@@ -72,20 +74,17 @@ public class LoginController {
         // Ez a token tovább küldött json file:
         String email = emailField.getText();
         String password = passwordField.getText();
-        /*String json = "{ \"email\" :" + "\"" + email + "\","
-                + "\"password\"" + ": \"" + password + "\" }";*/
 
-
+        // Login request léthezása
          LoginRequest loginRequest = new LoginRequest();
          loginRequest.setEmail(email);
          loginRequest.setPassword(password);
 
         //new gson to json
-
         Gson converter = new Gson();
         String toPublisher = (converter.toJson(loginRequest));
-        // ezt adom a bodypublishernek lejebb
 
+        // Http cliens létrehozása
         HttpClient httpClient = HttpClient.newHttpClient();
 
         // Loginrequest (POST)
@@ -103,6 +102,7 @@ public class LoginController {
 
             if (response.statusCode() == 200){
                 System.out.println("Sikeres token kreálás");
+                ApplicationConfiguration.setJwtToken(converter.fromJson(response.body(), JwtToken.class));
             }else if(response.statusCode() == 400){
                 System.out.println("rossz syntax / request");
                 return;
@@ -119,42 +119,8 @@ public class LoginController {
             throw new RuntimeException(e);
         }
 
+        // token átvitele
 
-
-        /*CompletableFuture<HttpResponse<String>> loginResponseFuture = httpClient.sendAsync(loginRequest, HttpResponse.BodyHandlers.ofString());
-        String jwtToken = null;
-        try {
-            jwtToken = loginResponseFuture.thenApply(HttpResponse::body).get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Send a GET request to the /data endpoint with the JWT token to get the user information
-        HttpRequest dataRequest = null;
-        try {
-            dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(baseUrl + "/data"))
-                    .header("Authorization", "Bearer " + jwtToken)
-                    .GET()
-                    .build();
-            System.out.println(jwtToken);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        CompletableFuture<HttpResponse<String>> dataResponseFuture = httpClient.sendAsync(dataRequest, HttpResponse.BodyHandlers.ofString());
-        String userDataJson = null;
-        try {
-            userDataJson = dataResponseFuture.thenApply(HttpResponse::body).get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Print the user information
-        System.out.println(userDataJson);*/
 
         // Átlépés a másik windowra
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("homepage-view.fxml"));
