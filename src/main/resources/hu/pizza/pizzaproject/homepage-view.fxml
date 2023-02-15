@@ -34,9 +34,9 @@
                   </MenuButton>
                </children>
             </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="324.0" spacing="20.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="900.0" spacing="20.0">
                <children>
-                  <Label minHeight="30.0" text="Üdvözöljük kedves xy">
+                  <Label fx:id="felsoNev" minHeight="30.0" prefWidth="500.0" text="Üdvözöljük kedves xy">
                      <HBox.margin>
                         <Insets top="35.0" />
                      </HBox.margin>

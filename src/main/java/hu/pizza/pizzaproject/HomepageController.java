@@ -16,6 +16,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class HomepageController {
 
@@ -25,11 +29,16 @@ public class HomepageController {
     private VBox adatokBox;
     @FXML
     private Button kilepesButton;
+    @FXML
+    private Label felsoNev;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         //TODO: Név betöltés jobb fentre.
     }
+
+
+
 
     public void menuItemPizzaAdatok(ActionEvent actionEvent) {
         adatokBoxClear();
