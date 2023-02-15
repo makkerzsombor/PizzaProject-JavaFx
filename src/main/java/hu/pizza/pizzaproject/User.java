@@ -16,7 +16,9 @@ public class User {
         this.first_name = first_name;
         this.last_name = last_name;
     }
-    public User() {
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public int getId() {
