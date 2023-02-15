@@ -1,7 +1,6 @@
 package hu.pizza.pizzaproject;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import hu.pizza.pizzaproject.Model.LoginRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,7 +35,7 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    private static final String LOGIN_API_URL = "http://localhost:8080/";
+    private static final String LOGIN_API_URL = "http://localhost:8080/user";
 
     @FXML
     private void initialize(){
@@ -69,49 +68,51 @@ public class LoginController {
                     "Please enter a password first!");
             return;
         }
-        // URL:
-        String baseUrl = "http://localhost:8080/user";
 
         // Ez a token tovább küldött json file:
         String email = emailField.getText();
         String password = passwordField.getText();
-        String json = "{ \"email\" :" + "\"" + email + "\","
-                + "\"password\"" + ": \"" + password + "\" }";
+        /*String json = "{ \"email\" :" + "\"" + email + "\","
+                + "\"password\"" + ": \"" + password + "\" }";*/
 
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(email);
-        loginRequest.setPassword(password);
+
+         LoginRequest loginRequest = new LoginRequest();
+         loginRequest.setEmail(email);
+         loginRequest.setPassword(password);
 
         //new gson to json
-        Gson converter = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
+        Gson converter = new Gson();
+        String toPublisher = (converter.toJson(loginRequest));
         // ezt adom a bodypublishernek lejebb
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
         // Loginrequest (POST)
-        HttpRequest loginRequest = null;
+        HttpRequest loginRequestPost = null;
         try {
-            System.out.println(HttpRequest.BodyPublishers.ofString(json));
-            loginRequest = HttpRequest.newBuilder()
-                    .uri(new URI(baseUrl + "/login"))
+            loginRequestPost = HttpRequest.newBuilder()
+                    .uri(new URI(LOGIN_API_URL + "/login"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .POST(HttpRequest.BodyPublishers.ofString(toPublisher))
                     .build();
 
-            HttpResponse<String> response = httpClient.send(loginRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(loginRequestPost, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println(loginRequest.headers() + "\n" + loginRequest.uri());
+            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri());
 
             if (response.statusCode() == 200){
                 System.out.println("Sikeres token kreálás");
-                System.out.println();
             }else if(response.statusCode() == 400){
                 System.out.println("rossz syntax / request");
+                return;
             }else if(response.statusCode() == 404){
                 System.out.println("Not found");
+                return;
             }else{
-                System.out.println("Valami nem okés");
+                showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+                        "Your email/password is incorrect");
+                return;
             }
 
         } catch (URISyntaxException | IOException | InterruptedException e) {

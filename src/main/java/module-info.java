@@ -7,4 +7,5 @@ module hu.pizza.pizzaproject {
 
     opens hu.pizza.pizzaproject to javafx.fxml;
     exports hu.pizza.pizzaproject;
+    opens hu.pizza.pizzaproject.Model to com.google.gson;
 }

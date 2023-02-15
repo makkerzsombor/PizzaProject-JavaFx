@@ -1,7 +1,8 @@
 package hu.pizza.pizzaproject.Model;
 
-public class LoginRequest {
+import com.google.gson.annotations.Expose;
 
+public class LoginRequest {
     private String email;
     private String password;
 
