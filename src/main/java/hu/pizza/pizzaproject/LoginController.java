@@ -37,8 +37,6 @@ public class LoginController {
 
     private static final String LOGIN_API_URL = "http://localhost:8080/user";
 
-    private JwtToken Token = new JwtToken();
-
     @FXML
     private void initialize(){
         logoView.setImage(null);
