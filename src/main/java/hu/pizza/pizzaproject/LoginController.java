@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Objects;
 
 public class LoginController {
 
@@ -122,6 +123,7 @@ public class LoginController {
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 1024, 768);
+            scene.getStylesheets().add("style.css");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

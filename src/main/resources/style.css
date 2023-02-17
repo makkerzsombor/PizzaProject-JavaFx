@@ -1,0 +1,48 @@
+.nagyVbox{
+    -fx-background-image: url("bg1.png");
+}
+
+.kereses{
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.modositas{
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.torles{
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.kilepes{
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.menupontok{
+
+}
+
+.koszones{
+    -fx-text-fill: black;
+}
+
+.gridpane{
+    -fx-background-image: url("bg1.png");
+}
+
+.belepes{
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.emailField{
+
+}
+
+.passwordField{
+
+}

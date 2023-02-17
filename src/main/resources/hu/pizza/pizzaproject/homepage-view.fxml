@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.HomepageController">
+<VBox fx:id="ablak" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="nagyVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.HomepageController">
    <children>
-      <HBox prefHeight="100.0" prefWidth="1024.0">
+      <HBox prefHeight="50.0" prefWidth="1024.0" styleClass="hbox">
          <children>
-            <HBox prefHeight="100.0" prefWidth="700.0">
+            <HBox prefHeight="100.0" prefWidth="700.0" styleClass="hbox">
                <children>
-                  <MenuButton minHeight="30.0" mnemonicParsing="false" prefWidth="130.0" text="Menüpontok">
+                  <MenuButton minHeight="30.0" mnemonicParsing="false" prefWidth="130.0" styleClass="menupontok" text="Menüpontok">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#menuItemPizzaAdatok" style="-fx-padding: 0 50 0 0;" text="Pizza Adatok" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -26,7 +26,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#menuItemStatusz" style="-fx-padding: 0 50 0 0;" text="Pizza Státusz" />
                     </items>
                      <HBox.margin>
-                        <Insets left="30.0" top="35.0" />
+                        <Insets left="30.0" top="10.0" />
                      </HBox.margin>
                      <font>
                         <Font size="15.0" />
@@ -34,19 +34,19 @@
                   </MenuButton>
                </children>
             </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="900.0" spacing="20.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="900.0" spacing="20.0" styleClass="hbox">
                <children>
-                  <Label fx:id="felsoNev" minHeight="30.0" prefWidth="500.0" text="Üdvözöljük kedves xy">
+                  <Label fx:id="felsoNev" minHeight="30.0" prefWidth="500.0" styleClass="koszones" text="Üdvözöljük kedves xy">
                      <HBox.margin>
-                        <Insets top="35.0" />
+                        <Insets top="10.0" />
                      </HBox.margin>
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" text="Kilépés">
+                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" styleClass="kilepes" text="Kilépés">
                      <HBox.margin>
-                        <Insets right="10.0" top="35.0" />
+                        <Insets right="10.0" top="10.0" />
                      </HBox.margin>
                      <font>
                         <Font size="15.0" />
@@ -58,29 +58,29 @@
       </HBox>
       <HBox prefHeight="668.0" prefWidth="1024.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="668.0" prefWidth="200.0" spacing="20.0">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="720.0" minHeight="720.0" prefHeight="720.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
                <children>
-                  <TextField fx:id="keresoField" promptText="Név:">
+                  <TextField fx:id="keresoField" maxWidth="180.0" prefWidth="180.0" promptText="Név:" styleClass="keresoField">
                      <VBox.margin>
-                        <Insets left="10.0" top="100.0" />
+                        <Insets left="5.0" />
                      </VBox.margin>
                      <font>
                         <Font size="15.0" />
                      </font>
                   </TextField>
-                  <Button mnemonicParsing="false" onAction="#keresoClick" text="Keresés">
+                  <Button mnemonicParsing="false" onAction="#keresoClick" styleClass="kereses" text="Keresés">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#modositasClick" text="Módosítás">
+                  <Button mnemonicParsing="false" onAction="#modositasClick" styleClass="modositas" text="Módosítás">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#torlesClick" text="Törlés">
+                  <Button mnemonicParsing="false" onAction="#torlesClick" styleClass="torles" text="Törlés">
                      <VBox.margin>
-                        <Insets />
+                        <Insets bottom="100.0" />
                      </VBox.margin>
                      <font>
                         <Font size="15.0" />
@@ -91,7 +91,7 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="adatokBox" maxWidth="804.0" prefHeight="668.0" prefWidth="804.0">
+            <VBox fx:id="adatokBox" maxWidth="804.0" prefHeight="668.0" prefWidth="804.0" styleClass="mainVbox">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></VBox>

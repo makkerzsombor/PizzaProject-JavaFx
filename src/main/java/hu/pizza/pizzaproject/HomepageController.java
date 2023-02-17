@@ -32,13 +32,13 @@ public class HomepageController {
     private Button kilepesButton;
     @FXML
     private Label felsoNev;
+    @FXML
+    private VBox ablak;
 
     @FXML
     private void initialize() {
         //TODO: token fogadása.
         System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
-
-
     }
 
 
@@ -206,6 +206,7 @@ public class HomepageController {
         LoginController controller = fxmlLoader.getController();
         stage.setResizable(false);
         Image icon = new Image("kesz_arany_logo.png");
+        scene.getStylesheets().add("style.css");
         stage.getIcons().add(icon);
         stage.show();
 
