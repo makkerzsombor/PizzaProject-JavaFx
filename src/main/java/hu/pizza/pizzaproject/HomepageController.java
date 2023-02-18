@@ -1,5 +1,6 @@
 package hu.pizza.pizzaproject;
 
+import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -16,6 +17,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class HomepageController {
 
@@ -25,11 +30,19 @@ public class HomepageController {
     private VBox adatokBox;
     @FXML
     private Button kilepesButton;
+    @FXML
+    private Label felsoNev;
+    @FXML
+    private VBox ablak;
 
     @FXML
-    private void initialize(){
-        //TODO: Név betöltés jobb fentre.
+    private void initialize() {
+        //TODO: token fogadása.
+        System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
     }
+
+
+
 
     public void menuItemPizzaAdatok(ActionEvent actionEvent) {
         adatokBoxClear();
@@ -193,6 +206,7 @@ public class HomepageController {
         LoginController controller = fxmlLoader.getController();
         stage.setResizable(false);
         Image icon = new Image("kesz_arany_logo.png");
+        scene.getStylesheets().add("style.css");
         stage.getIcons().add(icon);
         stage.show();
 

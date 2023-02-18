@@ -17,7 +17,7 @@ public class Application extends javafx.application.Application {
         Image icon = new Image("kesz_arany_logo.png");
         stage.getIcons().add(icon);
         stage.setResizable(false);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        scene.getStylesheets().add("style.css");
         stage.show();
     }
 
