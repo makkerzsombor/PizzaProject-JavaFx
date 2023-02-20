@@ -36,13 +36,13 @@ public class HomepageController {
     private void initialize() {
         //TODO: token fogadása.
         System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
-        JwtToken jwttoken = new JwtToken();
-        jwttoken.setJwtToken("");
-        ApplicationConfiguration.setJwtToken(jwttoken);
+
     }
 
     public void kilepesClick(ActionEvent actionEvent) {
-        //TODO: Esetleges token eldobása
+        JwtToken jwttoken = new JwtToken();
+        jwttoken.setJwtToken("");
+        ApplicationConfiguration.setJwtToken(jwttoken);
 
         // Visszalépés a login windowra
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
