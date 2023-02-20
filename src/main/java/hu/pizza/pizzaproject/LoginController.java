@@ -43,6 +43,7 @@ public class LoginController {
         logoView.setImage(null);
         Image kepem = new Image("kesz_arany_logo.png");
         logoView.setImage(kepem);
+        System.out.println(ApplicationConfiguration.getJwtToken());
     }
 
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
@@ -55,8 +56,6 @@ public class LoginController {
     }
 
     public void loginClick(ActionEvent actionEvent) {
-        //TODO: Backendbe kell egy admin login is
-
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
         if (emailField.getText().isEmpty()) {
@@ -90,7 +89,7 @@ public class LoginController {
         HttpRequest loginRequestPost = null;
         try {
             loginRequestPost = HttpRequest.newBuilder()
-                    .uri(new URI(LOGIN_API_URL + "/login"))
+                    .uri(new URI(LOGIN_API_URL + "/admin-login"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(toPublisher))
                     .build();
@@ -108,6 +107,9 @@ public class LoginController {
             }else if(response.statusCode() == 404){
                 System.out.println("Not found");
                 return;
+            }else if(response.statusCode() == 404){
+                showAlert(Alert.AlertType.ERROR, owner, "Login Error!",
+                        "You are not an admin!");
             }else{
                 showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                         "Your email/password is incorrect");

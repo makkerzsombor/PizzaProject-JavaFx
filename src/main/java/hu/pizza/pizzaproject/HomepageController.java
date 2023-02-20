@@ -1,26 +1,23 @@
 package hu.pizza.pizzaproject;
 
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
+import hu.pizza.pizzaproject.Model.JwtToken;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomepageController {
 
@@ -39,12 +36,67 @@ public class HomepageController {
     private void initialize() {
         //TODO: token fogadása.
         System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
+        JwtToken jwttoken = new JwtToken();
+        jwttoken.setJwtToken("");
+        ApplicationConfiguration.setJwtToken(jwttoken);
+    }
+
+    public void kilepesClick(ActionEvent actionEvent) {
+        //TODO: Esetleges token eldobása
+
+        // Visszalépés a login windowra
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 1024, 768);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Pizza Váltó");
+        stage.setScene(scene);
+        LoginController controller = fxmlLoader.getController();
+        stage.setResizable(false);
+        Image icon = new Image("kesz_arany_logo.png");
+        scene.getStylesheets().add("style.css");
+        stage.getIcons().add(icon);
+        stage.show();
+
+        // Ablak bezárása
+        Stage stagebezaras = (Stage) kilepesButton.getScene().getWindow();
+        stagebezaras.close();
+    }
+
+    public void keresoClick(ActionEvent actionEvent) {
+        //TODO: megkeresni a keresoField elemét a felhasználok táblázatból és az adatBox-ba rakja
+    }
+
+    public void modositasClick(ActionEvent actionEvent) {
+        //TODO: ha kivan jelölve 1 pizza/ember adatBox-ba form létrehozás modosításhoz
+    }
+
+    public void torlesClick(ActionEvent actionEvent) {
+        //TODO: pizza/ember törlése
+    }
+
+    private void adatokBoxClear(){
+        adatokBox.getChildren().clear();
     }
 
 
+    public void pizzaListing(ActionEvent actionEvent) {
+        //TODO: Pizza kilistázás
+    }
 
+    public void pizzaChanges(ActionEvent actionEvent) {
+        //TODO: Pizza módosítás form
+    }
 
-    public void menuItemPizzaAdatok(ActionEvent actionEvent) {
+    public void pizzaCreate(ActionEvent actionEvent) {
+        //TODO: Pizza létrehozás form
+    }
+
+    public void userListing(ActionEvent actionEvent) {
         adatokBoxClear();
 
         // Tábla cím
@@ -105,129 +157,13 @@ public class HomepageController {
         lista.getColumns().add(column5);
         lista.getColumns().add(column6);
 
-        //TODO: Pizzák lekérése backendből
-        Pizza pizza = new Pizza(1, "sajtos", "sajtospizza.png", "Finom sajtos pizza", 4.5, 2500);
+        // Lista<User>
+        List<User> userLista = new ArrayList<User>();
 
-        lista.getItems().add(pizza);
-        lista.setMinHeight(630);
-        text.setFont(Font.font(15));
-        adatokBox.getChildren().add(lista);
-    }
+        // HTTP Request
+        HttpRequest usersrequest = null;
 
-    public void menuItemFelhasznalok(ActionEvent actionEvent) {
-        adatokBoxClear();
+        //TODO: userRequest
 
-        // Tábla cím
-        Text text = new Text();
-        text.setText("Felhasználói adatok");
-        adatokBox.getChildren().add(text);
-        adatokBox.setAlignment(Pos.CENTER);
-
-        // TableView Hozzáadása
-        TableView lista = new TableView();
-
-        // Id
-        TableColumn<String ,Integer> column1 =
-                new TableColumn<>("Id");
-
-        column1.setCellValueFactory(
-                new PropertyValueFactory<>("Id"));
-
-        // Email
-        TableColumn<String ,String> column2 =
-                new TableColumn<>("Email");
-
-        column2.setCellValueFactory(
-                new PropertyValueFactory<>("Email"));
-
-        // Password
-        TableColumn<String ,String> column3 =
-                new TableColumn<>("Password");
-
-        column3.setCellValueFactory(
-                new PropertyValueFactory<>("Password"));
-
-        // Admin
-        TableColumn<String ,Boolean> column4=
-                new TableColumn<>("Admin");
-
-        column4.setCellValueFactory(
-                new PropertyValueFactory<>("Admin"));
-
-        // FirstName
-        TableColumn<String ,String> column5 =
-                new TableColumn<>("First Name");
-
-        column5.setCellValueFactory(
-                new PropertyValueFactory<>("first_name"));
-
-        // LastName
-        TableColumn<String ,String> column6 =
-                new TableColumn<>("Last Name");
-
-        column6.setCellValueFactory(
-                new PropertyValueFactory<>("last_name"));
-
-
-        lista.getColumns().add(column1);
-        lista.getColumns().add(column2);
-        lista.getColumns().add(column3);
-        lista.getColumns().add(column4);
-        lista.getColumns().add(column5);
-        lista.getColumns().add(column6);
-
-        //TODO:  Userek lekérése backendből
-        User user = new User(1, "example@gmail.com", "Ez egy titkosított jelszó", true, "Makker", "Zsombor");
-
-        lista.getItems().add(user);
-        lista.setMinHeight(630);
-        text.setFont(Font.font(15));
-        adatokBox.getChildren().add(lista);
-    }
-
-    public void menuItemStatusz(ActionEvent actionEvent) {
-        //TODO: Státusz még megbeszélésre szorul
-    }
-
-    public void kilepesClick(ActionEvent actionEvent) {
-        //TODO: Esetleges token eldobása
-
-        // Visszalépés a login windowra
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load(), 1024, 768);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Pizza Váltó");
-        stage.setScene(scene);
-        LoginController controller = fxmlLoader.getController();
-        stage.setResizable(false);
-        Image icon = new Image("kesz_arany_logo.png");
-        scene.getStylesheets().add("style.css");
-        stage.getIcons().add(icon);
-        stage.show();
-
-        // Ablak bezárása
-        Stage stagebezaras = (Stage) kilepesButton.getScene().getWindow();
-        stagebezaras.close();
-    }
-
-    public void keresoClick(ActionEvent actionEvent) {
-        //TODO: megkeresni a keresoField elemét a felhasználok táblázatból és az adatBox-ba rakja
-    }
-
-    public void modositasClick(ActionEvent actionEvent) {
-        //TODO: ha kivan jelölve 1 pizza/ember adatBox-ba form létrehozás modosításhoz
-    }
-
-    public void torlesClick(ActionEvent actionEvent) {
-        //TODO: pizza/ember törlése
-    }
-
-    private void adatokBoxClear(){
-        adatokBox.getChildren().clear();
     }
 }
