@@ -1,14 +1,14 @@
 package hu.pizza.pizzaproject;
 
 public class User {
-    private int id;
+    private Long id;
     private String email;
     private String password;
     private boolean admin;
     private String first_name;
     private String last_name;
 
-    public User(int id, String email, String password, boolean admin, String first_name, String last_name) {
+    public User(Long id, String first_name, String last_name, String email, String password, boolean admin) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -21,11 +21,11 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

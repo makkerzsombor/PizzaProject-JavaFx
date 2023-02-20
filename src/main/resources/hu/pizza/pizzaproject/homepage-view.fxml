@@ -10,21 +10,30 @@
 
 <VBox fx:id="ablak" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="nagyVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.HomepageController">
    <children>
-      <HBox prefHeight="50.0" prefWidth="1024.0" styleClass="hbox">
+      <HBox prefHeight="150.0" prefWidth="1024.0" styleClass="hbox">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="260.0" prefWidth="200.0">
+            <VBox alignment="TOP_CENTER" minHeight="150.0" prefHeight="300.0" prefWidth="200.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#pizzaListing" text="Pizza listázás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#pizzaChanges" text="Pizza módosítás" />
-                  <Button mnemonicParsing="false" onAction="#pizzaCreate" text="Pizza hozzáadás" />
-                  <Button mnemonicParsing="false" onAction="#userListing" text="User listázás" />
+                  <Button mnemonicParsing="false" onAction="#pizzaChanges" text="Pizza módosítás">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Button>
+                  <Button mnemonicParsing="false" onAction="#pizzaCreate" text="Pizza hozzáadás">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Button>
+                  <Button mnemonicParsing="false" onAction="#userListing" text="User listázás">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Button>
                </children>
             </VBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
+            <HBox alignment="TOP_RIGHT" prefHeight="150.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
                <children>
                   <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="koszones" text="Üdvözöljük kedves xy">
                      <HBox.margin>
@@ -49,9 +58,9 @@
             </HBox>
          </children>
       </HBox>
-      <HBox maxHeight="500.0" minHeight="608.0" prefHeight="500.0" prefWidth="1024.0">
+      <HBox maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="1024.0">
          <children>
-            <VBox alignment="BOTTOM_CENTER" maxHeight="720.0" minHeight="720.0" prefHeight="720.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
                <children>
                   <TextField fx:id="keresoField" maxWidth="180.0" prefWidth="180.0" promptText="Név:" styleClass="keresoField">
                      <VBox.margin>
@@ -84,7 +93,7 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="adatokBox" maxWidth="804.0" prefHeight="668.0" prefWidth="804.0" styleClass="mainVbox">
+            <VBox fx:id="adatokBox" maxHeight="618.0" maxWidth="804.0" minHeight="618.0" prefHeight="618.0" prefWidth="804.0" styleClass="mainVbox">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></VBox>

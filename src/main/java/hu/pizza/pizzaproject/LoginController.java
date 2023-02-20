@@ -43,7 +43,6 @@ public class LoginController {
         logoView.setImage(null);
         Image kepem = new Image("kesz_arany_logo.png");
         logoView.setImage(kepem);
-        System.out.println(ApplicationConfiguration.getJwtToken());
     }
 
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
@@ -96,7 +95,7 @@ public class LoginController {
 
             HttpResponse<String> response = httpClient.send(loginRequestPost, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri());
+            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri() + "Ez a header + uri");
 
             if (response.statusCode() == 200){
                 System.out.println("Sikeres token kreálás");

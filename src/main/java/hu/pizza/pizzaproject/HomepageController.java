@@ -1,9 +1,13 @@
 package hu.pizza.pizzaproject;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,11 +15,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +42,12 @@ public class HomepageController {
     @FXML
     private VBox ablak;
 
+    private String URL = "http://localhost:8080/user";
+
     @FXML
     private void initialize() {
-        //TODO: token fogadása.
         System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
+        //TODO: Emberünk nevének kiírása
 
     }
 
@@ -101,54 +113,57 @@ public class HomepageController {
 
         // Tábla cím
         Text text = new Text();
-        text.setText("Pizza adatok");
+        text.setText("User adatok");
+        adatokBox.setMargin(text, new Insets(0, 0, 10, 0));
+        text.setStyle("-fx-fill: white;");
+        text.setFont(Font.font(15));
         adatokBox.getChildren().add(text);
-        adatokBox.setAlignment(Pos.CENTER);
+        adatokBox.setAlignment(Pos.TOP_CENTER);
 
         // TableView hozzáadás
         TableView lista = new TableView();
 
         // id
-        TableColumn<String ,Integer> column1 =
+        TableColumn<User ,Integer> column1 =
                 new TableColumn<>("Id");
 
         column1.setCellValueFactory(
                 new PropertyValueFactory<>("Id"));
 
-        // pizza_name
-        TableColumn<String ,String> column2 =
-                new TableColumn<>("Pizza Name");
+        // email
+        TableColumn<User ,String> column2 =
+                new TableColumn<>("Email");
 
         column2.setCellValueFactory(
-                new PropertyValueFactory<>("Pizza_name"));
+                new PropertyValueFactory<>("Email"));
 
-        // picture
-        TableColumn<String ,String> column3 =
-                new TableColumn<>("Picture");
+        // lastname
+        TableColumn<User ,String> column3 =
+                new TableColumn<>("Lastname");
 
         column3.setCellValueFactory(
-                new PropertyValueFactory<>("Picture"));
+                new PropertyValueFactory<>("last_name"));
 
-        // description
-        TableColumn<String ,String> column4 =
-                new TableColumn<>("Description");
+        // firstname
+        TableColumn<User ,String> column4 =
+                new TableColumn<>("Firstname");
 
         column4.setCellValueFactory(
-                new PropertyValueFactory<>("Description"));
+                new PropertyValueFactory<>("first_name"));
 
-        // rating
-        TableColumn<String ,Float> column5 =
-                new TableColumn<>("Rating");
+        // password
+        TableColumn<User ,String> column5 =
+                new TableColumn<>("Password");
 
         column5.setCellValueFactory(
-                new PropertyValueFactory<>("Rating"));
+                new PropertyValueFactory<>("password"));
 
-        // price
-        TableColumn<String ,Float> column6 =
-                new TableColumn<>("Price");
+        // admin
+        TableColumn<User ,Boolean> column6 =
+                new TableColumn<>("Admin");
 
         column6.setCellValueFactory(
-                new PropertyValueFactory<>("Price"));
+                new PropertyValueFactory<>("admin"));
 
         lista.getColumns().add(column1);
         lista.getColumns().add(column2);
@@ -157,13 +172,46 @@ public class HomepageController {
         lista.getColumns().add(column5);
         lista.getColumns().add(column6);
 
+        adatokBox.getChildren().add(lista);
+
+        // Create HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
         // Lista<User>
         List<User> userLista = new ArrayList<User>();
 
         // HTTP Request
         HttpRequest usersrequest = null;
 
-        //TODO: userRequest
+        // Gson létrehozása (kiolvasáshoz)
+        Gson converter = new Gson();
+
+        try {
+            // Prepare the request
+            usersrequest = HttpRequest.newBuilder()
+                    .uri(new URI(URL + "/get-all"))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(usersrequest, HttpResponse.BodyHandlers.ofString());
+
+            // Parse the response body into a List<User> object using Gson
+            Type userListType = new TypeToken<List<User>>(){}.getType();
+            userLista = converter.fromJson(response.body(), userListType);
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
+
+        /*// console kilistázás
+        for (User item : userLista) {
+            System.out.println(item.getId() + " " + item.getEmail() + " " + item.getLast_name() + " " + item.getFirst_name() + " " + item.getPassword());
+        }*/
+
+        // Listából tableView
+        lista.setItems(FXCollections.observableArrayList(userLista));
 
     }
 }
