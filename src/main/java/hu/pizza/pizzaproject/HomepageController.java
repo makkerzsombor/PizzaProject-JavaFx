@@ -46,9 +46,46 @@ public class HomepageController {
 
     @FXML
     private void initialize() {
-        System.out.printf(ApplicationConfiguration.getJwtToken().getJwtToken());
         //TODO: Emberünk nevének kiírása
 
+        // JWT token kiolvasás
+        String jsonToken = ApplicationConfiguration.getJwtToken().getJwtToken();
+
+        // User létre hozása
+        User user = new User();
+
+        // GSON converter
+        Gson converter = new Gson();
+
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(URL + "/data"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + jsonToken)
+                    .GET()
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+
+            // Parse the response body into a User object using Gson
+            System.out.println(response.body());
+            user = converter.fromJson(response.body(), User.class);
+
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
+
+
+        felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
     }
 
     public void kilepesClick(ActionEvent actionEvent) {
@@ -98,10 +135,6 @@ public class HomepageController {
 
     public void pizzaListing(ActionEvent actionEvent) {
         //TODO: Pizza kilistázás
-    }
-
-    public void pizzaChanges(ActionEvent actionEvent) {
-        //TODO: Pizza módosítás form
     }
 
     public void pizzaCreate(ActionEvent actionEvent) {
