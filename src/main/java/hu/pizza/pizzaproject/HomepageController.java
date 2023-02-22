@@ -5,10 +5,12 @@ import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -88,8 +90,6 @@ public class HomepageController {
             // Error
             throw new RuntimeException(e);
         }
-
-
         felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
     }
 
@@ -132,104 +132,144 @@ public class HomepageController {
         if (selectedIndex == -1){
             showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy elemet!");
         }else{
-            //TODO: modosítás ablak elkészítése
-
             // adatok mentése
             User selected = lista.getSelectionModel().getSelectedItem();
             User modifyingUser = new User(selected.getId(), selected.getFirst_name(), selected.getLast_name(), selected.getEmail(), selected.getPassword(), selected.isAdmin());
-
-            // Sceneben form létrehozása
-            VBox kisablakVbox = new VBox(10);
-            HBox firstNameSor = new HBox(10);
-            HBox lastNameSor = new HBox(10);
-            HBox emailSor = new HBox(10);
-            HBox passwordSor = new HBox(10);
-            HBox adminSor = new HBox(10);
-
-            // Labelek
-            Label firstName = new Label();
-            firstName.setText("Firstname:");
-            Label lastName = new Label();
-            lastName.setText("Lastname:");
-            Label email = new Label();
-            email.setText("Email:");
-            Label password = new Label();
-            password.setText("Password:");
-            Label admin = new Label();
-            admin.setText("Admin:");
-
-            // Inputok
-            TextField firstNameTextField = new TextField();
-            TextField lastNameTextField = new TextField();
-            TextField emailTextField = new TextField();
-            TextField passwordTextField = new TextField();
-            CheckBox adminCheckbox = new CheckBox();
-            Button keszButton = new Button();
-            // Inputokba value-k:
-            firstNameTextField.setText(modifyingUser.getFirst_name());
-            lastNameTextField.setText(modifyingUser.getLast_name());
-            emailTextField.setText(modifyingUser.getEmail());
-            passwordTextField.setText(modifyingUser.getPassword());
-            keszButton.setText("Mentés");
-            if (modifyingUser.isAdmin()){
-                adminCheckbox.setSelected(true);
-            }else{
-                adminCheckbox.setSelected(false);
-            }
-
-            // sceneClearing
-            adatokBoxClear();
-
-            // kialakítás design:
-            adatokBox.setAlignment(Pos.CENTER);
-            kisablakVbox.setAlignment(Pos.TOP_CENTER);
-
-            kisablakVbox.setPadding(new Insets(0, 320, 0, 0));
-            kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
-
-            // Hboxok
-            firstNameSor.setAlignment(Pos.TOP_RIGHT);
-            lastNameSor.setAlignment(Pos.TOP_RIGHT);
-            emailSor.setAlignment(Pos.TOP_RIGHT);
-            passwordSor.setAlignment(Pos.TOP_RIGHT);
-            adminSor.setAlignment(Pos.TOP_RIGHT);
-            // Kell Egy node a marginhoz
-
-            // labelek
-            firstName.setPadding(new Insets(10, 10, 0, 0));
-            lastName.setPadding(new Insets(10, 10, 0, 0));
-            email.setPadding(new Insets(10, 10, 0, 0));
-            password.setPadding(new Insets(10, 10, 0, 0));
-            admin.setPadding(new Insets(10, 10, 0, 0));
-
-            // Sorok:
-            firstNameSor.setPadding(new Insets(10, 0, 0, 0));
-
-            lastNameSor.setPadding(new Insets(10, 0, 0, 0));
-
-            emailSor.setPadding(new Insets(10, 0, 0, 0));
-
-            passwordSor.setPadding(new Insets(10, 0, 0, 0));
-
-            adminSor.setPadding(new Insets(10,0,0,0));
-
-            keszButton.setPadding(new Insets(0,20,0,20));
-
-
-            // Hboxokba label + inputok
-            firstNameSor.getChildren().addAll(firstName,firstNameTextField);
-            lastNameSor.getChildren().addAll(lastName,lastNameTextField);
-            emailSor.getChildren().addAll(email,emailTextField);
-            passwordSor.getChildren().addAll(password,passwordTextField);
-            adminSor.getChildren().addAll(admin,adminCheckbox);
-
-            // Vboxba a hboxok
-            kisablakVbox.getChildren().addAll(firstNameSor, lastNameSor, emailSor, passwordSor, adminSor, keszButton);
-            adatokBox.getChildren().add(kisablakVbox);
-
-            // Modosítások után backendre felrakás (json, és pontosasn egyezzen a User class mintájával)
-
+            modositasFormCreate(modifyingUser);
         }
+    }
+    private void modositasFormCreate(User modifyingUser){
+        // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
+        VBox kisablakVbox = new VBox(10);
+        HBox firstNameSor = new HBox(10);
+        HBox lastNameSor = new HBox(10);
+        HBox emailSor = new HBox(10);
+        HBox passwordSor = new HBox(10);
+        Label admin = new Label();
+        admin.setText("Admin:");
+        CheckBox adminCheckbox = new CheckBox();
+        HBox adminSor = new HBox(10, admin, adminCheckbox);
+        HBox.setMargin(adminCheckbox, new Insets(0,133,0,0));
+        Button keszButton = new Button();
+        HBox modositasSor = new HBox(keszButton);
+        HBox.setMargin(keszButton, new Insets(0,120,10,0));
+
+        // Labelek
+        Label firstName = new Label();
+        firstName.setText("Firstname:");
+        Label lastName = new Label();
+        lastName.setText("Lastname:");
+        Label email = new Label();
+        email.setText("Email:");
+        Label password = new Label();
+        password.setText("Password:");
+
+        // Inputok
+        TextField firstNameTextField = new TextField();
+        TextField lastNameTextField = new TextField();
+        TextField emailTextField = new TextField();
+        TextField passwordTextField = new TextField();
+
+        // Inputokba value-k:
+        firstNameTextField.setText(modifyingUser.getFirst_name());
+        lastNameTextField.setText(modifyingUser.getLast_name());
+        emailTextField.setText(modifyingUser.getEmail());
+        passwordTextField.setText(modifyingUser.getPassword());
+        keszButton.setText("Mentés");
+        if (modifyingUser.isAdmin()){
+            adminCheckbox.setSelected(true);
+        }else{
+            adminCheckbox.setSelected(false);
+        }
+
+        // sceneClearing
+        adatokBoxClear();
+
+        // kialakítás design:
+        adatokBox.setAlignment(Pos.CENTER);
+        kisablakVbox.setAlignment(Pos.TOP_CENTER);
+
+        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
+        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+
+        // Hboxok
+        firstNameSor.setAlignment(Pos.TOP_RIGHT);
+        lastNameSor.setAlignment(Pos.TOP_RIGHT);
+        emailSor.setAlignment(Pos.TOP_RIGHT);
+        passwordSor.setAlignment(Pos.TOP_RIGHT);
+        adminSor.setAlignment(Pos.TOP_RIGHT);
+        modositasSor.setAlignment(Pos.TOP_RIGHT);
+        // Kell Egy node a marginhoz
+
+        // labelek
+        firstName.setPadding(new Insets(0, 10, 0, 0));
+        lastName.setPadding(new Insets(0, 10, 0, 0));
+        email.setPadding(new Insets(0, 10, 0, 0));
+        password.setPadding(new Insets(0, 10, 0, 0));
+        admin.setPadding(new Insets(0, 10, 0, 0));
+        keszButton.setPadding(new Insets(0,20,0,20));
+
+        // Sorok:
+        firstNameSor.setPadding(new Insets(10, 0, 0, 0));
+        lastNameSor.setPadding(new Insets(10, 0, 0, 0));
+        emailSor.setPadding(new Insets(10, 0, 0, 0));
+        passwordSor.setPadding(new Insets(10, 0, 0, 0));
+        adminSor.setPadding(new Insets(10,0,10,0));
+        // Hboxokba label + inputok
+        firstNameSor.getChildren().addAll(firstName,firstNameTextField);
+        lastNameSor.getChildren().addAll(lastName,lastNameTextField);
+        emailSor.getChildren().addAll(email,emailTextField);
+        passwordSor.getChildren().addAll(password,passwordTextField);
+
+        // Vboxba a hboxok
+        kisablakVbox.getChildren().addAll(firstNameSor, lastNameSor, emailSor, passwordSor, adminSor, modositasSor);
+        adatokBox.getChildren().add(kisablakVbox);
+
+        // Modosítások után backendre felrakás (json, és pontosasn egyezzen a User class mintájával)
+
+        // PUT kell id amit változtatunk, /user/szám külön function
+        keszButton.setOnAction((event) -> {
+            // GSON converter
+            Gson converter = new Gson();
+
+            // HttpClient
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            // HTTP Request
+            HttpRequest dataRequest = null;
+
+            // modified User + változtató id
+            long updateId = modifyingUser.getId();
+            User modifiedUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
+
+            // Jsonba átalakítás
+            String jsonUser = converter.toJson(modifiedUser);
+            try {
+                // Prepare the request
+                dataRequest = HttpRequest.newBuilder()
+                        .uri(new URI(USER_URL + "/" + updateId))
+                        .header("Content-Type", "application/json")
+                        .PUT(HttpRequest.BodyPublishers.ofString(jsonUser))
+                        .build();
+
+                // Send the request and get the response
+                HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200){
+                    System.out.println("Siker");
+                    Window window = adatokBox.getScene().getWindow();
+                    showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás","Az adatbázist sikeresen frissitettük");
+                }else{
+                    System.out.println(response.body());
+                    System.out.println("Valami rossz");
+                }
+            } catch (IOException | InterruptedException | URISyntaxException e) {
+                // Error
+                throw new RuntimeException(e);
+            }
+        });
+    }
+    private void modositasFelmasolas(){
 
     }
 
@@ -260,6 +300,8 @@ public class HomepageController {
 
     public void userListing(ActionEvent actionEvent) {
         adatokBoxClear();
+        lista.getItems().clear();
+        lista.getColumns().clear();
 
         // Tábla cím
         Text text = new Text();
@@ -322,6 +364,9 @@ public class HomepageController {
         // Lista<User>
         List<User> userLista = new ArrayList<User>();
 
+        // Előző törlési kisérletek
+
+
         // HTTP Request
         HttpRequest usersrequest = null;
 
@@ -346,14 +391,7 @@ public class HomepageController {
             // Error
             throw new RuntimeException(e);
         }
-
-        /*// console kilistázás
-        for (User item : userLista) {
-            System.out.println(item.getId() + " " + item.getEmail() + " " + item.getLast_name() + " " + item.getFirst_name() + " " + item.getPassword());
-        }*/
-
-        // Listából tableView
+        // Listából tableViewba rakás
         lista.setItems(FXCollections.observableArrayList(userLista));
-
     }
 }
