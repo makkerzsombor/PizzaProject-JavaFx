@@ -141,34 +141,42 @@ public class HomepageController {
     private void modositasFormCreate(User modifyingUser){
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         VBox kisablakVbox = new VBox(10);
-        HBox firstNameSor = new HBox(10);
-        HBox lastNameSor = new HBox(10);
-        HBox emailSor = new HBox(10);
-        HBox passwordSor = new HBox(10);
+
+        // Firtsname
+        Label firstName = new Label();
+        firstName.setText("Firstname:");
+        TextField firstNameTextField = new TextField();
+        HBox firstNameSor = new HBox(10, firstName, firstNameTextField);
+
+        // Lastsname
+        Label lastName = new Label();
+        lastName.setText("Lastname:");
+        TextField lastNameTextField = new TextField();
+        HBox lastNameSor = new HBox(10, lastName, lastNameTextField);
+
+        // Email
+        Label email = new Label();
+        email.setText("Email:");
+        TextField emailTextField = new TextField();
+        HBox emailSor = new HBox(10, email, emailTextField);
+
+        // Password
+        Label password = new Label();
+        password.setText("Password:");
+        TextField passwordTextField = new TextField();
+        HBox passwordSor = new HBox(10, password, passwordTextField);
+
+        // Admin
         Label admin = new Label();
         admin.setText("Admin:");
         CheckBox adminCheckbox = new CheckBox();
         HBox adminSor = new HBox(10, admin, adminCheckbox);
         HBox.setMargin(adminCheckbox, new Insets(0,133,0,0));
+
+        // Button
         Button keszButton = new Button();
         HBox modositasSor = new HBox(keszButton);
         HBox.setMargin(keszButton, new Insets(0,120,10,0));
-
-        // Labelek
-        Label firstName = new Label();
-        firstName.setText("Firstname:");
-        Label lastName = new Label();
-        lastName.setText("Lastname:");
-        Label email = new Label();
-        email.setText("Email:");
-        Label password = new Label();
-        password.setText("Password:");
-
-        // Inputok
-        TextField firstNameTextField = new TextField();
-        TextField lastNameTextField = new TextField();
-        TextField emailTextField = new TextField();
-        TextField passwordTextField = new TextField();
 
         // Inputokba value-k:
         firstNameTextField.setText(modifyingUser.getFirst_name());
@@ -181,7 +189,6 @@ public class HomepageController {
         }else{
             adminCheckbox.setSelected(false);
         }
-
         // sceneClearing
         adatokBoxClear();
 
@@ -199,14 +206,13 @@ public class HomepageController {
         passwordSor.setAlignment(Pos.TOP_RIGHT);
         adminSor.setAlignment(Pos.TOP_RIGHT);
         modositasSor.setAlignment(Pos.TOP_RIGHT);
-        // Kell Egy node a marginhoz
 
         // labelek
-        firstName.setPadding(new Insets(0, 10, 0, 0));
-        lastName.setPadding(new Insets(0, 10, 0, 0));
-        email.setPadding(new Insets(0, 10, 0, 0));
-        password.setPadding(new Insets(0, 10, 0, 0));
-        admin.setPadding(new Insets(0, 10, 0, 0));
+        firstName.setPadding(new Insets(5, 0, 0, 0));
+        lastName.setPadding(new Insets(5, 0, 0, 0));
+        email.setPadding(new Insets(5, 0, 0, 0));
+        password.setPadding(new Insets(5, 0, 0, 0));
+        admin.setPadding(new Insets(0, 0, 0, 0));
         keszButton.setPadding(new Insets(0,20,0,20));
 
         // Sorok:
@@ -215,62 +221,53 @@ public class HomepageController {
         emailSor.setPadding(new Insets(10, 0, 0, 0));
         passwordSor.setPadding(new Insets(10, 0, 0, 0));
         adminSor.setPadding(new Insets(10,0,10,0));
-        // Hboxokba label + inputok
-        firstNameSor.getChildren().addAll(firstName,firstNameTextField);
-        lastNameSor.getChildren().addAll(lastName,lastNameTextField);
-        emailSor.getChildren().addAll(email,emailTextField);
-        passwordSor.getChildren().addAll(password,passwordTextField);
 
         // Vboxba a hboxok
         kisablakVbox.getChildren().addAll(firstNameSor, lastNameSor, emailSor, passwordSor, adminSor, modositasSor);
         adatokBox.getChildren().add(kisablakVbox);
 
-        // Modosítások után backendre felrakás (json, és pontosasn egyezzen a User class mintájával)
-
-        // PUT kell id amit változtatunk, /user/szám külön function
         keszButton.setOnAction((event) -> {
-            // GSON converter
-            Gson converter = new Gson();
-
-            // HttpClient
-            HttpClient httpClient = HttpClient.newHttpClient();
-
-            // HTTP Request
-            HttpRequest dataRequest = null;
-
-            // modified User + változtató id
+            // Uj User kreálás továbbadás
             long updateId = modifyingUser.getId();
-            User modifiedUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
-
-            // Jsonba átalakítás
-            String jsonUser = converter.toJson(modifiedUser);
-            try {
-                // Prepare the request
-                dataRequest = HttpRequest.newBuilder()
-                        .uri(new URI(USER_URL + "/" + updateId))
-                        .header("Content-Type", "application/json")
-                        .PUT(HttpRequest.BodyPublishers.ofString(jsonUser))
-                        .build();
-
-                // Send the request and get the response
-                HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200){
-                    System.out.println("Siker");
-                    Window window = adatokBox.getScene().getWindow();
-                    showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás","Az adatbázist sikeresen frissitettük");
-                }else{
-                    System.out.println(response.body());
-                    System.out.println("Valami rossz");
-                }
-            } catch (IOException | InterruptedException | URISyntaxException e) {
-                // Error
-                throw new RuntimeException(e);
-            }
+            User readyUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
+            modositasFelmasolas(readyUser, updateId);
         });
     }
-    private void modositasFelmasolas(){
+    private void modositasFelmasolas(User readyUser, long updateId){
+        // GSON converter
+        Gson converter = new Gson();
 
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+
+        // Jsonba átalakítás
+        String jsonUser = converter.toJson(readyUser);
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(USER_URL + "/" + updateId))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonUser))
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200){
+                System.out.println("Siker");
+                Window window = adatokBox.getScene().getWindow();
+                showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás","Az adatbázist sikeresen frissitettük");
+            }else{
+                System.out.println(response.body());
+                System.out.println("Valami rossz");
+            }
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
     }
 
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
