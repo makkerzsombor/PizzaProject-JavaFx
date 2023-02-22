@@ -5,12 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -32,6 +30,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HomepageController {
 
@@ -227,7 +226,7 @@ public class HomepageController {
         adatokBox.getChildren().add(kisablakVbox);
 
         keszButton.setOnAction((event) -> {
-            // Uj User kreálás továbbadás
+            // Todo: ha saját magát modositja müködjön
             long updateId = modifyingUser.getId();
             User readyUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
             modositasFelmasolas(readyUser, updateId);
@@ -269,7 +268,6 @@ public class HomepageController {
             throw new RuntimeException(e);
         }
     }
-
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -278,9 +276,68 @@ public class HomepageController {
         alert.initOwner(owner);
         alert.show();
     }
-
     public void torlesClick(ActionEvent actionEvent) {
-        //TODO: pizza/ember törlése
+        // Kijelölés ellenőrzése
+        int selectedIndex = lista.getSelectionModel().getSelectedIndex();
+        Window owner = kilepesButton.getScene().getWindow();
+        if (selectedIndex == -1){
+            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy elemet!");
+        }else{
+            megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!","Biztosan törölni akarja az elemet!", selectedIndex);
+        }
+    }
+
+    private void megerositoAlert(Alert.AlertType alertType, Window owner, String title, String message, int selectedIndex){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        // Button-ok
+        ButtonType okButton= new ButtonType("Igen");
+        ButtonType cancelButton = new ButtonType("Mégsem", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(okButton, cancelButton);
+
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == okButton) {
+                System.out.println("OK button clicked");
+                veglegestorles(selectedIndex);
+            } else if (buttonType == cancelButton) {
+                System.out.println("Cancel button clicked");
+            }
+        });
+    }
+
+    private void veglegestorles(int selectedIndex){
+        int index = selectedIndex+1;
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(USER_URL + "/" + index))
+                    .header("Content-Type", "application/json")
+                    .DELETE()
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200){
+                System.out.println("Siker");
+                Window window = adatokBox.getScene().getWindow();
+                showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az elemet sikeresen eltávolítottuk");
+            }else{
+                System.out.println(response.body());
+                System.out.println("Valami rossz");
+            }
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
     }
 
     private void adatokBoxClear(){
