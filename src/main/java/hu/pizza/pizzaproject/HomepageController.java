@@ -229,15 +229,11 @@ public class HomepageController {
             System.out.println("Jelszó ellenörzés");
             long updateId = modifyingUser.getId();
             User readyUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
-            System.out.println("Ready user password: " + readyUser.getPassword());
-            System.out.println("Modifying user password: " + modifyingUser.getPassword());
-            if (readyUser.getPassword() == modifyingUser.getPassword()){
+            if (readyUser.getPassword().equals(modifyingUser.getPassword())){
                 System.out.println("A jelszavak azonosak");
                 User noPasswordUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), adminCheckbox.isSelected());
                 modositasFelmasolas(noPasswordUser, updateId);
-                //TODO: Ide jönn a jelszo nélküli <User>
             }else{
-                //TODO: Ide jönn a jelszo változtatos
                 modositasFelmasolas(readyUser, updateId);
                 System.out.println("Rossz a jelszó");
             }
@@ -278,6 +274,7 @@ public class HomepageController {
             // Error
             throw new RuntimeException(e);
         }
+        userListCreate();
     }
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -339,7 +336,6 @@ public class HomepageController {
                 System.out.println("Siker");
                 Window window = adatokBox.getScene().getWindow();
                 showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az elemet sikeresen eltávolítottuk");
-                //TODO: user kilistázás újra
             }else{
                 System.out.println(response.body());
                 System.out.println("Valami rossz");
@@ -347,6 +343,7 @@ public class HomepageController {
         } catch (IOException | InterruptedException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
+        userListCreate();
     }
     private void adatokBoxClear(){
         adatokBox.getChildren().clear();
@@ -359,7 +356,7 @@ public class HomepageController {
         //TODO: Pizza létrehozás form
     }
 
-    public void userListing(ActionEvent actionEvent) {
+    public void userListCreate(){
         adatokBoxClear();
         lista.getItems().clear();
         lista.getColumns().clear();
@@ -454,5 +451,9 @@ public class HomepageController {
         }
         // Listából tableViewba rakás
         lista.setItems(FXCollections.observableArrayList(userLista));
+    }
+
+    public void userListing(ActionEvent actionEvent) {
+        userListCreate();
     }
 }
