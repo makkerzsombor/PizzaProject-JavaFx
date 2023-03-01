@@ -229,17 +229,18 @@ public class HomepageController {
             System.out.println("Jelszó ellenörzés");
             long updateId = modifyingUser.getId();
             User readyUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
-            if (readyUser.getPassword().equals(modifyingUser.getPassword())){
-                System.out.println("A jelszavak azonosak");
+            if (passwordTextField.getText() == null){
+                System.out.println("A jelszo nem változik");
                 User noPasswordUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), adminCheckbox.isSelected());
                 modositasFelmasolas(noPasswordUser, updateId);
             }else{
                 modositasFelmasolas(readyUser, updateId);
-                System.out.println("Rossz a jelszó");
+                System.out.println("A jelszo változik");
             }
         });
     }
     private void modositasFelmasolas(User readyUser, long updateId){
+        //TODO: backenden engedni kell az adminná modosítást
         // GSON converter
         Gson converter = new Gson();
 
@@ -398,12 +399,12 @@ public class HomepageController {
         column4.setCellValueFactory(
                 new PropertyValueFactory<>("first_name"));
 
-        // password
+        /*// password
         TableColumn<User ,String> column5 =
                 new TableColumn<>("Password");
 
         column5.setCellValueFactory(
-                new PropertyValueFactory<>("password"));
+                new PropertyValueFactory<>("password"));*/
 
         // admin
         TableColumn<User ,Boolean> column6 =
@@ -412,7 +413,7 @@ public class HomepageController {
         column6.setCellValueFactory(
                 new PropertyValueFactory<>("admin"));
 
-        lista.getColumns().addAll(column1,column2,column3,column4,column5,column6);
+        lista.getColumns().addAll(column1,column2,column3,column4,column6);
 
         adatokBox.getChildren().add(lista);
 
