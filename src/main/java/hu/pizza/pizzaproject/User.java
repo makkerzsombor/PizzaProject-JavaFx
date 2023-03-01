@@ -17,13 +17,13 @@ public class User {
         this.last_name = last_name;
     }
 
-    /*public User(Long id, String email, boolean admin, String first_name, String last_name) {
+    public User(Long id, String first_name, String last_name, String email, boolean admin) {
         this.id = id;
         this.email = email;
         this.admin = admin;
         this.first_name = first_name;
         this.last_name = last_name;
-    }*/
+    }
 
     public User(String email, String password) {
         this.email = email;

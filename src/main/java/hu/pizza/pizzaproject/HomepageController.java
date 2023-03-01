@@ -226,10 +226,21 @@ public class HomepageController {
         adatokBox.getChildren().add(kisablakVbox);
 
         keszButton.setOnAction((event) -> {
-            // Todo: ha saját magát modositja müködjön
+            System.out.println("Jelszó ellenörzés");
             long updateId = modifyingUser.getId();
             User readyUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), adminCheckbox.isSelected());
-            modositasFelmasolas(readyUser, updateId);
+            System.out.println("Ready user password: " + readyUser.getPassword());
+            System.out.println("Modifying user password: " + modifyingUser.getPassword());
+            if (readyUser.getPassword() == modifyingUser.getPassword()){
+                System.out.println("A jelszavak azonosak");
+                User noPasswordUser = new User(updateId, firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), adminCheckbox.isSelected());
+                modositasFelmasolas(noPasswordUser, updateId);
+                //TODO: Ide jönn a jelszo nélküli <User>
+            }else{
+                //TODO: Ide jönn a jelszo változtatos
+                modositasFelmasolas(readyUser, updateId);
+                System.out.println("Rossz a jelszó");
+            }
         });
     }
     private void modositasFelmasolas(User readyUser, long updateId){
@@ -278,7 +289,8 @@ public class HomepageController {
     }
     public void torlesClick(ActionEvent actionEvent) {
         // Kijelölés ellenőrzése
-        int selectedIndex = lista.getSelectionModel().getSelectedIndex();
+        User selected = lista.getSelectionModel().getSelectedItem();
+        long selectedIndex = selected.getId();
         Window owner = kilepesButton.getScene().getWindow();
         if (selectedIndex == -1){
             showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy elemet!");
@@ -286,8 +298,7 @@ public class HomepageController {
             megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!","Biztosan törölni akarja az elemet!", selectedIndex);
         }
     }
-
-    private void megerositoAlert(Alert.AlertType alertType, Window owner, String title, String message, int selectedIndex){
+    private void megerositoAlert(Alert.AlertType alertType, Window owner, String title, String message, long selectedIndex){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -307,9 +318,7 @@ public class HomepageController {
             }
         });
     }
-
-    private void veglegestorles(int selectedIndex){
-        int index = selectedIndex+1;
+    private void veglegestorles(long selectedIndex){
         // HttpClient
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -318,7 +327,7 @@ public class HomepageController {
         try {
             // Prepare the request
             dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(USER_URL + "/" + index))
+                    .uri(new URI(USER_URL + "/" + selectedIndex))
                     .header("Content-Type", "application/json")
                     .DELETE()
                     .build();
@@ -330,20 +339,18 @@ public class HomepageController {
                 System.out.println("Siker");
                 Window window = adatokBox.getScene().getWindow();
                 showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az elemet sikeresen eltávolítottuk");
+                //TODO: user kilistázás újra
             }else{
                 System.out.println(response.body());
                 System.out.println("Valami rossz");
             }
         } catch (IOException | InterruptedException | URISyntaxException e) {
-            // Error
             throw new RuntimeException(e);
         }
     }
-
     private void adatokBoxClear(){
         adatokBox.getChildren().clear();
     }
-
     public void pizzaListing(ActionEvent actionEvent) {
         //TODO: Pizza kilistázás
     }
