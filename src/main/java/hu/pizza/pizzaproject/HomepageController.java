@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -366,8 +367,8 @@ public class HomepageController {
         Text text = new Text();
         text.setText("User adatok");
         adatokBox.setMargin(text, new Insets(0, 0, 10, 0));
-        text.setStyle("-fx-fill: white;");
-        text.setFont(Font.font(15));
+        text.setStyle("-fx-fill: white; ");
+        text.setFont(Font.font("Segoe UI" ,FontWeight.BOLD,15));
         adatokBox.getChildren().add(text);
         adatokBox.setAlignment(Pos.TOP_CENTER);
 
@@ -399,21 +400,14 @@ public class HomepageController {
         column4.setCellValueFactory(
                 new PropertyValueFactory<>("first_name"));
 
-        /*// password
-        TableColumn<User ,String> column5 =
-                new TableColumn<>("Password");
-
-        column5.setCellValueFactory(
-                new PropertyValueFactory<>("password"));*/
-
         // admin
-        TableColumn<User ,Boolean> column6 =
+        TableColumn<User ,Boolean> column5 =
                 new TableColumn<>("Admin");
 
-        column6.setCellValueFactory(
+        column5.setCellValueFactory(
                 new PropertyValueFactory<>("admin"));
 
-        lista.getColumns().addAll(column1,column2,column3,column4,column6);
+        lista.getColumns().addAll(column1,column2,column3,column4,column5);
 
         adatokBox.getChildren().add(lista);
 
@@ -422,9 +416,6 @@ public class HomepageController {
 
         // Lista<User>
         List<User> userLista = new ArrayList<User>();
-
-        // Előző törlési kisérletek
-
 
         // HTTP Request
         HttpRequest usersrequest = null;
