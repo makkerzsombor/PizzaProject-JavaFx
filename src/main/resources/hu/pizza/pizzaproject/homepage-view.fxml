@@ -14,16 +14,16 @@
          <children>
             <VBox alignment="TOP_CENTER" minHeight="120.0" prefHeight="120.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#pizzaListing" text="Pizza listázás">
+                  <Button mnemonicParsing="false" onAction="#pizzaListing" styleClass="gomb" text="Pizza listázás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#pizzaCreate" text="Pizza hozzáadás">
+                  <Button mnemonicParsing="false" onAction="#pizzaCreate" styleClass="gomb" text="Pizza hozzáadás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
-                  <Button mnemonicParsing="false" onAction="#userListing" text="User listázás">
+                  <Button mnemonicParsing="false" onAction="#userListing" styleClass="gomb" text="User listázás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
@@ -42,7 +42,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" styleClass="kilepes" text="Kilépés">
+                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" styleClass="gomb" text="Kilépés">
                      <HBox.margin>
                         <Insets right="10.0" top="10.0" />
                      </HBox.margin>
@@ -66,17 +66,17 @@
                         <Font size="15.0" />
                      </font>
                   </TextField>
-                  <Button mnemonicParsing="false" onAction="#keresoClick" styleClass="kereses" text="Keresés">
+                  <Button mnemonicParsing="false" onAction="#keresoClick" styleClass="gomb" text="Keresés">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#modositasClick" styleClass="modositas" text="Módosítás">
+                  <Button mnemonicParsing="false" onAction="#modositasClick" styleClass="gomb" text="Módosítás">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#torlesClick" styleClass="torles" text="Törlés">
+                  <Button mnemonicParsing="false" onAction="#torlesClick" styleClass="gomb" text="Törlés">
                      <VBox.margin>
                         <Insets bottom="100.0" />
                      </VBox.margin>
