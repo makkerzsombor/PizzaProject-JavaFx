@@ -11,5 +11,20 @@ import java.util.concurrent.ExecutionException;
 
 public class RequestHandler {
 
+    public Request addRequest(){
+        Request request = new Request();
+        return request;
+    }
+    public Request updateRequest(){
+        Request request = new Request();
+        return request;
+    }
+
+    public Request deleterequest(){
+        Request request = new Request();
+        return request;
+    }
+
+
 
 }

@@ -1,19 +1,23 @@
-package hu.pizza.pizzaproject;
+package hu.pizza.pizzaproject.dataClasses;
 
 public class Pizza {
     private int id;
-    private String pizza_name;
+    private String name;
     private String picture;
     private String description;
-    private double rating;
     private int price;
-
-    public Pizza(int id, String pizza_name, String picture, String description, double rating, int price) {
+    public Pizza(int id, String name, String picture, String description, int price) {
         this.id = id;
-        this.pizza_name = pizza_name;
+        this.name = name;
         this.picture = picture;
         this.description = description;
-        this.rating = rating;
+        this.price = price;
+    }
+
+    public Pizza(String name, String picture, String description, int price) {
+        this.name = name;
+        this.picture = picture;
+        this.description = description;
         this.price = price;
     }
 
@@ -29,11 +33,11 @@ public class Pizza {
     }
 
     public String getPizza_name() {
-        return pizza_name;
+        return name;
     }
 
     public void setPizza_name(String pizza_name) {
-        this.pizza_name = pizza_name;
+        this.name = pizza_name;
     }
 
     public String getPicture() {
@@ -50,14 +54,6 @@ public class Pizza {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public int getPrice() {
