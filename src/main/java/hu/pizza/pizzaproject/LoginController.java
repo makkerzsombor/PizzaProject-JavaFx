@@ -55,8 +55,6 @@ public class LoginController {
     }
 
     public void loginClick(ActionEvent actionEvent) {
-        //TODO: Backendbe kell egy admin login is
-
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
         if (emailField.getText().isEmpty()) {
@@ -90,35 +88,36 @@ public class LoginController {
         HttpRequest loginRequestPost = null;
         try {
             loginRequestPost = HttpRequest.newBuilder()
-                    .uri(new URI(LOGIN_API_URL + "/login"))
+                    .uri(new URI(LOGIN_API_URL + "/admin-login"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(toPublisher))
                     .build();
 
             HttpResponse<String> response = httpClient.send(loginRequestPost, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri());
+            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri() + "Ez a header + uri");
 
             if (response.statusCode() == 200){
                 System.out.println("Sikeres token kreálás");
                 ApplicationConfiguration.setJwtToken(converter.fromJson(response.body(), JwtToken.class));
+                newAblak();
             }else if(response.statusCode() == 400){
                 System.out.println("rossz syntax / request");
-                return;
             }else if(response.statusCode() == 404){
                 System.out.println("Not found");
-                return;
+            }else if(response.statusCode() == 403){
+                showAlert(Alert.AlertType.ERROR, owner, "Login Error!",
+                        "You are not an admin!");
             }else{
                 showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                         "Your email/password is incorrect");
-                return;
             }
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        // Átlépés a másik windowra
+    }
+    private void newAblak(){
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("homepage-view.fxml"));
         Scene scene = null;
         try {

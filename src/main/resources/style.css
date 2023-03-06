@@ -22,12 +22,9 @@
     -fx-background-color: black;
 }
 
-.menupontok{
-
-}
-
 .koszones{
-    -fx-text-fill: black;
+    -fx-text-fill: white;
+    -fx-background-color: black;
 }
 
 .gridpane{
@@ -39,10 +36,23 @@
     -fx-background-color: black;
 }
 
-.emailField{
-
+.menupontok .label{
+    -fx-text-fill: white;
 }
 
-.passwordField{
+.menupontok{
+    -fx-background-color: black;
+}
 
+menupontok:hover{
+    -fx-background-color: white;
+}
+
+.menuItemek .label{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.menuItemek:hover{
+    -fx-background-color: white;
 }
