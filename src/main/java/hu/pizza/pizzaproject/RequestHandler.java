@@ -18,9 +18,33 @@ import java.util.List;
 
 public class RequestHandler {
 
-    public Request addPizzaRequest(){
-        Request request = new Request();
-        return request;
+    public HttpResponse addPizzaRequest(String URL, Pizza newPizza){
+        // GSON converter
+        Gson converter = new Gson();
+
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+
+        // Jsonba átalakítás
+        String jsonPizza = converter.toJson(newPizza);
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(URL + "/add-pizza"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPizza))
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+            return response;
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
     }
     public HttpResponse updateUserRequest(User readyUser, long updateId, String USER_URL){
         // GSON converter
@@ -40,6 +64,35 @@ public class RequestHandler {
                     .uri(new URI(USER_URL + "/" + updateId))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(jsonUser))
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+            return response;
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
+    }
+    public HttpResponse updatePizzaRequest(Pizza readyPizza, int updateId, String URL) {
+        // GSON converter
+        Gson converter = new Gson();
+
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+
+        // Jsonba átalakítás
+        String jsonPizza = converter.toJson(readyPizza);
+        System.out.println(jsonPizza);
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(URL + "/" + updateId))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonPizza))
                     .build();
 
             // Send the request and get the response
