@@ -398,7 +398,6 @@ public class HomepageController {
         // Táblázat ujra kreálása:
         userListCreate();
     }
-
     private void pizzaVeglegesTorles(long selectedIndex) {
         System.out.println("Pizzás delete-be megy");
         // Törlés
@@ -414,7 +413,6 @@ public class HomepageController {
         // Táblázat ujra kreálása:
         pizzaListCreate();
     }
-
     private void adatokBoxClear() {
         adatokBox.getChildren().clear();
     }
@@ -497,7 +495,7 @@ public class HomepageController {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), leirasTextField.getText(), kepTextField.getText(), arField.getValue());
+                Pizza newPizza = new Pizza(nevTextField.getText(),  kepTextField.getText(), leirasTextField.getText(), arField.getValue());
                 HttpResponse response = requestHandler.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     System.out.println("Pizza sikeresen létrehozva");
