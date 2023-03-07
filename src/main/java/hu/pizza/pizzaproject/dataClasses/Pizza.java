@@ -32,12 +32,12 @@ public class Pizza {
         this.id = id;
     }
 
-    public String getPizza_name() {
+    public String getName() {
         return name;
     }
 
-    public void setPizza_name(String pizza_name) {
-        this.name = pizza_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPicture() {

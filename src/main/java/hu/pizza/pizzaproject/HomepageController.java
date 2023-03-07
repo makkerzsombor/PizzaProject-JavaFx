@@ -1,9 +1,8 @@
 package hu.pizza.pizzaproject;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
+import hu.pizza.pizzaproject.dataClasses.Pizza;
 import hu.pizza.pizzaproject.dataClasses.User;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -24,17 +23,10 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomepageController {
-
     @FXML
     private TextField keresoField;
     @FXML
@@ -45,51 +37,21 @@ public class HomepageController {
     private Label felsoNev;
     @FXML
     private VBox ablak;
-
     @FXML
-    private TableView<User> lista = new TableView<>();
-
+    private TableView<User> userLista = new TableView<>();
+    @FXML
+    private TableView<Pizza> pizzaLista = new TableView<>();
     private int Update_id;
-
     private String USER_URL = "http://localhost:8080/user";
+    private String PIZZA_URL = "http://localhost:8080/pizza";
+    private RequestHandler requestHandler = new RequestHandler();
+
+    private boolean userTable;
 
     @FXML
     private void initialize() {
-        // JWT token kiolvasás
-        String jsonToken = ApplicationConfiguration.getJwtToken().getJwtToken();
-
-        // User létre hozása
-        User user = new User();
-
-        // GSON converter
-        Gson converter = new Gson();
-
-        // HttpClient
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        // HTTP Request
-        HttpRequest dataRequest = null;
-
-        try {
-            // Prepare the request
-            dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(USER_URL + "/data"))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + jsonToken)
-                    .GET()
-                    .build();
-
-            // Send the request and get the response
-            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
-
-            // Parse the response body into a User object using Gson
-            System.out.println(response.body());
-            user = converter.fromJson(response.body(), User.class);
-
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            // Error
-            throw new RuntimeException(e);
-        }
+        User user = requestHandler.getUserRequest(USER_URL);
+        // Felső labelbe név rakás
         felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
     }
 
@@ -127,13 +89,13 @@ public class HomepageController {
 
     public void modositasClick(ActionEvent actionEvent) {
         // Kijelölés ellenőrzése
-        int selectedIndex = lista.getSelectionModel().getSelectedIndex();
+        int selectedIndex = userLista.getSelectionModel().getSelectedIndex();
         Window owner = kilepesButton.getScene().getWindow();
         if (selectedIndex == -1){
             showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy elemet!");
         }else{
             // adatok mentése
-            User selected = lista.getSelectionModel().getSelectedItem();
+            User selected = userLista.getSelectionModel().getSelectedItem();
             User modifyingUser = new User(selected.getId(), selected.getFirst_name(), selected.getLast_name(), selected.getEmail(), selected.getPassword(), selected.isAdmin());
             modositasFormCreate(modifyingUser);
         }
@@ -242,40 +204,17 @@ public class HomepageController {
     }
     private void modositasFelmasolas(User readyUser, long updateId){
         //TODO: backenden engedni kell az adminná modosítást
-        // GSON converter
-        Gson converter = new Gson();
-
-        // HttpClient
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        // HTTP Request
-        HttpRequest dataRequest = null;
-
-        // Jsonba átalakítás
-        String jsonUser = converter.toJson(readyUser);
-        try {
-            // Prepare the request
-            dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(USER_URL + "/" + updateId))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(jsonUser))
-                    .build();
-
-            // Send the request and get the response
-            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200){
-                System.out.println("Siker");
-                Window window = adatokBox.getScene().getWindow();
-                showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás","Az adatbázist sikeresen frissitettük");
-            }else{
-                System.out.println(response.body());
-                System.out.println("Valami rossz");
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            // Error
-            throw new RuntimeException(e);
+        // Modositas
+        HttpResponse response = requestHandler.updateUserRequest(readyUser, updateId, USER_URL);
+        if (response.statusCode() == 200){
+            System.out.println("Siker");
+            Window window = adatokBox.getScene().getWindow();
+            showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás","Az adatbázist sikeresen frissitettük");
+        }else{
+            System.out.println(response.body());
+            System.out.println("Valami rossz");
         }
+        // Táblázat újra generálása
         userListCreate();
     }
     private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
@@ -287,15 +226,30 @@ public class HomepageController {
         alert.show();
     }
     public void torlesClick(ActionEvent actionEvent) {
-        // Kijelölés ellenőrzése
-        User selected = lista.getSelectionModel().getSelectedItem();
-        long selectedIndex = selected.getId();
-        Window owner = kilepesButton.getScene().getWindow();
-        if (selectedIndex == -1){
-            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy elemet!");
+        if (userTable) {
+            // Kijelölés ellenőrzése
+            User selected = userLista.getSelectionModel().getSelectedItem();
+            long selectedIndex = selected.getId();
+            Window owner = kilepesButton.getScene().getWindow();
+            if (selectedIndex == -1){
+                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy felhasználot!");
+            }else{
+                megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!","Biztosan törölni akarja felhasználot?", selectedIndex);
+            }
+        }else if (!userTable){
+            Pizza selected = pizzaLista.getSelectionModel().getSelectedItem();
+            long selectedIndex = selected.getId();
+            Window owner = kilepesButton.getScene().getWindow();
+            if (selectedIndex == -1){
+                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Először jelöljön ki egy pizzát!");
+            }else{
+                megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!","Biztosan törölni akarja a kijelölt pizzát?", selectedIndex);
+            }
         }else{
-            megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!","Biztosan törölni akarja az elemet!", selectedIndex);
+            Window owner = kilepesButton.getScene().getWindow();
+            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!","Nem jelölt ki elemet!");
         }
+
     }
     private void megerositoAlert(Alert.AlertType alertType, Window owner, String title, String message, long selectedIndex){
         Alert alert = new Alert(alertType);
@@ -308,50 +262,67 @@ public class HomepageController {
         ButtonType cancelButton = new ButtonType("Mégsem", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(okButton, cancelButton);
 
-        alert.showAndWait().ifPresent(buttonType -> {
-            if (buttonType == okButton) {
-                System.out.println("OK button clicked");
-                veglegestorles(selectedIndex);
-            } else if (buttonType == cancelButton) {
-                System.out.println("Cancel button clicked");
-            }
-        });
-    }
-    private void veglegestorles(long selectedIndex){
-        // HttpClient
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        // HTTP Request
-        HttpRequest dataRequest = null;
-        try {
-            // Prepare the request
-            dataRequest = HttpRequest.newBuilder()
-                    .uri(new URI(USER_URL + "/" + selectedIndex))
-                    .header("Content-Type", "application/json")
-                    .DELETE()
-                    .build();
-
-            // Send the request and get the response
-            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200){
-                System.out.println("Siker");
-                Window window = adatokBox.getScene().getWindow();
-                showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az elemet sikeresen eltávolítottuk");
-            }else{
-                System.out.println(response.body());
-                System.out.println("Valami rossz");
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            throw new RuntimeException(e);
+        // Vizsgáljuk, hogy melyik táblázatból jelöltünk ke elemet
+        if (userTable) {
+            // User
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == okButton) {
+                    System.out.println("OK button clicked");
+                    userVeglegesTorles(selectedIndex);
+                } else if (buttonType == cancelButton) {
+                    System.out.println("Cancel button clicked");
+                }
+            });
+        }else{
+            // Pizza
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == okButton) {
+                    System.out.println("OK button clicked");
+                    pizzaVeglegesTorles(selectedIndex);
+                } else if (buttonType == cancelButton) {
+                    System.out.println("Cancel button clicked");
+                }
+            });
         }
+
+    }
+    private void userVeglegesTorles(long selectedIndex){
+        System.out.println("User deletebe megy");
+        // Törlés
+        HttpResponse response = requestHandler.deleteRequest(USER_URL, selectedIndex);
+        if (response.statusCode() == 200){
+            System.out.println("Siker");
+            Window window = adatokBox.getScene().getWindow();
+            showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az adott felhasználót sikeresen eltávolítottuk");
+        }else{
+            System.out.println(response.body());
+            System.out.println("Valami rossz");
+        }
+        // Táblázat ujra kreálása:
         userListCreate();
     }
+
+    private void pizzaVeglegesTorles(long selectedIndex){
+        System.out.println("Pizzás delete-be megy");
+        // Törlés
+        HttpResponse response = requestHandler.deleteRequest(PIZZA_URL, selectedIndex);
+        if (response.statusCode() == 200){
+            System.out.println("Siker");
+            Window window = adatokBox.getScene().getWindow();
+            showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés","Az adott pizzát sikeresen eltávolítottuk");
+        }else{
+            System.out.println(response.body());
+            System.out.println("Valami rossz");
+        }
+        // Táblázat ujra kreálása:
+        pizzaListCreate();
+    }
+
     private void adatokBoxClear(){
         adatokBox.getChildren().clear();
     }
     public void pizzaListing(ActionEvent actionEvent) {
-        //TODO: Pizza kilistázás
+        pizzaListCreate();
     }
 
     public void pizzaCreate(ActionEvent actionEvent) {
@@ -359,9 +330,10 @@ public class HomepageController {
     }
 
     public void userListCreate(){
+        userTable = true;
         adatokBoxClear();
-        lista.getItems().clear();
-        lista.getColumns().clear();
+        userLista.getItems().clear();
+        userLista.getColumns().clear();
 
         // Tábla cím
         Text text = new Text();
@@ -407,42 +379,70 @@ public class HomepageController {
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("admin"));
 
-        lista.getColumns().addAll(column1,column2,column3,column4,column5);
+        userLista.getColumns().addAll(column1,column2,column3,column4,column5);
 
-        adatokBox.getChildren().add(lista);
+        adatokBox.getChildren().add(userLista);
 
-        // Create HttpClient
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        // Lista<User>
-        List<User> userLista = new ArrayList<User>();
-
-        // HTTP Request
-        HttpRequest usersrequest = null;
-
-        // Gson létrehozása (kiolvasáshoz)
-        Gson converter = new Gson();
-
-        try {
-            // Prepare the request
-            usersrequest = HttpRequest.newBuilder()
-                    .uri(new URI(USER_URL + "/get-all"))
-                    .header("Content-Type", "application/json")
-                    .GET()
-                    .build();
-
-            // Send the request and get the response
-            HttpResponse<String> response = httpClient.send(usersrequest, HttpResponse.BodyHandlers.ofString());
-
-            // Parse the response body into a List<User> object using Gson
-            Type userListType = new TypeToken<List<User>>(){}.getType();
-            userLista = converter.fromJson(response.body(), userListType);
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            // Error
-            throw new RuntimeException(e);
-        }
+        List<User> userLista = requestHandler.getallUserRequest(USER_URL);
         // Listából tableViewba rakás
-        lista.setItems(FXCollections.observableArrayList(userLista));
+        this.userLista.setItems(FXCollections.observableArrayList(userLista));
+    }
+    public void pizzaListCreate(){
+        userTable = false;
+        adatokBoxClear();
+        pizzaLista.getItems().clear();
+        pizzaLista.getColumns().clear();
+
+        // Tábla cím
+        Text text = new Text();
+        text.setText("Pizza adatok");
+        adatokBox.setMargin(text, new Insets(0, 0, 10, 0));
+        text.setStyle("-fx-fill: white; ");
+        text.setFont(Font.font("Segoe UI" ,FontWeight.BOLD,15));
+        adatokBox.getChildren().add(text);
+        adatokBox.setAlignment(Pos.TOP_CENTER);
+
+        // id
+        TableColumn<Pizza ,Integer> column1 =
+                new TableColumn<>("Id");
+
+        column1.setCellValueFactory(
+                new PropertyValueFactory<>("Id"));
+
+        // name
+        TableColumn<Pizza ,String> column2 =
+                new TableColumn<>("Name");
+
+        column2.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+
+        // description
+        TableColumn<Pizza,String> column3 =
+                new TableColumn<>("Description");
+
+        column3.setCellValueFactory(
+                new PropertyValueFactory<>("description"));
+
+        // picture
+        TableColumn<Pizza ,String> column4 =
+                new TableColumn<>("Picture");
+
+        column4.setCellValueFactory(
+                new PropertyValueFactory<>("picture"));
+
+        // price
+        TableColumn<Pizza ,Integer> column5 =
+                new TableColumn<>("Price");
+
+        column5.setCellValueFactory(
+                new PropertyValueFactory<>("price"));
+
+        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5);
+
+        adatokBox.getChildren().add(pizzaLista);
+        List<Pizza> pizzaListaKesz = requestHandler.getallPizzaRequest(PIZZA_URL);
+        // Listából tableViewba rakás
+        this.pizzaLista.setItems(FXCollections.observableArrayList(pizzaListaKesz));
     }
 
     public void userListing(ActionEvent actionEvent) {
