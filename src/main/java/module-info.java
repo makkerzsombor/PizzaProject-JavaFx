@@ -8,6 +8,6 @@ module hu.pizza.pizzaproject {
     opens hu.pizza.pizzaproject to javafx.fxml, com.google.gson;
     exports hu.pizza.pizzaproject;
     opens hu.pizza.pizzaproject.Model to com.google.gson;
-    exports hu.pizza.pizzaproject.dataClasses;
-    opens hu.pizza.pizzaproject.dataClasses to com.google.gson, javafx.fxml;
+    exports hu.pizza.pizzaproject.DataClasses;
+    opens hu.pizza.pizzaproject.DataClasses to com.google.gson, javafx.fxml;
 }

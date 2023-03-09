@@ -2,9 +2,10 @@ package hu.pizza.pizzaproject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import hu.pizza.pizzaproject.DataClasses.Order;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
-import hu.pizza.pizzaproject.dataClasses.Pizza;
-import hu.pizza.pizzaproject.dataClasses.User;
+import hu.pizza.pizzaproject.DataClasses.Pizza;
+import hu.pizza.pizzaproject.DataClasses.User;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -103,7 +104,6 @@ public class RequestHandler {
             throw new RuntimeException(e);
         }
     }
-
     public HttpResponse deleteRequest(String USER_URL, long selectedIndex){
         // HttpClient
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -125,7 +125,6 @@ public class RequestHandler {
             throw new RuntimeException(e);
         }
     }
-
     public User getUserRequest(String USER_URL){
         // JWT token kiolvasás
         String jsonToken = ApplicationConfiguration.getJwtToken().getJwtToken();
@@ -165,7 +164,6 @@ public class RequestHandler {
         // User visszaadása:
         return user;
     }
-
     public List<User> getallUserRequest(String BASE_URL){
         // Create HttpClient
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -200,7 +198,6 @@ public class RequestHandler {
         // Lista visszaküldés
         return userLista;
     }
-
     public List<Pizza> getallPizzaRequest(String BASE_URL){
         // Create HttpClient
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -234,5 +231,70 @@ public class RequestHandler {
         }
         // Lista visszaküldés
         return pizzaLista;
+    }
+    public List<Order> getallOrderRequest(String BASE_URL) {
+        // Create HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // Lista<Pizza>
+        List<Order> orderLista;
+
+        // HTTP Request
+        HttpRequest pizzaRequest = null;
+
+        // Gson létrehozása (kiolvasáshoz)
+        Gson converter = new Gson();
+
+        try {
+            // Prepare the request
+            pizzaRequest = HttpRequest.newBuilder()
+                    .uri(new URI(BASE_URL + "/get-all"))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(pizzaRequest, HttpResponse.BodyHandlers.ofString());
+
+            // Parse the response body into a List<User> object using Gson
+            Type orderListType = new TypeToken<List<Order>>(){}.getType();
+            orderLista = converter.fromJson(response.body(), orderListType);
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
+        // Lista visszaküldés
+        return orderLista;
+    }
+    public HttpResponse updateReadyStatus(long updateId, String ORDER_URL) {
+        // GSON converter
+        Gson converter = new Gson();
+
+        // HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // HTTP Request
+        HttpRequest dataRequest = null;
+        //ezJson = "ready": "true";
+        Order readyOrder = new Order(updateId, true);
+
+        // Jsonba átalakítás
+        String jsonOrder = converter.toJson(readyOrder);
+        System.out.println(jsonOrder);
+        try {
+            // Prepare the request
+            dataRequest = HttpRequest.newBuilder()
+                    .uri(new URI(ORDER_URL + "/" + updateId))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonOrder))
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = httpClient.send(dataRequest, HttpResponse.BodyHandlers.ofString());
+            return response;
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            // Error
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,9 +1,10 @@
 package hu.pizza.pizzaproject;
 
+import hu.pizza.pizzaproject.FormsAndLists.FormsAndLists;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
-import hu.pizza.pizzaproject.dataClasses.Pizza;
-import hu.pizza.pizzaproject.dataClasses.User;
+import hu.pizza.pizzaproject.DataClasses.Pizza;
+import hu.pizza.pizzaproject.DataClasses.User;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -28,15 +29,11 @@ import java.util.List;
 
 public class HomepageController {
     @FXML
-    private TextField keresoField;
-    @FXML
-    private VBox adatokBox;
+    private VBox adatokBox = new VBox();
     @FXML
     private Button kilepesButton;
     @FXML
     private Label felsoNev;
-    @FXML
-    private VBox ablak;
     @FXML
     private TableView<User> userLista = new TableView<>();
     @FXML
@@ -44,9 +41,9 @@ public class HomepageController {
     private int Update_id;
     private String USER_URL = "http://localhost:8080/user";
     private String PIZZA_URL = "http://localhost:8080/pizza";
+    private String ORDER_URL = "http://localhost:8080/order";
     private RequestHandler requestHandler = new RequestHandler();
     private boolean userTable;
-
     @FXML
     private void initialize() {
         User user = requestHandler.getUserRequest(USER_URL);
@@ -79,9 +76,6 @@ public class HomepageController {
         // Ablak bezárása
         Stage stagebezaras = (Stage) kilepesButton.getScene().getWindow();
         stagebezaras.close();
-    }
-    public void keresoClick(ActionEvent actionEvent) {
-        //TODO: megkeresni a keresoField elemét a felhasználok táblázatból és az adatBox-ba rakja
     }
     public void modositasClick(ActionEvent actionEvent) {
         if (userTable) {
@@ -497,7 +491,7 @@ public class HomepageController {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), leirasTextField.getText(), kepTextField.getText(), arField.getValue());
+                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(),leirasTextField.getText(), arField.getValue());
                 HttpResponse response = requestHandler.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     System.out.println("Pizza sikeresen létrehozva");
@@ -630,5 +624,16 @@ public class HomepageController {
     }
     public void userListing(ActionEvent actionEvent) {
         userListCreate();
+    }
+
+    public void rendelesClick(ActionEvent actionEvent) {
+        rendelesFormFrissites();
+    }
+    public void rendelesFormFrissites(){
+        //TODO: Ezt kellene meghivni valahogy
+        FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
+        adatokBoxClear();
+        adatokBox.setAlignment(Pos.TOP_CENTER);
+        adatokBox.getChildren().add(formsAndLists.orderListCreate(ORDER_URL));
     }
 }

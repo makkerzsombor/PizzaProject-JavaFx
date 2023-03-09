@@ -3,16 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="ablak" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="nagyVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.HomepageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="nagyVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.HomepageController">
    <children>
-      <HBox minHeight="120.0" prefHeight="120.0" prefWidth="1024.0" styleClass="hbox">
+      <HBox minHeight="120.0" prefHeight="150.0" prefWidth="1024.0" styleClass="hbox">
          <children>
-            <VBox alignment="TOP_CENTER" minHeight="120.0" prefHeight="120.0" prefWidth="200.0">
+            <VBox alignment="TOP_CENTER" minHeight="120.0" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#pizzaListing" styleClass="gomb" text="Pizza listázás">
                      <VBox.margin>
@@ -27,6 +26,11 @@
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
+                  <Button mnemonicParsing="false" onAction="#rendelesClick" styleClass="gomb" text="Rendelések">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
             <HBox alignment="TOP_RIGHT" prefHeight="120.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
@@ -54,23 +58,10 @@
             </HBox>
          </children>
       </HBox>
-      <HBox maxHeight="648.0" minHeight="648.0" prefHeight="648.0" prefWidth="1024.0">
+      <HBox maxHeight="648.0" minHeight="618.0" prefHeight="618.0" prefWidth="1024.0">
          <children>
             <VBox alignment="BOTTOM_CENTER" maxHeight="648.0" minHeight="648.0" prefHeight="648.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
                <children>
-                  <TextField fx:id="keresoField" maxWidth="180.0" prefWidth="180.0" promptText="Név:" styleClass="keresoField">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </TextField>
-                  <Button mnemonicParsing="false" onAction="#keresoClick" styleClass="gomb" text="Keresés">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
                   <Button mnemonicParsing="false" onAction="#modositasClick" styleClass="gomb" text="Módosítás">
                      <font>
                         <Font size="15.0" />
