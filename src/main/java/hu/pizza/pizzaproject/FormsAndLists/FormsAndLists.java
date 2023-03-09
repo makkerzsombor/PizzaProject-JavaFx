@@ -3,6 +3,7 @@ package hu.pizza.pizzaproject.FormsAndLists;
 import hu.pizza.pizzaproject.DataClasses.Order;
 import hu.pizza.pizzaproject.DataClasses.Pizza;
 import hu.pizza.pizzaproject.DataClasses.User;
+import hu.pizza.pizzaproject.PizzaDto;
 import hu.pizza.pizzaproject.RequestHandler;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -278,4 +279,77 @@ public class FormsAndLists {
         userLista.setItems(FXCollections.observableArrayList(UserListaKesz));
         return userLista;
     }
+
+    public PizzaDto pizzaUpdateForm(Pizza modifyingPizza){
+        VBox kisablakVbox = new VBox(10);
+
+        // Név
+        Label nev = new Label();
+        nev.setText("Név:");
+        TextField nevTextField = new TextField();
+        nevTextField.setText(modifyingPizza.getName());
+        HBox nevSor = new HBox(10, nev, nevTextField);
+
+        // Leírás
+        Label leiras = new Label();
+        leiras.setText("Leírás:");
+        TextField leirasTextField = new TextField();
+        leirasTextField.setText(modifyingPizza.getDescription());
+        HBox leirasSor = new HBox(10, leiras, leirasTextField);
+
+        // Kép
+        Label kep = new Label();
+        kep.setText("Kép:");
+        TextField kepTextField = new TextField();
+        kepTextField.setText(modifyingPizza.getPicture());
+        HBox kepSor = new HBox(10, kep, kepTextField);
+
+        // Ár
+        Label Ár = new Label();
+        Ár.setText("Ár:");
+        Spinner<Integer> arField = new Spinner<>();
+        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
+        HBox arSor = new HBox(10, Ár, arField);
+
+        // kialakítás design:
+        adatokBox.setAlignment(Pos.CENTER);
+        kisablakVbox.setAlignment(Pos.TOP_CENTER);
+
+        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
+        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+
+        // Hboxok
+        nevSor.setAlignment(Pos.TOP_RIGHT);
+        leirasSor.setAlignment(Pos.TOP_RIGHT);
+        kepSor.setAlignment(Pos.TOP_RIGHT);
+        arSor.setAlignment(Pos.TOP_RIGHT);
+
+        // labelek
+        nev.setPadding(new Insets(5, 0, 0, 0));
+        leiras.setPadding(new Insets(5, 0, 0, 0));
+        kep.setPadding(new Insets(5, 0, 0, 0));
+        Ár.setPadding(new Insets(5, 0, 0, 0));
+
+        // Sorok:
+        nevSor.setPadding(new Insets(10, 0, 0, 0));
+        leirasSor.setPadding(new Insets(10, 0, 0, 0));
+        kepSor.setPadding(new Insets(10, 0, 0, 0));
+        arSor.setPadding(new Insets(10, 0, 0, 0));
+
+        // Vboxba a hboxok
+        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor);
+        System.out.println("Létrehozza a pizza modositas formot");
+
+        // new pizzadto
+        PizzaDto pizzaDto = new PizzaDto();
+        // feltöltés
+        pizzaDto.setVbox(kisablakVbox);
+        pizzaDto.setName(nevTextField);
+        pizzaDto.setDescription(leirasTextField);
+        pizzaDto.setPicture(kepTextField);
+        pizzaDto.setPrice(arField);
+        //Visszaadás
+        return pizzaDto;
+    }
+
 }

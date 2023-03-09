@@ -102,79 +102,21 @@ public class HomepageController {
         }
     }
     private void pizzaModositasFormCreate(Pizza modifyingPizza){
-        // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
-        VBox kisablakVbox = new VBox(10);
-
-        // Név
-        Label nev = new Label();
-        nev.setText("Név:");
-        TextField nevTextField = new TextField();
-        nevTextField.setText(modifyingPizza.getName());
-        HBox nevSor = new HBox(10, nev, nevTextField);
-
-        // Leírás
-        Label leiras = new Label();
-        leiras.setText("Leírás:");
-        TextField leirasTextField = new TextField();
-        leirasTextField.setText(modifyingPizza.getDescription());
-        HBox leirasSor = new HBox(10, leiras, leirasTextField);
-
-        // Kép
-        Label kep = new Label();
-        kep.setText("Kép:");
-        TextField kepTextField = new TextField();
-        kepTextField.setText(modifyingPizza.getPicture());
-        HBox kepSor = new HBox(10, kep, kepTextField);
-
-        // Ár
-        Label Ár = new Label();
-        Ár.setText("Ár:");
-        Spinner<Integer> arField = new Spinner<>();
-        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
-        HBox arSor = new HBox(10, Ár, arField);
-
-        // Létrehozás
-        Button keszButton = new Button();
-        keszButton.setText("Mentés");
-        HBox buttonSor = new HBox(keszButton);
-        HBox.setMargin(keszButton, new Insets(0, 120, 10, 0));
-        // sceneClearing
+        // FormsandLists
+        FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBoxClear();
+        PizzaDto pizzaDto = formsAndLists.pizzaUpdateForm(modifyingPizza);
+        //kiolvasom egy változoba
+        adatokBox.getChildren().add(pizzaDto.getVbox());
+        // Gomb kreálás
+        Button mentesButton = new Button("Mentés");
+        adatokBox.getChildren().add(mentesButton);
 
-        // kialakítás design:
-        adatokBox.setAlignment(Pos.CENTER);
-        kisablakVbox.setAlignment(Pos.TOP_CENTER);
-
-        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
-        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
-
-        // Hboxok
-        nevSor.setAlignment(Pos.TOP_RIGHT);
-        leirasSor.setAlignment(Pos.TOP_RIGHT);
-        kepSor.setAlignment(Pos.TOP_RIGHT);
-        arSor.setAlignment(Pos.TOP_RIGHT);
-        buttonSor.setAlignment(Pos.TOP_RIGHT);
-
-        // labelek
-        nev.setPadding(new Insets(5, 0, 0, 0));
-        leiras.setPadding(new Insets(5, 0, 0, 0));
-        kep.setPadding(new Insets(5, 0, 0, 0));
-        Ár.setPadding(new Insets(5, 0, 0, 0));
-        keszButton.setPadding(new Insets(0, 20, 0, 20));
-
-        // Sorok:
-        nevSor.setPadding(new Insets(10, 0, 0, 0));
-        leirasSor.setPadding(new Insets(10, 0, 0, 0));
-        kepSor.setPadding(new Insets(10, 0, 0, 0));
-        arSor.setPadding(new Insets(10, 0, 0, 0));
-
-        // Vboxba a hboxok
-        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor, buttonSor);
-        adatokBox.getChildren().add(kisablakVbox);
-
-        keszButton.setOnAction((event) -> {
+        mentesButton.setOnAction((event) -> {
+            //dtobol a pizza adatok
             int updateId = modifyingPizza.getId();
-            Pizza readyPizza = new Pizza(updateId, nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
+            System.out.println("Ez az id: " + updateId);
+            Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue());
             pizzaModositasFelmasolas(readyPizza, updateId);
         });
     }
@@ -393,7 +335,6 @@ public class HomepageController {
         userListCreate();
     }
     private void pizzaVeglegesTorles(long selectedIndex) {
-        System.out.println("Pizzás delete-be megy");
         // Törlés
         HttpResponse response = requestHandler.deleteRequest(PIZZA_URL, selectedIndex);
         if (response.statusCode() == 200) {
