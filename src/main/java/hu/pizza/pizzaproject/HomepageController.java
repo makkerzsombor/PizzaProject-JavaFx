@@ -420,7 +420,7 @@ public class HomepageController {
         adatokBoxClear();
         //Létrehozott formandlist
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
-        adatokBox.getChildren().add(formsAndLists.createPizza(kilepesButton));
+        adatokBox.getChildren().add(formsAndLists.createPizza(kilepesButton, pizzaLista));
     }
     private void userListCreate() {
         userTable = true;

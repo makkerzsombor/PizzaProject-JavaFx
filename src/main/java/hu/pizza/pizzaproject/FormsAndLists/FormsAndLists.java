@@ -81,7 +81,7 @@ public class FormsAndLists {
             adatokBox.getChildren().add(orderListCreate(ORDER_URL));
         }
     }
-    public VBox createPizza(Button kilepesButton) {
+    public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         VBox kisablakVbox = new VBox(10);
 
@@ -157,6 +157,9 @@ public class FormsAndLists {
                     System.out.println("Pizza sikeresen létrehozva");
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
+                    // lista firssitése
+                    adatokBox.getChildren().clear();
+                    adatokBox.getChildren().add(createPizzaList(pizzaLista));
                 } else if (response.statusCode() == 409) {
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Ilyen nevű pizza már létezik!");
@@ -165,8 +168,6 @@ public class FormsAndLists {
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Dolgozunk rajta!");
                 }
-                //TODO: lista firssitése
-                //pizzaListCreate();
             }
         });
         return kisablakVbox;
