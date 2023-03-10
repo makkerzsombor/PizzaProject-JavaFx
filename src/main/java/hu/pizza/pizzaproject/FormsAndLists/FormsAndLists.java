@@ -48,32 +48,50 @@ public class FormsAndLists {
         cim.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         HBox cimSor = new HBox(cim);
         cimSor.setAlignment(Pos.TOP_CENTER);
-
+        // Van e egyáltalán nem kész pizza
+        int notDoneCounter = 0;
         for (int i = 0; i < orders.size(); i++) {
             if (!orders.get(i).isReady()) {
-                orderElem = "userId: " + String.valueOf(orders.get(i).getUser_id()) + " pizzaId: " + String.valueOf(orders.get(i).getPizza_id()) + " Időpont: " +
-                        String.valueOf(orders.get(i).getOrder_date()) + " Telefon: " + String.valueOf(orders.get(i).getPhone_number()) + " Cím: " +
-                        String.valueOf(orders.get(i).getLocation());
-                Label label = new Label(orderElem);
-                Button readyButton = new Button("Elkészült");
-                readyButton.setId(String.valueOf(orders.get(i).getId()));
-                readyButton.setOnAction((event) -> {
-                    handleOrderDone(readyButton.getId());
-                });
-                HBox elemSor = new HBox(label, readyButton);
-                elemSor.setSpacing(10);
-                elemSor.setAlignment(Pos.TOP_RIGHT);
-                elemSor.setPadding(new Insets(5, 120, 5, 0));
-                label.setPadding(new Insets(5, 0, 0, 0));
-                hboxLista.getChildren().addAll(elemSor);
-                hboxLista.setAlignment(Pos.TOP_CENTER);
+                notDoneCounter++;
             }
         }
-        VBox kesz = new VBox();
-        VBox cimPLuszLista = new VBox(cimSor, hboxLista);
-        kesz.getChildren().add(cimPLuszLista);
-        return kesz;
+        // Nincs mit megjeleniteni
+        if (notDoneCounter == 0) {
+            Label szoveg = new Label("Nincs készülő pizza!");
+            szoveg.setStyle("-fx-text-fill: White;");
+            szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
+            VBox semmiCim = new VBox(cim, szoveg);
+            semmiCim.setAlignment(Pos.TOP_CENTER);
+            VBox keszSemmi = new VBox(semmiCim);
+            return keszSemmi;
+        } else {
+            for (int i = 0; i < orders.size(); i++) {
+                if (!orders.get(i).isReady()) {
+                    orderElem = "userId: " + String.valueOf(orders.get(i).getUser_id()) + " pizzaId: " + String.valueOf(orders.get(i).getPizza_id()) + " Időpont: " +
+                            String.valueOf(orders.get(i).getOrder_date()) + " Telefon: " + String.valueOf(orders.get(i).getPhone_number()) + " Cím: " +
+                            String.valueOf(orders.get(i).getLocation());
+                    Label label = new Label(orderElem);
+                    Button readyButton = new Button("Elkészült");
+                    readyButton.setId(String.valueOf(orders.get(i).getId()));
+                    readyButton.setOnAction((event) -> {
+                        handleOrderDone(readyButton.getId());
+                    });
+                    HBox elemSor = new HBox(label, readyButton);
+                    elemSor.setSpacing(10);
+                    elemSor.setAlignment(Pos.TOP_RIGHT);
+                    elemSor.setPadding(new Insets(5, 120, 5, 0));
+                    label.setPadding(new Insets(5, 0, 0, 0));
+                    hboxLista.getChildren().addAll(elemSor);
+                    hboxLista.setAlignment(Pos.TOP_CENTER);
+                }
+            }
+            VBox kesz = new VBox();
+            VBox cimPLuszLista = new VBox(cimSor, hboxLista);
+            kesz.getChildren().add(cimPLuszLista);
+            return kesz;
+        }
     }
+
     public void handleOrderDone(String elem) {
         long index = Integer.parseInt(elem.substring(0, 1));
         HttpResponse response = requestHandler.updateReadyStatus(index, ORDER_URL);
@@ -82,6 +100,7 @@ public class FormsAndLists {
             adatokBox.getChildren().add(orderListCreate(ORDER_URL));
         }
     }
+
     public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         VBox kisablakVbox = new VBox(10);
@@ -152,7 +171,7 @@ public class FormsAndLists {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(),leirasTextField.getText(), arField.getValue());
+                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
                 HttpResponse response = requestHandler.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     System.out.println("Pizza sikeresen létrehozva");
@@ -282,7 +301,7 @@ public class FormsAndLists {
         return userLista;
     }
 
-    public PizzaDto pizzaUpdateForm(Pizza modifyingPizza){
+    public PizzaDto pizzaUpdateForm(Pizza modifyingPizza) {
         VBox kisablakVbox = new VBox(10);
 
         // Név
@@ -354,7 +373,7 @@ public class FormsAndLists {
         return pizzaDto;
     }
 
-    public UserDto userUpdateForm(User modifyingUser){
+    public UserDto userUpdateForm(User modifyingUser) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         VBox kisablakVbox = new VBox(10);
 
