@@ -9,7 +9,6 @@ public class Order {
     private String location;
     private Date order_date;
     private String phone_number;
-
     private int price;
     private boolean ready;
 

@@ -69,7 +69,7 @@ public class FormsAndLists {
                 if (!orders.get(i).isReady()) {
                     orderElem = "userId: " + String.valueOf(orders.get(i).getUser_id()) + " pizzaId: " + String.valueOf(orders.get(i).getPizza_id()) + " Időpont: " +
                             String.valueOf(orders.get(i).getOrder_date()) + " Telefon: " + String.valueOf(orders.get(i).getPhone_number()) + " Cím: " +
-                            String.valueOf(orders.get(i).getLocation());
+                            String.valueOf(orders.get(i).getLocation() + " Összeg: " + String.valueOf(orders.get(i).getPrice()));
                     Label label = new Label(orderElem);
                     Button readyButton = new Button("Elkészült");
                     readyButton.setId(String.valueOf(orders.get(i).getId()));
