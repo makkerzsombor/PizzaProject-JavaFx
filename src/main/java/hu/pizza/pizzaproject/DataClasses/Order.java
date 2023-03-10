@@ -8,29 +8,12 @@ public class Order {
     private long pizza_id;
     private String location;
     private Date order_date;
-    private int phone_number;
+    private String phone_number;
+
+    private int price;
     private boolean ready;
 
     public Order() {
-    }
-
-    public Order(long id, long user_id, long pizza_id, String location, Date order_date, int phone_number, boolean ready) {
-        this.id = id;
-        this.user_id = user_id;
-        this.pizza_id = pizza_id;
-        this.location = location;
-        this.order_date = order_date;
-        this.phone_number = phone_number;
-        this.ready = ready;
-    }
-
-    public Order(long user_id, long pizza_id, String location, Date order_date, int phone_number, boolean ready) {
-        this.user_id = user_id;
-        this.pizza_id = pizza_id;
-        this.location = location;
-        this.order_date = order_date;
-        this.phone_number = phone_number;
-        this.ready = ready;
     }
 
     public Order(long id, boolean ready) {
@@ -78,12 +61,20 @@ public class Order {
         this.order_date = order_date;
     }
 
-    public int getPhone_number() {
+    public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhone_number(int phone_number) {
+    public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public boolean isReady() {
