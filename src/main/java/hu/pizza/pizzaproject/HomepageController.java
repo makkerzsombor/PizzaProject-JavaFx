@@ -251,7 +251,6 @@ public class HomepageController {
         // Táblázat ujra kreálása:
         userListCreate();
     }
-
     private void pizzaVeglegesTorles(long selectedIndex) {
         // Törlés
         HttpResponse response = requestHandler.deleteRequest(PIZZA_URL, selectedIndex);
@@ -265,7 +264,6 @@ public class HomepageController {
         // Táblázat ujra kreálása:
         pizzaListCreate();
     }
-
     private void adatokBoxClear() {
         adatokBox.getChildren().clear();
     }
