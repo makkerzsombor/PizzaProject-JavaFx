@@ -107,7 +107,7 @@ public class LoginController {
                 System.out.println("Not found");
             }else if(response.statusCode() == 403){
                 showAlert(Alert.AlertType.ERROR, owner, "Login Error!",
-                        "You are not an admin!");
+                        "You either have no account with this email or you might lack Admin rigths!");
             }else{
                 showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                         "Your email/password is incorrect");

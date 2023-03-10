@@ -239,6 +239,9 @@ public class FormsAndLists {
 
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("price"));
+        //elözetes törlések
+        pizzaLista.getColumns().clear();
+        pizzaLista.getItems().clear();
 
         pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5);
 
