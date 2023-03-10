@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.dataClasses;
+package hu.pizza.pizzaproject.DataClasses;
 
 public class User {
     private Long id;

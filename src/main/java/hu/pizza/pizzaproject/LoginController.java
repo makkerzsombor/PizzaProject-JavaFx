@@ -107,7 +107,7 @@ public class LoginController {
                 System.out.println("Not found");
             }else if(response.statusCode() == 403){
                 showAlert(Alert.AlertType.ERROR, owner, "Login Error!",
-                        "You are not an admin!");
+                        "You either have no account with this email or you might lack Admin rigths!");
             }else{
                 showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                         "Your email/password is incorrect");
@@ -119,7 +119,7 @@ public class LoginController {
     }
     private void newAblak(){
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("homepage-view.fxml"));
-        Scene scene = null;
+        Scene scene;
         try {
             scene = new Scene(fxmlLoader.load(), 1024, 768);
             scene.getStylesheets().add("style.css");
@@ -129,7 +129,6 @@ public class LoginController {
         Stage stage = new Stage();
         stage.setTitle("Homepage");
         stage.setScene(scene);
-        HomepageController controller = fxmlLoader.getController();
         stage.setResizable(false);
         Image icon = new Image("kesz_arany_logo.png");
         stage.getIcons().add(icon);
