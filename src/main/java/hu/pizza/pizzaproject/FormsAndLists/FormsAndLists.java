@@ -4,6 +4,7 @@ import hu.pizza.pizzaproject.DataClasses.Order;
 import hu.pizza.pizzaproject.DataClasses.Pizza;
 import hu.pizza.pizzaproject.DataClasses.User;
 import hu.pizza.pizzaproject.Dtos.PizzaDto;
+import hu.pizza.pizzaproject.Dtos.UserDto;
 import hu.pizza.pizzaproject.RequestHandler;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -351,6 +352,94 @@ public class FormsAndLists {
         pizzaDto.setPrice(arField);
         //Visszaadás
         return pizzaDto;
+    }
+
+    public UserDto userUpdateForm(User modifyingUser){
+        // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
+        VBox kisablakVbox = new VBox(10);
+
+        // Firtsname
+        Label firstName = new Label();
+        firstName.setText("Firstname:");
+        TextField firstNameTextField = new TextField();
+        HBox firstNameSor = new HBox(10, firstName, firstNameTextField);
+
+        // Lastsname
+        Label lastName = new Label();
+        lastName.setText("Lastname:");
+        TextField lastNameTextField = new TextField();
+        HBox lastNameSor = new HBox(10, lastName, lastNameTextField);
+
+        // Email
+        Label email = new Label();
+        email.setText("Email:");
+        TextField emailTextField = new TextField();
+        HBox emailSor = new HBox(10, email, emailTextField);
+
+        // Password
+        Label password = new Label();
+        password.setText("Password:");
+        TextField passwordTextField = new TextField();
+        HBox passwordSor = new HBox(10, password, passwordTextField);
+
+        // Admin
+        Label admin = new Label();
+        admin.setText("Admin:");
+        CheckBox adminCheckbox = new CheckBox();
+        HBox adminSor = new HBox(10, admin, adminCheckbox);
+        HBox.setMargin(adminCheckbox, new Insets(0, 133, 0, 0));
+
+        // Inputokba value-k:
+        firstNameTextField.setText(modifyingUser.getFirst_name());
+        lastNameTextField.setText(modifyingUser.getLast_name());
+        emailTextField.setText(modifyingUser.getEmail());
+        passwordTextField.setText(modifyingUser.getPassword());
+        if (modifyingUser.isAdmin()) {
+            adminCheckbox.setSelected(true);
+        } else {
+            adminCheckbox.setSelected(false);
+        }
+
+        // kialakítás design:
+        adatokBox.setAlignment(Pos.CENTER);
+        kisablakVbox.setAlignment(Pos.TOP_CENTER);
+
+        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
+        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+
+        // Hboxok
+        firstNameSor.setAlignment(Pos.TOP_RIGHT);
+        lastNameSor.setAlignment(Pos.TOP_RIGHT);
+        emailSor.setAlignment(Pos.TOP_RIGHT);
+        passwordSor.setAlignment(Pos.TOP_RIGHT);
+        adminSor.setAlignment(Pos.TOP_RIGHT);
+
+        // labelek
+        firstName.setPadding(new Insets(5, 0, 0, 0));
+        lastName.setPadding(new Insets(5, 0, 0, 0));
+        email.setPadding(new Insets(5, 0, 0, 0));
+        password.setPadding(new Insets(5, 0, 0, 0));
+        admin.setPadding(new Insets(0, 0, 0, 0));
+
+        // Sorok:
+        firstNameSor.setPadding(new Insets(10, 0, 0, 0));
+        lastNameSor.setPadding(new Insets(10, 0, 0, 0));
+        emailSor.setPadding(new Insets(10, 0, 0, 0));
+        passwordSor.setPadding(new Insets(10, 0, 0, 0));
+        adminSor.setPadding(new Insets(10, 0, 10, 0));
+
+        // Vboxba a hboxok
+        kisablakVbox.getChildren().addAll(firstNameSor, lastNameSor, emailSor, passwordSor, adminSor);
+        // new userdto
+        UserDto userDto = new UserDto();
+        // feltöltés
+        userDto.setVbox(kisablakVbox);
+        userDto.setFirst_name(firstNameTextField);
+        userDto.setLast_name(lastNameTextField);
+        userDto.setEmail(emailTextField);
+        userDto.setPassword(passwordTextField);
+        userDto.setAdmin(adminCheckbox);
+        return userDto;
     }
 
 }
