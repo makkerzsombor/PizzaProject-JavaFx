@@ -1,31 +1,26 @@
 package hu.pizza.pizzaproject;
 
+import hu.pizza.pizzaproject.Dtos.PizzaDto;
 import hu.pizza.pizzaproject.FormsAndLists.FormsAndLists;
 import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
 import hu.pizza.pizzaproject.Model.JwtToken;
 import hu.pizza.pizzaproject.DataClasses.Pizza;
 import hu.pizza.pizzaproject.DataClasses.User;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 public class HomepageController {
     @FXML
@@ -96,7 +91,7 @@ public class HomepageController {
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Először jelöljön ki egy elemet!");
             }else{
                 Pizza selected = pizzaLista.getSelectionModel().getSelectedItem();
-                Pizza modifyingPizza = new Pizza(selected.getId(), selected.getName(), selected.getDescription(), selected.getPicture(), selected.getPrice());
+                Pizza modifyingPizza = new Pizza(selected.getId(), selected.getName(),  selected.getPicture(), selected.getDescription(), selected.getPrice());
                 pizzaModositasFormCreate(modifyingPizza);
             }
         }

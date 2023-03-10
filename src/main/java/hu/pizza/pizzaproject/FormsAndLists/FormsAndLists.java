@@ -3,7 +3,7 @@ package hu.pizza.pizzaproject.FormsAndLists;
 import hu.pizza.pizzaproject.DataClasses.Order;
 import hu.pizza.pizzaproject.DataClasses.Pizza;
 import hu.pizza.pizzaproject.DataClasses.User;
-import hu.pizza.pizzaproject.PizzaDto;
+import hu.pizza.pizzaproject.Dtos.PizzaDto;
 import hu.pizza.pizzaproject.RequestHandler;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -73,7 +73,6 @@ public class FormsAndLists {
         kesz.getChildren().add(cimPLuszLista);
         return kesz;
     }
-
     public void handleOrderDone(String elem) {
         long index = Integer.parseInt(elem.substring(0, 1));
         HttpResponse response = requestHandler.updateReadyStatus(index, ORDER_URL);
@@ -158,6 +157,8 @@ public class FormsAndLists {
                     System.out.println("Pizza sikeresen létrehozva");
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
+                    // táblázatból törlés
+                    pizzaLista.getItems().clear();
                     // lista firssitése
                     adatokBox.getChildren().clear();
                     adatokBox.getChildren().add(createPizzaList(pizzaLista));
