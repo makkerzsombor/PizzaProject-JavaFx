@@ -313,6 +313,7 @@ public class HomepageController {
     }
 
     public void rendelesFormFrissites() {
+        // comment
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBoxClear();
         adatokBox.setAlignment(Pos.TOP_CENTER);
