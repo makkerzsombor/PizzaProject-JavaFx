@@ -11,29 +11,29 @@
    <children>
       <HBox minHeight="120.0" prefHeight="150.0" prefWidth="1024.0" styleClass="hbox">
          <children>
-            <VBox alignment="TOP_CENTER" minHeight="120.0" prefHeight="150.0" prefWidth="200.0">
+            <VBox alignment="TOP_CENTER" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#pizzaListing" styleClass="gomb" text="Pizza listázás">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaListing" prefWidth="120.0" styleClass="gomb" text="Pizza listázás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#pizzaCreate" styleClass="gomb" text="Pizza hozzáadás">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaCreate" prefWidth="120.0" styleClass="gomb" text="Pizza hozzáadás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
-                  <Button mnemonicParsing="false" onAction="#userListing" styleClass="gomb" text="User listázás">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#userListing" prefWidth="120.0" styleClass="gomb" text="User listázás">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
-                  <Button mnemonicParsing="false" onAction="#rendelesClick" styleClass="gomb" text="Rendelések">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#rendelesClick" prefWidth="120.0" styleClass="gomb" text="Rendelések">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
                </children>
             </VBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="120.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
+            <HBox alignment="TOP_RIGHT" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
                <children>
                   <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="koszones" text="Üdvözöljük kedves xy">
                      <HBox.margin>
@@ -58,16 +58,16 @@
             </HBox>
          </children>
       </HBox>
-      <HBox maxHeight="648.0" minHeight="618.0" prefHeight="618.0" prefWidth="1024.0">
+      <HBox maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="1024.0">
          <children>
-            <VBox alignment="BOTTOM_CENTER" maxHeight="648.0" minHeight="648.0" prefHeight="648.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
                <children>
-                  <Button mnemonicParsing="false" onAction="#modositasClick" styleClass="gomb" text="Módosítás">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#modositasClick" prefWidth="120.0" styleClass="gomb" text="Módosítás">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#torlesClick" styleClass="gomb" text="Törlés">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#torlesClick" prefWidth="120.0" styleClass="gomb" text="Törlés">
                      <VBox.margin>
                         <Insets bottom="100.0" />
                      </VBox.margin>
@@ -80,7 +80,7 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="adatokBox" maxHeight="648.0" maxWidth="804.0" minHeight="648.0" prefHeight="648.0" prefWidth="804.0" styleClass="mainVbox">
+            <VBox fx:id="adatokBox" maxHeight="618.0" maxWidth="804.0" minHeight="618.0" prefHeight="618.0" prefWidth="804.0" styleClass="mainVbox">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></VBox>
