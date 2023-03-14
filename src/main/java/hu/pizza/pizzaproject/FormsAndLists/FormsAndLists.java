@@ -175,7 +175,6 @@ public class FormsAndLists {
                 Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
                 HttpResponse response = requestHandler.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
-                    System.out.println("Pizza sikeresen létrehozva");
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
                     // táblázatból törlés
@@ -363,7 +362,6 @@ public class FormsAndLists {
 
         // Vboxba a hboxok
         kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor);
-        System.out.println("Létrehozza a pizza modositas formot");
 
         // new pizzadto
         PizzaDto pizzaDto = new PizzaDto();
