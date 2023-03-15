@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.Dtos;
+package hu.pizza.pizzaproject.model;
 
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;

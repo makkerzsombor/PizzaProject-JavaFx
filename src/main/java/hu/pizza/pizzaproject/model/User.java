@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.DataClasses;
+package hu.pizza.pizzaproject.model;
 
 public class User {
     private Long id;
@@ -79,5 +79,17 @@ public class User {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", admin=" + admin +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                '}';
     }
 }
