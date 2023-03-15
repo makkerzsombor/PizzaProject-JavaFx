@@ -1,11 +1,13 @@
-package hu.pizza.pizzaproject.FormsAndLists;
+package hu.pizza.pizzaproject.components;
 
-import hu.pizza.pizzaproject.DataClasses.Order;
-import hu.pizza.pizzaproject.DataClasses.Pizza;
-import hu.pizza.pizzaproject.DataClasses.User;
-import hu.pizza.pizzaproject.Dtos.PizzaDto;
-import hu.pizza.pizzaproject.Dtos.UserDto;
-import hu.pizza.pizzaproject.RequestHandler;
+import hu.pizza.pizzaproject.model.Order;
+import hu.pizza.pizzaproject.model.Pizza;
+import hu.pizza.pizzaproject.model.User;
+import hu.pizza.pizzaproject.model.PizzaDto;
+import hu.pizza.pizzaproject.model.UserDto;
+import hu.pizza.pizzaproject.requests.OrderRequests;
+import hu.pizza.pizzaproject.requests.PizzaRequests;
+import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,24 +24,26 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hu.pizza.pizzaproject.HomepageController.showAlert;
+import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
 public class FormsAndLists {
-    private VBox adatokBox;
+    private final VBox adatokBox;
 
     public FormsAndLists(VBox adatokBox) {
         this.adatokBox = adatokBox;
     }
 
-    private static List<Order> orders = new ArrayList<>();
-    private RequestHandler requestHandler = new RequestHandler();
-    private String ORDER_URL = "http://localhost:8080/order";
-    private String PIZZA_URL = "http://localhost:8080/pizza";
-    private String USER_URL = "http://localhost:8080/user";
+    private static final List<Order> orders = new ArrayList<>();
+    private final UserRequests userRequests = new UserRequests();
+    private final PizzaRequests pizzaRequests = new PizzaRequests();
+    private final OrderRequests orderRequests = new OrderRequests();
+    private final String ORDER_URL = "http://localhost:8080/order";
+    private final String PIZZA_URL = "http://localhost:8080/pizza";
+    private final String USER_URL = "http://localhost:8080/user";
 
     public VBox orderListCreate(String BASE_URL) {
         orders.clear();
-        orders.addAll(requestHandler.getallOrderRequest(BASE_URL));
+        orders.addAll(orderRequests.getallOrderRequest(BASE_URL));
         VBox hboxLista = new VBox();
         hboxLista.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         String orderElem = "";
@@ -50,8 +54,8 @@ public class FormsAndLists {
         cimSor.setAlignment(Pos.TOP_CENTER);
         // Van e egyáltalán nem kész pizza
         int notDoneCounter = 0;
-        for (int i = 0; i < orders.size(); i++) {
-            if (!orders.get(i).isReady()) {
+        for (Order value : orders) {
+            if (!value.isReady()) {
                 notDoneCounter++;
             }
         }
@@ -62,17 +66,16 @@ public class FormsAndLists {
             szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
-            VBox keszSemmi = new VBox(semmiCim);
-            return keszSemmi;
+            return new VBox(semmiCim);
         } else {
-            for (int i = 0; i < orders.size(); i++) {
-                if (!orders.get(i).isReady()) {
-                    orderElem = "userId: " + String.valueOf(orders.get(i).getUser_id()) + " pizzaId: " + String.valueOf(orders.get(i).getPizza_id()) + " Időpont: " +
-                            String.valueOf(orders.get(i).getOrder_date()) + " Telefon: " + String.valueOf(orders.get(i).getPhone_number()) + " Cím: " +
-                            String.valueOf(orders.get(i).getLocation() + " Összeg: " + String.valueOf(orders.get(i).getPrice()));
+            for (Order order : orders) {
+                if (!order.isReady()) {
+                    orderElem = "userId: " + order.getUser_id() + " pizzaId: " + order.getPizza_id() + " Időpont: " +
+                            order.getOrder_date() + " Telefon: " + order.getPhone_number() + " Cím: " +
+                            order.getLocation() + " Összeg: " + order.getPrice();
                     Label label = new Label(orderElem);
                     Button readyButton = new Button("Elkészült");
-                    readyButton.setId(String.valueOf(orders.get(i).getId()));
+                    readyButton.setId(String.valueOf(order.getId()));
                     readyButton.setOnAction((event) -> {
                         handleOrderDone(readyButton.getId());
                     });
@@ -94,7 +97,7 @@ public class FormsAndLists {
 
     public void handleOrderDone(String elem) {
         long index = Integer.parseInt(elem.substring(0, 1));
-        HttpResponse response = requestHandler.updateReadyStatus(index, ORDER_URL);
+        HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
         if (response.statusCode() == 200) {
             adatokBox.getChildren().clear();
             adatokBox.getChildren().add(orderListCreate(ORDER_URL));
@@ -123,12 +126,12 @@ public class FormsAndLists {
         TextField kepTextField = new TextField();
         HBox kepSor = new HBox(10, kep, kepTextField);
 
-        // Ár
-        Label Ár = new Label();
-        Ár.setText("Ár:");
+        // ar
+        Label ar = new Label();
+        ar.setText("ar:");
         Spinner<Integer> arField = new Spinner<>();
         arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 2000, 10));
-        HBox arSor = new HBox(10, Ár, arField);
+        HBox arSor = new HBox(10, ar, arField);
 
         // Létrehozás
         Button keszButton = new Button();
@@ -154,7 +157,7 @@ public class FormsAndLists {
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
-        Ár.setPadding(new Insets(5, 0, 0, 0));
+        ar.setPadding(new Insets(5, 0, 0, 0));
         keszButton.setPadding(new Insets(0, 20, 0, 20));
 
         // Sorok:
@@ -173,7 +176,7 @@ public class FormsAndLists {
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
                 Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
-                HttpResponse response = requestHandler.addPizzaRequest(PIZZA_URL, newPizza);
+                HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
@@ -199,7 +202,7 @@ public class FormsAndLists {
         // Tábla cím
         Text text = new Text();
         text.setText("Pizza adatok");
-        adatokBox.setMargin(text, new Insets(0, 0, 10, 0));
+        VBox.setMargin(text, new Insets(0, 0, 10, 0));
         text.setStyle("-fx-fill: white; ");
         text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         adatokBox.getChildren().add(text);
@@ -245,7 +248,7 @@ public class FormsAndLists {
 
         pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5);
 
-        List<Pizza> pizzaListaKesz = requestHandler.getallPizzaRequest(PIZZA_URL);
+        List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
         // Listából tableViewba rakás
         pizzaLista.setItems(FXCollections.observableArrayList(pizzaListaKesz));
         return pizzaLista;
@@ -255,7 +258,7 @@ public class FormsAndLists {
         // Tábla cím
         Text text = new Text();
         text.setText("User adatok");
-        adatokBox.setMargin(text, new Insets(0, 0, 10, 0));
+        VBox.setMargin(text, new Insets(0, 0, 10, 0));
         text.setStyle("-fx-fill: white; ");
         text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         adatokBox.getChildren().add(text);
@@ -298,7 +301,7 @@ public class FormsAndLists {
 
         userLista.getColumns().addAll(column1, column2, column3, column4, column5);
 
-        List<User> UserListaKesz = requestHandler.getallUserRequest(USER_URL);
+        List<User> UserListaKesz = userRequests.getallUserRequest(USER_URL);
         // Listából tableViewba rakás
         userLista.setItems(FXCollections.observableArrayList(UserListaKesz));
         return userLista;
@@ -328,12 +331,12 @@ public class FormsAndLists {
         kepTextField.setText(modifyingPizza.getPicture());
         HBox kepSor = new HBox(10, kep, kepTextField);
 
-        // Ár
-        Label Ár = new Label();
-        Ár.setText("Ár:");
+        // ar
+        Label ar = new Label();
+        ar.setText("ar:");
         Spinner<Integer> arField = new Spinner<>();
         arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
-        HBox arSor = new HBox(10, Ár, arField);
+        HBox arSor = new HBox(10, ar, arField);
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
@@ -352,7 +355,7 @@ public class FormsAndLists {
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
-        Ár.setPadding(new Insets(5, 0, 0, 0));
+        ar.setPadding(new Insets(5, 0, 0, 0));
 
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
@@ -415,11 +418,7 @@ public class FormsAndLists {
         lastNameTextField.setText(modifyingUser.getLast_name());
         emailTextField.setText(modifyingUser.getEmail());
         passwordTextField.setText(modifyingUser.getPassword());
-        if (modifyingUser.isAdmin()) {
-            adminCheckbox.setSelected(true);
-        } else {
-            adminCheckbox.setSelected(false);
-        }
+        adminCheckbox.setSelected(modifyingUser.isAdmin());
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);

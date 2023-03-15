@@ -1,10 +1,10 @@
-package hu.pizza.pizzaproject;
+package hu.pizza.pizzaproject.components;
 
 import com.google.gson.Gson;
-import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
-import hu.pizza.pizzaproject.Model.JwtToken;
-import hu.pizza.pizzaproject.Model.LoginRequest;
-import javafx.event.ActionEvent;
+import hu.pizza.pizzaproject.Application;
+import hu.pizza.pizzaproject.model.User;
+import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
+import hu.pizza.pizzaproject.auth.JwtResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,7 +23,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Objects;
 
 public class LoginController {
 
@@ -45,8 +44,8 @@ public class LoginController {
         logoView.setImage(kepem);
     }
 
-    private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
+    private static void showAlert(Window owner, String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -54,16 +53,16 @@ public class LoginController {
         alert.show();
     }
 
-    public void loginClick(ActionEvent actionEvent) {
+    public void loginClick() {
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
         if (emailField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+            showAlert(owner, "Form Error!",
                     "Please enter your email first!");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+            showAlert(owner, "Form Error!",
                     "Please enter a password first!");
             return;
         }
@@ -72,14 +71,10 @@ public class LoginController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        // Login request léthezása
-         LoginRequest loginRequest = new LoginRequest();
-         loginRequest.setEmail(email);
-         loginRequest.setPassword(password);
-
-        //new gson to json
-        Gson converter = new Gson();
-        String toPublisher = (converter.toJson(loginRequest));
+        //User object létrehozása
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
 
         // Http cliens létrehozása
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -90,7 +85,7 @@ public class LoginController {
             loginRequestPost = HttpRequest.newBuilder()
                     .uri(new URI(LOGIN_API_URL + "/admin-login"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(toPublisher))
+                    .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(user)))
                     .build();
 
             HttpResponse<String> response = httpClient.send(loginRequestPost, HttpResponse.BodyHandlers.ofString());
@@ -98,18 +93,19 @@ public class LoginController {
             System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri() + "Ez a header + uri");
 
             if (response.statusCode() == 200){
-                System.out.println("Sikeres token kreálás");
-                ApplicationConfiguration.setJwtToken(converter.fromJson(response.body(), JwtToken.class));
+                System.out.println("Successful token creation");
+                JwtResponse jwtResponse = new Gson().fromJson(response.body(), JwtResponse.class);
+                ApplicationConfiguration.setJwtResponse(jwtResponse);
                 newAblak();
             }else if(response.statusCode() == 400){
                 System.out.println("rossz syntax / request");
             }else if(response.statusCode() == 404){
                 System.out.println("Not found");
             }else if(response.statusCode() == 403){
-                showAlert(Alert.AlertType.ERROR, owner, "Login Error!",
+                showAlert(owner, "Login Error!",
                         "You either have no account with this email or you might lack Admin rigths!");
             }else{
-                showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+                showAlert(owner, "Form Error!",
                         "Your email/password is incorrect");
             }
 

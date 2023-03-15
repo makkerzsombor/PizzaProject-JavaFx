@@ -1,12 +1,13 @@
-package hu.pizza.pizzaproject;
+package hu.pizza.pizzaproject.components;
 
-import hu.pizza.pizzaproject.Dtos.PizzaDto;
-import hu.pizza.pizzaproject.Dtos.UserDto;
-import hu.pizza.pizzaproject.FormsAndLists.FormsAndLists;
-import hu.pizza.pizzaproject.Model.ApplicationConfiguration;
-import hu.pizza.pizzaproject.Model.JwtToken;
-import hu.pizza.pizzaproject.DataClasses.Pizza;
-import hu.pizza.pizzaproject.DataClasses.User;
+import hu.pizza.pizzaproject.Application;
+import hu.pizza.pizzaproject.model.PizzaDto;
+import hu.pizza.pizzaproject.model.UserDto;
+import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
+import hu.pizza.pizzaproject.model.Pizza;
+import hu.pizza.pizzaproject.model.User;
+import hu.pizza.pizzaproject.requests.PizzaRequests;
+import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -31,26 +32,25 @@ public class HomepageController {
     @FXML
     private Label felsoNev;
     @FXML
-    private TableView<User> userLista = new TableView<>();
+    private final TableView<User> userLista = new TableView<>();
     @FXML
-    private TableView<Pizza> pizzaLista = new TableView<>();
-    private String USER_URL = "http://localhost:8080/user";
-    private String PIZZA_URL = "http://localhost:8080/pizza";
-    private String ORDER_URL = "http://localhost:8080/order";
-    private RequestHandler requestHandler = new RequestHandler();
+    private final TableView<Pizza> pizzaLista = new TableView<>();
+    private final String USER_URL = "http://localhost:8080/user";
+    private final String PIZZA_URL = "http://localhost:8080/pizza";
+    private final String ORDER_URL = "http://localhost:8080/order";
+    private final UserRequests userRequests = new UserRequests();
+    private final PizzaRequests pizzaRequests = new PizzaRequests();
     private boolean userTable;
 
     @FXML
     private void initialize() {
-        User user = requestHandler.getUserRequest(USER_URL);
+        User user = userRequests.getUserInformation(USER_URL);
         // Felső labelbe név rakás
         felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
     }
 
-    public void kilepesClick(ActionEvent actionEvent) {
-        JwtToken jwttoken = new JwtToken();
-        jwttoken.setJwtToken("");
-        ApplicationConfiguration.setJwtToken(jwttoken);
+    public void kilepesClick() {
+        ApplicationConfiguration.setJwtResponse(null);
 
         // Visszalépés a login windowra
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
@@ -125,7 +125,7 @@ public class HomepageController {
 
     private void pizzaModositasFelmasolas(Pizza readyPizza, int updateId) {
         // Modositas
-        HttpResponse response = requestHandler.updatePizzaRequest(readyPizza, updateId, PIZZA_URL);
+        HttpResponse response = pizzaRequests.updatePizzaRequest(readyPizza, updateId, PIZZA_URL);
         if (response.statusCode() == 200) {
             Window window = adatokBox.getScene().getWindow();
             showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás", "Az adatbázist sikeresen frissitettük");
@@ -168,7 +168,7 @@ public class HomepageController {
 
     private void userModositasFelmasolas(User readyUser, long updateId) {
         // Modositas
-        HttpResponse response = requestHandler.updateUserRequest(readyUser, updateId, USER_URL);
+        HttpResponse response = userRequests.updateUserRequest(readyUser, updateId, USER_URL);
         if (response.statusCode() == 200) {
             Window window = adatokBox.getScene().getWindow();
             showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás", "Az adatbázist sikeresen frissitettük");
@@ -248,7 +248,7 @@ public class HomepageController {
 
     private void userVeglegesTorles(long selectedIndex) {
         // Törlés
-        HttpResponse response = requestHandler.deleteRequest(USER_URL, selectedIndex);
+        HttpResponse response = userRequests.deleteUserRequest(USER_URL, selectedIndex);
         if (response.statusCode() == 200) {
             Window window = adatokBox.getScene().getWindow();
             showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés", "Az adott felhasználót sikeresen eltávolítottuk");
@@ -261,7 +261,7 @@ public class HomepageController {
     }
     private void pizzaVeglegesTorles(long selectedIndex) {
         // Törlés
-        HttpResponse response = requestHandler.deleteRequest(PIZZA_URL, selectedIndex);
+        HttpResponse response = userRequests.deleteUserRequest(PIZZA_URL, selectedIndex);
         if (response.statusCode() == 200) {
             Window window = adatokBox.getScene().getWindow();
             showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés", "Az adott pizzát sikeresen eltávolítottuk");

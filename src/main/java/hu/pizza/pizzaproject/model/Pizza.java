@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.DataClasses;
+package hu.pizza.pizzaproject.model;
 
 public class Pizza {
     private int id;

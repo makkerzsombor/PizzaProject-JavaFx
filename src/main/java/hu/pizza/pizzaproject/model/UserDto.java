@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.Dtos;
+package hu.pizza.pizzaproject.model;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;

@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.DataClasses;
+package hu.pizza.pizzaproject.model;
 
 import java.util.Date;
 
