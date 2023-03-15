@@ -105,11 +105,15 @@ public class HomepageController {
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBoxClear();
         PizzaDto pizzaDto = formsAndLists.pizzaUpdateForm(modifyingPizza);
-        //kiolvasom egy változoba
-        adatokBox.getChildren().add(pizzaDto.getVbox());
-        // Gomb kreálás
+        // Button létrehozása
         Button mentesButton = new Button("Mentés");
-        adatokBox.getChildren().add(mentesButton);
+        mentesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+
+        HBox gombSor = new HBox(mentesButton);
+        gombSor.setAlignment(Pos.TOP_CENTER);
+        gombSor.setPadding(new Insets(0, 0,0,320));
+        pizzaDto.getVbox().getChildren().add(gombSor);
+        adatokBox.getChildren().add(pizzaDto.getVbox());
 
         mentesButton.setOnAction((event) -> {
             //dtobol a pizza adatok
@@ -138,11 +142,15 @@ public class HomepageController {
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBoxClear();
         UserDto userDto = formsAndLists.userUpdateForm(modifyingUser);
-        //kiolvasom egy változoba
-        adatokBox.getChildren().add(userDto.getVbox());
         // Gomb kreálás
         Button mentesButton = new Button("Mentés");
-        adatokBox.getChildren().add(mentesButton);
+        mentesButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
+
+        HBox gombSor = new HBox(mentesButton);
+        gombSor.setAlignment(Pos.TOP_CENTER);
+        gombSor.setPadding(new Insets(0, 0,0,320));
+        userDto.getVbox().getChildren().add(gombSor);
+        adatokBox.getChildren().add(userDto.getVbox());
 
         mentesButton.setOnAction((event) -> {
             //dtobol a pizza adatok
