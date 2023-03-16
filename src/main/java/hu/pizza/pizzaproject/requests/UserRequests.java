@@ -46,7 +46,7 @@ public class UserRequests {
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token
-                    response = requestHandler.sendPut(USER_URL + updateId, accessToken, jsonBody);
+                    response = requestHandler.sendPut(USER_URL + '/' + updateId, accessToken, jsonBody);
                 } catch (IOException | InterruptedException ex) {
                     // Error
                     throw new RuntimeException(ex);
@@ -152,7 +152,7 @@ public class UserRequests {
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token
-                    response = requestHandler.sendDelete(USER_URL + userId, accessToken);
+                    response = requestHandler.sendDelete(USER_URL + '/' + userId, accessToken);
                 } catch (IOException | InterruptedException ex) {
                     // Error
                     throw new RuntimeException(ex);

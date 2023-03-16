@@ -97,16 +97,14 @@ public class LoginController {
                 JwtResponse jwtResponse = new Gson().fromJson(response.body(), JwtResponse.class);
                 ApplicationConfiguration.setJwtResponse(jwtResponse);
                 newAblak();
-            }else if(response.statusCode() == 400){
-                System.out.println("rossz syntax / request");
             }else if(response.statusCode() == 404){
-                System.out.println("Not found");
-            }else if(response.statusCode() == 403){
-                showAlert(owner, "Login Error!",
-                        "You either have no account with this email or you might lack Admin rigths!");
-            }else{
                 showAlert(owner, "Form Error!",
                         "Your email/password is incorrect");
+            }else if(response.statusCode() == 403){
+                showAlert(owner, "Login Error!",
+                        "You might lack Admin rigths!");
+            }else{
+                System.out.println(response.statusCode());
             }
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
