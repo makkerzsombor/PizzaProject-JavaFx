@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.model.Order;
 import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
 import hu.pizza.pizzaproject.auth.JwtResponse;
+import hu.pizza.pizzaproject.model.User;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -12,7 +13,11 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class OrderRequests {
-    public List<Order> getallOrderRequest(String BASE_URL) {
+    public List<Order> getallOrderRequest(String ORDER_URL) {
+        // Get access and refresh tokens
+        JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
+        String accessToken = jwtResponse.getJwttoken();
+        String refreshToken = jwtResponse.getRefreshToken();
 
         // Lista<Pizza>
         List<Order> orderLista;
@@ -23,8 +28,9 @@ public class OrderRequests {
         // Gson létrehozása (kiolvasáshoz)
         Gson converter = new Gson();
 
+        HttpResponse<String> response = null;
         try {
-            HttpResponse<String> response = requestHandler.sendGetAll(BASE_URL + "/get-all");
+             response = requestHandler.sendGetAll(ORDER_URL + "/get-all", accessToken);
 
             // Parse the response body into a List<User> object using Gson
             Type orderListType = new TypeToken<List<Order>>(){}.getType();
@@ -33,6 +39,25 @@ public class OrderRequests {
             // Error
             throw new RuntimeException(e);
         }
+
+        if (response.statusCode() == 451) {
+            System.out.println("Access token expired, refreshing...");
+            JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
+            if (newJwtResponse != null) {
+                accessToken = newJwtResponse.getJwttoken();
+                ApplicationConfiguration.setJwtResponse(newJwtResponse);
+                try {
+                    // Retry the original request with the new access token
+                    response = requestHandler.sendGet(ORDER_URL + "/data", accessToken);
+                    Type orderListType = new TypeToken<List<Order>>(){}.getType();
+                    orderLista = converter.fromJson(response.body(), orderListType);
+                } catch (IOException | InterruptedException e) {
+                    // Error
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
         // Lista visszaküldés
         return orderLista;
     }

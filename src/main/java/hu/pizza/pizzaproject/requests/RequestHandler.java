@@ -19,13 +19,23 @@ public class RequestHandler {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
-                .header("Authorization", "Bearer " + accessToken)
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
                 .build();
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    public HttpResponse<String> sendGetAll(String url) throws IOException, InterruptedException {
+    public HttpResponse<String> sendGetAll(String url, String accessToken) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .build();
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public HttpResponse<String> sendGetAllPizzas(String url) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
