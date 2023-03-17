@@ -107,7 +107,7 @@ public class PizzaRequests {
         Gson converter = new Gson();
 
         try {
-            HttpResponse<String> response = requestHandler.sendGetAll(BASE_URL + "/get-all");
+            HttpResponse<String> response = requestHandler.sendGetAllPizzas(BASE_URL + "/get-all");
 
             // Parse the response body into a List<User> object using Gson
             Type pizzaListType = new TypeToken<List<Pizza>>() {

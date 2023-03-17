@@ -101,7 +101,11 @@ public class UserRequests {
     }
 
 
-    public List<User> getallUserRequest(String BASE_URL){
+    public List<User> getallUserRequest(String USER_URL){
+        // Get access and refresh tokens
+        JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
+        String accessToken = jwtResponse.getJwttoken();
+        String refreshToken = jwtResponse.getRefreshToken();
 
         // Lista<User>
         List<User> userLista = new ArrayList<User>();
@@ -112,8 +116,9 @@ public class UserRequests {
         // Gson létrehozása (kiolvasáshoz)
         Gson converter = new Gson();
 
+        HttpResponse<String> response = null;
         try {
-            HttpResponse<String> response = requestHandler.sendGetAll(BASE_URL + "/get-all");
+            response = requestHandler.sendGetAll(USER_URL + "/get-all", accessToken);
 
             // Parse the response body into a List<User> object using Gson
             Type userListType = new TypeToken<List<User>>(){}.getType();
@@ -123,6 +128,26 @@ public class UserRequests {
             throw new RuntimeException(e);
         }
         // Lista visszaküldés
+
+        // If the response status code is 451, call refreshHandler and retry the request
+        if (response.statusCode() == 451) {
+            System.out.println("Access token expired, refreshing...");
+            JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
+            if (newJwtResponse != null) {
+                accessToken = newJwtResponse.getJwttoken();
+                ApplicationConfiguration.setJwtResponse(newJwtResponse);
+                try {
+                    // Retry the original request with the new access token
+                    response = requestHandler.sendGet(USER_URL + "/data", accessToken);
+                    Type userListType = new TypeToken<List<User>>(){}.getType();
+                    userLista = converter.fromJson(response.body(), userListType);
+                } catch (IOException | InterruptedException e) {
+                    // Error
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
         return userLista;
     }
 

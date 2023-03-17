@@ -52,6 +52,7 @@ public class FormsAndLists {
         cim.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         HBox cimSor = new HBox(cim);
         cimSor.setAlignment(Pos.TOP_CENTER);
+
         // Van e egyáltalán nem kész pizza
         int notDoneCounter = 0;
         for (Order value : orders) {
