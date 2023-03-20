@@ -1,10 +1,6 @@
 package hu.pizza.pizzaproject.components;
 
-import hu.pizza.pizzaproject.model.Order;
-import hu.pizza.pizzaproject.model.Pizza;
-import hu.pizza.pizzaproject.model.User;
-import hu.pizza.pizzaproject.model.PizzaDto;
-import hu.pizza.pizzaproject.model.UserDto;
+import hu.pizza.pizzaproject.model.*;
 import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
@@ -111,7 +107,7 @@ public class FormsAndLists {
 
     public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
-        String filePath = "";
+        FilePathAsString.setFilePath("");
         VBox kisablakVbox = new VBox(10);
 
         // Név
@@ -140,8 +136,8 @@ public class FormsAndLists {
             Window window = kilepesButton.getScene().getWindow();
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null) {
-                //TODO: Ezt tovább kell vinnem
-                // filePath = selectedFile.getPath();
+                FilePathAsString.setFilePath(selectedFile.getPath());
+                // TODO: FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
             }
         });
         HBox kepSor = new HBox(10, kep, feltoltesButton);
@@ -191,11 +187,11 @@ public class FormsAndLists {
         keszButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
 
         keszButton.setOnAction((event) -> {
-            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || filePath.equals("")) {
+            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || FilePathAsString.getFilePath().equals("")) {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), filePath, leirasTextField.getText(), arField.getValue(), true);
+                Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), arField.getValue(), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
