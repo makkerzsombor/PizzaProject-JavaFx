@@ -111,7 +111,7 @@ public class HomepageController {
 
         HBox gombSor = new HBox(mentesButton);
         gombSor.setAlignment(Pos.TOP_CENTER);
-        gombSor.setPadding(new Insets(0, 0,0,320));
+        gombSor.setPadding(new Insets(0, 0, 0, 320));
         pizzaDto.getVbox().getChildren().add(gombSor);
         adatokBox.getChildren().add(pizzaDto.getVbox());
 
@@ -148,7 +148,7 @@ public class HomepageController {
 
         HBox gombSor = new HBox(mentesButton);
         gombSor.setAlignment(Pos.TOP_CENTER);
-        gombSor.setPadding(new Insets(0, 0,0,320));
+        gombSor.setPadding(new Insets(0, 0, 0, 320));
         userDto.getVbox().getChildren().add(gombSor);
         adatokBox.getChildren().add(userDto.getVbox());
 
@@ -158,10 +158,10 @@ public class HomepageController {
             // jelszó megadás ellenőrzése
             if (userDto.getPassword().getText() == null) {
                 User noChangePassWordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getAdmin().isSelected());
-                userModositasFelmasolas(noChangePassWordUser,updateId);
+                userModositasFelmasolas(noChangePassWordUser, updateId);
             } else {
-                User changePasswordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getPassword().getText(),userDto.getAdmin().isSelected());
-                userModositasFelmasolas(changePasswordUser,updateId);
+                User changePasswordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getPassword().getText(), userDto.getAdmin().isSelected());
+                userModositasFelmasolas(changePasswordUser, updateId);
             }
         });
     }
@@ -201,17 +201,11 @@ public class HomepageController {
                 megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!", "Biztosan törölni akarja felhasználot?", selectedIndex);
             }
         } else if (!userTable) {
-            Pizza selected = pizzaLista.getSelectionModel().getSelectedItem();
-            long selectedIndex = selected.getId();
             Window owner = kilepesButton.getScene().getWindow();
-            if (selectedIndex == -1) {
-                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Először jelöljön ki egy pizzát!");
-            } else {
-                megerositoAlert(Alert.AlertType.ERROR, owner, "Biztos!", "Biztosan törölni akarja a kijelölt pizzát?", selectedIndex);
-            }
+            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Pizzát nem lehet törölni, csak az elérhetőségét (módosítani)!");
         } else {
             Window owner = kilepesButton.getScene().getWindow();
-            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Nem jelölt ki elemet!");
+            showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Nem jelölt ki elemet a (user) táblából!");
         }
 
     }
@@ -235,15 +229,7 @@ public class HomepageController {
                     userVeglegesTorles(selectedIndex);
                 }
             });
-        } else {
-            // Pizza
-            alert.showAndWait().ifPresent(buttonType -> {
-                if (buttonType == okButton) {
-                    pizzaVeglegesTorles(selectedIndex);
-                }
-            });
         }
-
     }
 
     private void userVeglegesTorles(long selectedIndex) {
@@ -259,19 +245,7 @@ public class HomepageController {
         // Táblázat ujra kreálása:
         userListCreate();
     }
-    private void pizzaVeglegesTorles(long selectedIndex) {
-        // Törlés
-        HttpResponse response = userRequests.deleteUserRequest(PIZZA_URL, selectedIndex);
-        if (response.statusCode() == 200) {
-            Window window = adatokBox.getScene().getWindow();
-            showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres Törlés", "Az adott pizzát sikeresen eltávolítottuk");
-        } else {
-            System.out.println(response.body());
-            System.out.println("Valami rossz");
-        }
-        // Táblázat ujra kreálása:
-        pizzaListCreate();
-    }
+
     private void adatokBoxClear() {
         adatokBox.getChildren().clear();
     }
