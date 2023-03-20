@@ -166,9 +166,9 @@ public class HomepageController {
         });
     }
 
-    private void userModositasFelmasolas(User readyUser, long updateId) {
+    private void userModositasFelmasolas(User readyUser, Long updateId) {
         // Modositas
-        HttpResponse response = userRequests.updateUserRequest(readyUser, updateId, USER_URL);
+        HttpResponse<String> response = userRequests.updateUserRequest(readyUser, updateId, USER_URL);
         if (response.statusCode() == 200) {
             Window window = adatokBox.getScene().getWindow();
             showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres módosítás", "Az adatbázist sikeresen frissitettük");

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class UserRequests {
 
-    public HttpResponse<String> updateUserRequest(User readyUser, long updateId, String USER_URL) {
+    public HttpResponse<String> updateUserRequest(User readyUser, Long updateId, String USER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
         String accessToken = jwtResponse.getJwttoken();
