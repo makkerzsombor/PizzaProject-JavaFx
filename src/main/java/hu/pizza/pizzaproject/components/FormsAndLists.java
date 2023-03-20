@@ -9,6 +9,8 @@ import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -18,8 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
+import java.io.File;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +111,7 @@ public class FormsAndLists {
 
     public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
+        String filePath = "";
         VBox kisablakVbox = new VBox(10);
 
         // Név
@@ -124,8 +129,22 @@ public class FormsAndLists {
         // Kép
         Label kep = new Label();
         kep.setText("Kép:");
-        TextField kepTextField = new TextField();
-        HBox kepSor = new HBox(10, kep, kepTextField);
+        // Extension filter
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image files", "*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All files", "*.*");
+
+        Button feltoltesButton = new Button("Kép kiválasztása");
+        feltoltesButton.setOnAction((event) ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            Window window = kilepesButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(window);
+            if (selectedFile != null) {
+                //TODO: Ezt tovább kell vinnem
+                // filePath = selectedFile.getPath();
+            }
+        });
+        HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
         Label ar = new Label();
@@ -164,7 +183,7 @@ public class FormsAndLists {
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
-        kepSor.setPadding(new Insets(10, 0, 0, 0));
+        kepSor.setPadding(new Insets(10, 47, 0, 0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
 
         // Vboxba a hboxok
@@ -172,11 +191,11 @@ public class FormsAndLists {
         keszButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
 
         keszButton.setOnAction((event) -> {
-            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || kepTextField.getText().equals("")) {
+            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || filePath.equals("")) {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue(), true);
+                Pizza newPizza = new Pizza(nevTextField.getText(), filePath, leirasTextField.getText(), arField.getValue(), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
@@ -346,7 +365,7 @@ public class FormsAndLists {
         CheckBox elerhetoCheckBox = new CheckBox();
         if (modifyingPizza.isAvailable()) {
             elerhetoCheckBox.setSelected(true);
-        }else {
+        } else {
             elerhetoCheckBox.setSelected(false);
         }
         HBox elerhetoSor = new HBox(10, elerheto, elerhetoCheckBox);
