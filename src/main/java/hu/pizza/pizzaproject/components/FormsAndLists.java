@@ -176,7 +176,7 @@ public class FormsAndLists {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
+                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue(), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
@@ -243,11 +243,18 @@ public class FormsAndLists {
 
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("price"));
+
+        // available
+        TableColumn<Pizza, Boolean> column6 =
+                new TableColumn<>("Available");
+
+        column6.setCellValueFactory(
+                new PropertyValueFactory<>("available"));
         //elözetes törlések
         pizzaLista.getColumns().clear();
         pizzaLista.getItems().clear();
 
-        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5);
+        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5, column6);
 
         List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
         // Listából tableViewba rakás
@@ -312,32 +319,37 @@ public class FormsAndLists {
         VBox kisablakVbox = new VBox(10);
 
         // Név
-        Label nev = new Label();
-        nev.setText("Név:");
+        Label nev = new Label("Név:");
         TextField nevTextField = new TextField();
         nevTextField.setText(modifyingPizza.getName());
         HBox nevSor = new HBox(10, nev, nevTextField);
 
         // Leírás
-        Label leiras = new Label();
-        leiras.setText("Leírás:");
+        Label leiras = new Label("Leírás:");
         TextField leirasTextField = new TextField();
         leirasTextField.setText(modifyingPizza.getDescription());
         HBox leirasSor = new HBox(10, leiras, leirasTextField);
 
         // Kép
-        Label kep = new Label();
-        kep.setText("Kép:");
+        Label kep = new Label("Kép:");
         TextField kepTextField = new TextField();
         kepTextField.setText(modifyingPizza.getPicture());
         HBox kepSor = new HBox(10, kep, kepTextField);
 
         // ar
-        Label ar = new Label();
-        ar.setText("ar:");
+        Label ar = new Label("Ár:");
         Spinner<Integer> arField = new Spinner<>();
         arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
         HBox arSor = new HBox(10, ar, arField);
+
+        Label elerheto = new Label("Elérhető: ");
+        CheckBox elerhetoCheckBox = new CheckBox();
+        if (modifyingPizza.isAvailable()) {
+            elerhetoCheckBox.setSelected(true);
+        }else {
+            elerhetoCheckBox.setSelected(false);
+        }
+        HBox elerhetoSor = new HBox(10, elerheto, elerhetoCheckBox);
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
@@ -351,21 +363,24 @@ public class FormsAndLists {
         leirasSor.setAlignment(Pos.TOP_RIGHT);
         kepSor.setAlignment(Pos.TOP_RIGHT);
         arSor.setAlignment(Pos.TOP_RIGHT);
+        elerhetoSor.setAlignment(Pos.TOP_RIGHT);
 
         // labelek
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
         ar.setPadding(new Insets(5, 0, 0, 0));
+        elerheto.setPadding(new Insets(5, 0, 0, 0));
 
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
         kepSor.setPadding(new Insets(10, 0, 0, 0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
+        elerhetoSor.setPadding(new Insets(10, 0, 0, 0));
 
         // Vboxba a hboxok
-        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor);
+        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor, elerhetoSor);
 
         // new pizzadto
         PizzaDto pizzaDto = new PizzaDto();
@@ -375,6 +390,7 @@ public class FormsAndLists {
         pizzaDto.setDescription(leirasTextField);
         pizzaDto.setPicture(kepTextField);
         pizzaDto.setPrice(arField);
+        pizzaDto.setAvailable(elerhetoCheckBox);
         //Visszaadás
         return pizzaDto;
     }

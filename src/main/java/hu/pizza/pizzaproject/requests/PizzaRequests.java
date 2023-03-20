@@ -109,9 +109,10 @@ public class PizzaRequests {
         try {
             HttpResponse<String> response = requestHandler.sendGetAllPizzas(BASE_URL + "/get-all");
 
-            // Parse the response body into a List<User> object using Gson
+            // Parse the response body into a List<Pizza> object using Gson
             Type pizzaListType = new TypeToken<List<Pizza>>() {
             }.getType();
+            System.out.println(response.body());
             pizzaLista = converter.fromJson(response.body(), pizzaListType);
         } catch (IOException | InterruptedException e) {
             // Error

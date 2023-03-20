@@ -6,19 +6,22 @@ public class Pizza {
     private String picture;
     private String description;
     private int price;
-    public Pizza(int id, String name, String picture, String description, int price) {
+    private boolean available;
+    public Pizza(int id, String name, String picture, String description, int price, boolean available) {
         this.id = id;
         this.name = name;
         this.picture = picture;
         this.description = description;
         this.price = price;
+        this.available = available;
     }
 
-    public Pizza(String name, String picture, String description, int price) {
+    public Pizza(String name, String picture, String description, int price, boolean available) {
         this.name = name;
         this.picture = picture;
         this.description = description;
         this.price = price;
+        this.available = available;
     }
 
     public Pizza() {
@@ -62,5 +65,13 @@ public class Pizza {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

@@ -94,7 +94,7 @@ public class HomepageController {
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Először jelöljön ki egy elemet!");
             } else {
                 Pizza selected = pizzaLista.getSelectionModel().getSelectedItem();
-                Pizza modifyingPizza = new Pizza(selected.getId(), selected.getName(), selected.getPicture(), selected.getDescription(), selected.getPrice());
+                Pizza modifyingPizza = new Pizza(selected.getId(), selected.getName(), selected.getPicture(), selected.getDescription(), selected.getPrice(), selected.isAvailable());
                 pizzaModositasFormCreate(modifyingPizza);
             }
         }
@@ -118,7 +118,7 @@ public class HomepageController {
         mentesButton.setOnAction((event) -> {
             //dtobol a pizza adatok
             int updateId = modifyingPizza.getId();
-            Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue());
+            Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
             pizzaModositasFelmasolas(readyPizza, updateId);
         });
     }
