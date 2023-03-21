@@ -54,6 +54,8 @@ public class PizzaRequests {
     }
 
     public HttpResponse<String> updatePizzaRequest(Pizza readyPizza, int updateId, String PIZZA_URL) {
+        //TODO: Itt már kapunhatunk uj linket és filepath-et is
+
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
         String accessToken = jwtResponse.getJwttoken();

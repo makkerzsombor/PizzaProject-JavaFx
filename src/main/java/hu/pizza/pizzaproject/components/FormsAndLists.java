@@ -126,8 +126,8 @@ public class FormsAndLists {
         Label kep = new Label();
         kep.setText("Kép:");
         // Extension filter
-        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image files", "*.png", "*.jpg");
-        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All files", "*.*");
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
 
         Button feltoltesButton = new Button("Kép kiválasztása");
         feltoltesButton.setOnAction((event) ->{
@@ -140,6 +140,7 @@ public class FormsAndLists {
                 // TODO: FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
             }
         });
+        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
@@ -189,12 +190,13 @@ public class FormsAndLists {
         keszButton.setOnAction((event) -> {
             if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || FilePathAsString.getFilePath().equals("")) {
                 Window owner = kilepesButton.getScene().getWindow();
-                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
+                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt és töltsön fel egy képet!");
             } else {
                 Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), arField.getValue(), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
+                    System.out.println("Ez a filepath: " + FilePathAsString.getFilePath());
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
                     // táblázatból törlés
                     pizzaLista.getItems().clear();
@@ -331,6 +333,8 @@ public class FormsAndLists {
     }
 
     public PizzaDto pizzaUpdateForm(Pizza modifyingPizza) {
+        // TODO: Vagy 2db gomb kell, egy ahhoz, hogy feltöltsünk újképet, egy pedig ahhoz, hogy a már fent lévő képek között tudjunk váltogatni
+        FilePathAsString.setFilePath("");
         VBox kisablakVbox = new VBox(10);
 
         // Név
@@ -345,11 +349,32 @@ public class FormsAndLists {
         leirasTextField.setText(modifyingPizza.getDescription());
         HBox leirasSor = new HBox(10, leiras, leirasTextField);
 
-        // Kép
-        Label kep = new Label("Kép:");
+        // már fent lévő pizza(link megváltoztatása)
+        Label linkKep = new Label("Már fent lévő link:");
         TextField kepTextField = new TextField();
         kepTextField.setText(modifyingPizza.getPicture());
-        HBox kepSor = new HBox(10, kep, kepTextField);
+        HBox linkKepSor = new HBox(10, linkKep, kepTextField);
+
+        // újkép feltöltése:
+        Label kep = new Label("Új kép feltöltése:");
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files","*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files","*.*");
+
+        Button feltoltesButton = new Button("Új kép kiválasztása");
+        feltoltesButton.setOnAction((event) ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            Window window = feltoltesButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(window);
+            if (selectedFile != null) {
+                FilePathAsString.setFilePath(selectedFile.getPath());
+                // FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
+            }
+        });
+        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        HBox kepSor = new HBox(10, kep, feltoltesButton);
+
+
 
         // ar
         Label ar = new Label("Ár:");
@@ -376,6 +401,7 @@ public class FormsAndLists {
         // Hboxok
         nevSor.setAlignment(Pos.TOP_RIGHT);
         leirasSor.setAlignment(Pos.TOP_RIGHT);
+        linkKepSor.setAlignment(Pos.TOP_RIGHT);
         kepSor.setAlignment(Pos.TOP_RIGHT);
         arSor.setAlignment(Pos.TOP_RIGHT);
         elerhetoSor.setAlignment(Pos.TOP_RIGHT);
@@ -384,18 +410,20 @@ public class FormsAndLists {
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
+        linkKep.setPadding(new Insets(5,0,0,0));
         ar.setPadding(new Insets(5, 0, 0, 0));
         elerheto.setPadding(new Insets(5, 0, 0, 0));
 
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
+        linkKepSor.setPadding(new Insets(10,0,0,0));
         kepSor.setPadding(new Insets(10, 0, 0, 0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
         elerhetoSor.setPadding(new Insets(10, 0, 0, 0));
 
         // Vboxba a hboxok
-        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor, elerhetoSor);
+        kisablakVbox.getChildren().addAll(nevSor, leirasSor, linkKepSor, kepSor, arSor, elerhetoSor);
 
         // new pizzadto
         PizzaDto pizzaDto = new PizzaDto();

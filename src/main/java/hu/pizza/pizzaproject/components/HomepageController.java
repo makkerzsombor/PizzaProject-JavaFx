@@ -1,11 +1,8 @@
 package hu.pizza.pizzaproject.components;
 
 import hu.pizza.pizzaproject.Application;
-import hu.pizza.pizzaproject.model.PizzaDto;
-import hu.pizza.pizzaproject.model.UserDto;
+import hu.pizza.pizzaproject.model.*;
 import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
-import hu.pizza.pizzaproject.model.Pizza;
-import hu.pizza.pizzaproject.model.User;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.event.ActionEvent;
@@ -23,6 +20,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.nio.file.Path;
 
 public class HomepageController {
     @FXML
@@ -118,8 +116,33 @@ public class HomepageController {
         mentesButton.setOnAction((event) -> {
             //dtobol a pizza adatok
             int updateId = modifyingPizza.getId();
-            Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
-            pizzaModositasFelmasolas(readyPizza, updateId);
+            // Vizsgálni kell, hogy mi történt:
+            System.out.println("Pizza link: " + pizzaDto.getPicture().getText() + " Ez a filepath: " + FilePathAsString.getFilePath() );
+            if (FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
+                // Nem változik a kép semmilyen módon (de lehet az alatta lévő meghívást használni, mivel ugyanazt a linket küldjük el)
+                System.out.println("Nem változik a kép");
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                pizzaModositasFelmasolas(readyPizza, updateId);
+            }
+            if (FilePathAsString.getFilePath().equals("") && !modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
+                // Más lett a kép link
+                System.out.println("Új link: " + pizzaDto.getPicture().getText());
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                pizzaModositasFelmasolas(readyPizza, updateId);
+            }
+            if (!FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
+                // Új képet kell feltölteni
+                System.out.println("Új kép path-je: " + FilePathAsString.getFilePath());
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), FilePathAsString.getFilePath(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                pizzaModositasFelmasolas(readyPizza, updateId);
+            }
+            if (!FilePathAsString.getFilePath().equals("") && !modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
+                // Ilyen nem lehet mert egyszerre változna a link és a kép feltöltés is
+                Window window = kilepesButton.getScene().getWindow();
+                showAlert(Alert.AlertType.WARNING, window, "Nem jó használat", "Nem lehet egyszerre linket változtatni és képet feltölteni");
+                // Újra meghívás
+                pizzaModositasFormCreate(modifyingPizza);
+            }
         });
     }
 
