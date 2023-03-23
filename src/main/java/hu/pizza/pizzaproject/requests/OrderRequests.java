@@ -16,7 +16,7 @@ public class OrderRequests {
     public List<Order> getallOrderRequest(String ORDER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Lista<Pizza>
@@ -44,7 +44,7 @@ public class OrderRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the original request with the new access token
@@ -61,10 +61,10 @@ public class OrderRequests {
         // Lista visszaküldés
         return orderLista;
     }
-    public HttpResponse<String> updateReadyStatus(long updateId, String ORDER_URL) {
+    public HttpResponse<String> updateReadyStatus(Long updateId, String ORDER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -91,7 +91,7 @@ public class OrderRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token

@@ -18,7 +18,7 @@ public class UserRequests {
     public HttpResponse<String> updateUserRequest(User readyUser, Long updateId, String USER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -42,7 +42,7 @@ public class UserRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token
@@ -60,7 +60,7 @@ public class UserRequests {
     public User getUserInformation(String USER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -83,7 +83,7 @@ public class UserRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the original request with the new access token
@@ -104,7 +104,7 @@ public class UserRequests {
     public List<User> getallUserRequest(String USER_URL){
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Lista<User>
@@ -134,7 +134,7 @@ public class UserRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the original request with the new access token
@@ -154,7 +154,7 @@ public class UserRequests {
     public HttpResponse<String> deleteUserRequest(String USER_URL, long userId){
         // Tokenek kiolvasása
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -173,7 +173,7 @@ public class UserRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token

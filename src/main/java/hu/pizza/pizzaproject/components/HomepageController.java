@@ -84,7 +84,7 @@ public class HomepageController {
             } else {
                 // adatok mentése
                 User selected = userLista.getSelectionModel().getSelectedItem();
-                User modifyingUser = new User(selected.getId(), selected.getFirst_name(), selected.getLast_name(), selected.getEmail(), selected.getPassword(), selected.isAdmin());
+                User modifyingUser = new User(selected.getId(), selected.getFirst_name(), selected.getLast_name(), selected.getEmail(), selected.getPassword(), selected.getAdmin());
                 userModositasFormCreate(modifyingUser);
             }
         } else {
@@ -157,10 +157,10 @@ public class HomepageController {
             long updateId = modifyingUser.getId();
             // jelszó megadás ellenőrzése
             if (userDto.getPassword().getText() == null) {
-                User noChangePassWordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getAdmin().isSelected());
+                User noChangePassWordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getAdmin().isSelected() ? "ADMIN" : "USER");
                 userModositasFelmasolas(noChangePassWordUser,updateId);
             } else {
-                User changePasswordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getPassword().getText(),userDto.getAdmin().isSelected());
+                User changePasswordUser = new User(updateId, userDto.getFirst_name().getText(), userDto.getLast_name().getText(), userDto.getEmail().getText(), userDto.getPassword().getText(),userDto.getAdmin().isSelected() ? "ADMIN" : "USER");
                 userModositasFelmasolas(changePasswordUser,updateId);
             }
         });
