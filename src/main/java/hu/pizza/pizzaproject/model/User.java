@@ -4,11 +4,11 @@ public class User {
     private Long id;
     private String email;
     private String password = null;
-    private boolean admin;
+    private String admin;
     private String first_name;
     private String last_name;
 
-    public User(Long id, String first_name, String last_name, String email, String password, boolean admin) {
+    public User(Long id, String first_name, String last_name, String email, String password, String admin) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -17,7 +17,7 @@ public class User {
         this.last_name = last_name;
     }
 
-    public User(Long id, String first_name, String last_name, String email, boolean admin) {
+    public User(Long id, String first_name, String last_name, String email, String admin) {
         this.id = id;
         this.email = email;
         this.admin = admin;
@@ -57,11 +57,11 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdmin() {
+    public String getAdmin() {
         return admin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(String admin) {
         this.admin = admin;
     }
 

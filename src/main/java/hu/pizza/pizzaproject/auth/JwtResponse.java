@@ -1,30 +1,24 @@
 package hu.pizza.pizzaproject.auth;
 
 public class JwtResponse {
-    private String jwttoken;
-    private String status;
+    private String accessToken;
     private String refreshToken;
 
-    public JwtResponse(String status, String jwttoken, String refreshToken) {
-        this.status = status;
-        this.jwttoken = jwttoken;
+    public JwtResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
-    public String getStatus() {
-        return status;
+    public JwtResponse(){
+
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public String getJwttoken() {
-        return jwttoken;
-    }
-
-    public void setJwttoken(String jwttoken) {
-        this.jwttoken = jwttoken;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getRefreshToken() {

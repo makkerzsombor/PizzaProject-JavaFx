@@ -23,6 +23,7 @@ import javafx.stage.Window;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
@@ -71,7 +72,11 @@ public class FormsAndLists {
         } else {
             for (Order order : orders) {
                 if (!order.isReady()) {
-                    orderElem = "userId: " + order.getUser_id() + " pizzaId: " + order.getPizza_id() + " Időpont: " +
+                    List<Long> ids = new ArrayList<>();
+                    for (var i = 0; i < order.getOrderPizzas().size(); i++){
+                        ids.add(order.getOrderPizzas().get(i).getId());
+                    }
+                    orderElem = "userId: " + order.getUser_id() + " pizzaIds: " + ids + " Időpont: " +
                             order.getOrder_date() + " Telefon: " + order.getPhone_number() + " Cím: " +
                             order.getLocation() + " Összeg: " + order.getPrice();
                     Label label = new Label(orderElem);
@@ -419,7 +424,7 @@ public class FormsAndLists {
         lastNameTextField.setText(modifyingUser.getLast_name());
         emailTextField.setText(modifyingUser.getEmail());
         passwordTextField.setText(modifyingUser.getPassword());
-        adminCheckbox.setSelected(modifyingUser.isAdmin());
+        adminCheckbox.setSelected(Objects.equals(modifyingUser.getAdmin(), "ADMIN"));
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);

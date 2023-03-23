@@ -15,7 +15,7 @@ public class PizzaRequests {
     public HttpResponse<String> addPizzaRequest(String PIZZA_URL, Pizza newPizza) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -38,7 +38,7 @@ public class PizzaRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token
@@ -56,7 +56,7 @@ public class PizzaRequests {
     public HttpResponse<String> updatePizzaRequest(Pizza readyPizza, int updateId, String PIZZA_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
-        String accessToken = jwtResponse.getJwttoken();
+        String accessToken = jwtResponse.getAccessToken();
         String refreshToken = jwtResponse.getRefreshToken();
 
         // Create a RequestHandler instance
@@ -80,7 +80,7 @@ public class PizzaRequests {
             System.out.println("Access token expired, refreshing...");
             JwtResponse newJwtResponse = RefreshHandler.refresh(refreshToken);
             if (newJwtResponse != null) {
-                accessToken = newJwtResponse.getJwttoken();
+                accessToken = newJwtResponse.getAccessToken();
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the PUT request with the new access token

@@ -1,47 +1,40 @@
 package hu.pizza.pizzaproject.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
-    private long id;
-    private long user_id;
-    private long pizza_id;
+    private Long id;
+    private Long user_id;
     private String location;
     private Date order_date;
-    private String phone_number;
     private int price;
+    private String phone_number;
     private boolean ready;
+    private List<Order> orderPizzas;
 
-    public Order() {
-    }
-
-    public Order(long id, boolean ready) {
+    public Order(Long id, boolean ready) {
         this.id = id;
         this.ready = ready;
     }
 
-    public long getId() {
+    public Order() {
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
-    }
-
-    public long getPizza_id() {
-        return pizza_id;
-    }
-
-    public void setPizza_id(long pizza_id) {
-        this.pizza_id = pizza_id;
     }
 
     public String getLocation() {
@@ -60,14 +53,6 @@ public class Order {
         this.order_date = order_date;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -76,11 +61,38 @@ public class Order {
         this.price = price;
     }
 
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
     public boolean isReady() {
         return ready;
     }
 
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+    public List<Order> getOrderPizzas() {
+        return orderPizzas;
+    }
+
+    public void setOrderPizzas(List<Order> orderPizzas) {
+        this.orderPizzas = orderPizzas;
+    }
+
+    public Order(Long id, Long user_id, String location, Date order_date, int price, String phone_number, boolean ready, List<Order> orderPizzas) {
+        this.id = id;
+        this.user_id = user_id;
+        this.location = location;
+        this.order_date = order_date;
+        this.price = price;
+        this.phone_number = phone_number;
+        this.ready = ready;
+        this.orderPizzas = orderPizzas;
     }
 }
