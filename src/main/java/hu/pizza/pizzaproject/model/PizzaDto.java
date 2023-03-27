@@ -1,5 +1,6 @@
 package hu.pizza.pizzaproject.model;
 
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -11,6 +12,7 @@ public class PizzaDto {
     private TextField picture;
     private TextField description;
     private Spinner<Integer> price;
+    private CheckBox available;
 
     public VBox getVbox() {
         return vbox;
@@ -58,5 +60,13 @@ public class PizzaDto {
 
     public void setPrice(Spinner<Integer> price) {
         this.price = price;
+    }
+
+    public CheckBox getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(CheckBox available) {
+        this.available = available;
     }
 }
