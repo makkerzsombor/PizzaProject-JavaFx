@@ -145,8 +145,12 @@ public class FormsAndLists {
 
         // ar
         Label ar = new Label("ar:");
-        Spinner<Integer> arField = new Spinner<>();
-        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 2000, 10));
+        TextField arField = new TextField();
+        arField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                arField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         HBox arSor = new HBox(10, ar, arField);
 
         // Létrehozás
@@ -191,7 +195,7 @@ public class FormsAndLists {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt és töltsön fel egy képet!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), arField.getValue(), true);
+                Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
@@ -375,8 +379,12 @@ public class FormsAndLists {
 
         // ar
         Label ar = new Label("ar:");
-        Spinner<Integer> arField = new Spinner<>();
-        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
+        TextField arField = new TextField();
+        arField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                arField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         HBox arSor = new HBox(10, ar, arField);
 
         Label elerheto = new Label("Elérhető: ");

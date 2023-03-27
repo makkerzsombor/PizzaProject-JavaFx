@@ -11,7 +11,7 @@ public class PizzaDto {
     private TextField name;
     private TextField picture;
     private TextField description;
-    private Spinner<Integer> price;
+    private TextField price;
     private CheckBox available;
 
     public VBox getVbox() {
@@ -54,11 +54,11 @@ public class PizzaDto {
         this.description = description;
     }
 
-    public Spinner<Integer> getPrice() {
+    public TextField getPrice() {
         return price;
     }
 
-    public void setPrice(Spinner<Integer> price) {
+    public void setPrice(TextField price) {
         this.price = price;
     }
 

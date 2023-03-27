@@ -120,19 +120,19 @@ public class HomepageController {
             if (FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
                 // Nem változik a kép semmilyen módon (de lehet az alatta lévő meghívást használni, mivel ugyanazt a linket küldjük el)
                 System.out.println("Nem változik a kép");
-                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), Integer.parseInt(pizzaDto.getPrice().getText()) , pizzaDto.getAvailable().isSelected());
                 pizzaModositasFelmasolas(readyPizza, updateId);
             }
             if (FilePathAsString.getFilePath().equals("") && !modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
                 // Más lett a kép link
                 System.out.println("Új link: " + pizzaDto.getPicture().getText());
-                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), pizzaDto.getPicture().getText(), pizzaDto.getDescription().getText(), Integer.parseInt(pizzaDto.getPrice().getText()), pizzaDto.getAvailable().isSelected());
                 pizzaModositasFelmasolas(readyPizza, updateId);
             }
             if (!FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
                 // Új képet kell feltölteni
                 System.out.println("Új kép path-je: " + FilePathAsString.getFilePath());
-                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), FilePathAsString.getFilePath(), pizzaDto.getDescription().getText(), pizzaDto.getPrice().getValue(), pizzaDto.getAvailable().isSelected());
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), FilePathAsString.getFilePath(), pizzaDto.getDescription().getText(), Integer.parseInt(pizzaDto.getPrice().getText()), pizzaDto.getAvailable().isSelected());
                 pizzaModositasFelmasolas(readyPizza, updateId);
             }
             if (!FilePathAsString.getFilePath().equals("") && !modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
