@@ -4,7 +4,7 @@ public class User {
     private Long id;
     private String email;
     private String password = null;
-    private String admin;
+    private String role;
     private String first_name;
     private String last_name;
 
@@ -12,7 +12,7 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.admin = admin;
+        this.role = admin;
         this.first_name = first_name;
         this.last_name = last_name;
     }
@@ -20,7 +20,7 @@ public class User {
     public User(Long id, String first_name, String last_name, String email, String admin) {
         this.id = id;
         this.email = email;
-        this.admin = admin;
+        this.role = admin;
         this.first_name = first_name;
         this.last_name = last_name;
     }
@@ -58,11 +58,11 @@ public class User {
     }
 
     public String getAdmin() {
-        return admin;
+        return role;
     }
 
     public void setAdmin(String admin) {
-        this.admin = admin;
+        this.role = admin;
     }
 
     public String getFirst_name() {
@@ -87,7 +87,7 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", admin=" + admin +
+                ", admin=" + role +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
                 '}';

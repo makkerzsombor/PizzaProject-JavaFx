@@ -300,7 +300,7 @@ public class FormsAndLists {
 
         // admin
         TableColumn<User, Boolean> column5 =
-                new TableColumn<>("Admin");
+                new TableColumn<>("Role");
 
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("admin"));
