@@ -1,10 +1,6 @@
 package hu.pizza.pizzaproject.components;
 
-import hu.pizza.pizzaproject.model.Order;
-import hu.pizza.pizzaproject.model.Pizza;
-import hu.pizza.pizzaproject.model.User;
-import hu.pizza.pizzaproject.model.PizzaDto;
-import hu.pizza.pizzaproject.model.UserDto;
+import hu.pizza.pizzaproject.model.*;
 import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
@@ -18,8 +14,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
+import java.io.File;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,38 +110,53 @@ public class FormsAndLists {
 
     public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
+        FilePathAsString.setFilePath("");
         VBox kisablakVbox = new VBox(10);
 
         // Név
-        Label nev = new Label();
-        nev.setText("Név:");
+        Label nev = new Label("Név:");
         TextField nevTextField = new TextField();
         HBox nevSor = new HBox(10, nev, nevTextField);
 
         // Leírás
-        Label leiras = new Label();
-        leiras.setText("Leírás:");
+        Label leiras = new Label("Leírás:");
         TextField leirasTextField = new TextField();
         HBox leirasSor = new HBox(10, leiras, leirasTextField);
 
         // Kép
-        Label kep = new Label();
-        kep.setText("Kép:");
-        TextField kepTextField = new TextField();
-        HBox kepSor = new HBox(10, kep, kepTextField);
+        Label kep = new Label("Kép:");
+        // Extension filter
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
+
+        Button feltoltesButton = new Button("Kép kiválasztása");
+        feltoltesButton.setOnAction((event) ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            Window window = kilepesButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(window);
+            if (selectedFile != null) {
+                FilePathAsString.setFilePath(selectedFile.getPath());
+                // TODO: FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
+            }
+        });
+        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
-        Label ar = new Label();
-        ar.setText("ar:");
-        Spinner<Integer> arField = new Spinner<>();
-        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 2000, 10));
+        Label ar = new Label("ar:");
+        TextField arField = new TextField();
+        arField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                arField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         HBox arSor = new HBox(10, ar, arField);
 
         // Létrehozás
-        Button keszButton = new Button();
-        keszButton.setText("Létrehozás");
+        Button keszButton = new Button("Létrehozás");
         HBox buttonSor = new HBox(keszButton);
-        HBox.setMargin(keszButton, new Insets(0, 30, 10, 0));
+        HBox.setMargin(keszButton, new Insets(0, 100, 10, 0));
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
@@ -169,22 +182,24 @@ public class FormsAndLists {
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
-        kepSor.setPadding(new Insets(10, 0, 0, 0));
+        kepSor.setPadding(new Insets(10, 47, 0, 0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
+
 
         // Vboxba a hboxok
         kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor, buttonSor);
         keszButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
 
         keszButton.setOnAction((event) -> {
-            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || kepTextField.getText().equals("")) {
+            if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || FilePathAsString.getFilePath().equals("")) {
                 Window owner = kilepesButton.getScene().getWindow();
-                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt!");
+                showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt és töltsön fel egy képet!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), kepTextField.getText(), leirasTextField.getText(), arField.getValue());
+                Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
+                    System.out.println("Ez a filepath: " + FilePathAsString.getFilePath());
                     showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
                     // táblázatból törlés
                     pizzaLista.getItems().clear();
@@ -248,11 +263,19 @@ public class FormsAndLists {
 
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("price"));
+
+        // available
+        TableColumn<Pizza, Boolean> column6 =
+                new TableColumn<>("Available");
+
+        column6.setCellValueFactory(
+                new PropertyValueFactory<>("available"));
+
         //elözetes törlések
         pizzaLista.getColumns().clear();
         pizzaLista.getItems().clear();
 
-        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5);
+        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5, column6);
 
         List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
         // Listából tableViewba rakás
@@ -300,7 +323,7 @@ public class FormsAndLists {
 
         // admin
         TableColumn<User, Boolean> column5 =
-                new TableColumn<>("Admin");
+                new TableColumn<>("Role");
 
         column5.setCellValueFactory(
                 new PropertyValueFactory<>("admin"));
@@ -314,35 +337,64 @@ public class FormsAndLists {
     }
 
     public PizzaDto pizzaUpdateForm(Pizza modifyingPizza) {
+        FilePathAsString.setFilePath("");
         VBox kisablakVbox = new VBox(10);
 
         // Név
-        Label nev = new Label();
-        nev.setText("Név:");
+        Label nev = new Label("Név:");
         TextField nevTextField = new TextField();
         nevTextField.setText(modifyingPizza.getName());
         HBox nevSor = new HBox(10, nev, nevTextField);
 
         // Leírás
-        Label leiras = new Label();
-        leiras.setText("Leírás:");
+        Label leiras = new Label("Leírás:");
         TextField leirasTextField = new TextField();
         leirasTextField.setText(modifyingPizza.getDescription());
         HBox leirasSor = new HBox(10, leiras, leirasTextField);
 
-        // Kép
-        Label kep = new Label();
-        kep.setText("Kép:");
+        // már fent lévő pizza(link megváltoztatása)
+        Label linkKep = new Label("Már fent lévő link:");
         TextField kepTextField = new TextField();
         kepTextField.setText(modifyingPizza.getPicture());
-        HBox kepSor = new HBox(10, kep, kepTextField);
+        HBox linkKepSor = new HBox(10, linkKep, kepTextField);
+
+        // újkép feltöltése:
+        Label kep = new Label("Új kép feltöltése:");
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files","*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files","*.*");
+
+        Button feltoltesButton = new Button("Új kép kiválasztása");
+        feltoltesButton.setOnAction((event) ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            Window window = feltoltesButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(window);
+            if (selectedFile != null) {
+                FilePathAsString.setFilePath(selectedFile.getPath());
+                // FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
+            }
+        });
+        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
-        Label ar = new Label();
-        ar.setText("ar:");
-        Spinner<Integer> arField = new Spinner<>();
-        arField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, modifyingPizza.getPrice(), 10));
+        Label ar = new Label("ar:");
+        TextField arField = new TextField();
+        arField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                arField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         HBox arSor = new HBox(10, ar, arField);
+
+        Label elerheto = new Label("Elérhető: ");
+        CheckBox elerhetoCheckBox = new CheckBox();
+        if (modifyingPizza.isAvailable()) {
+            elerhetoCheckBox.setSelected(true);
+        } else {
+            elerhetoCheckBox.setSelected(false);
+        }
+        HBox elerhetoSor = new HBox(10, elerheto, elerhetoCheckBox);
 
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
@@ -354,23 +406,29 @@ public class FormsAndLists {
         // Hboxok
         nevSor.setAlignment(Pos.TOP_RIGHT);
         leirasSor.setAlignment(Pos.TOP_RIGHT);
+        linkKepSor.setAlignment(Pos.TOP_RIGHT);
         kepSor.setAlignment(Pos.TOP_RIGHT);
         arSor.setAlignment(Pos.TOP_RIGHT);
+        elerhetoSor.setAlignment(Pos.TOP_RIGHT);
 
         // labelek
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
+        linkKep.setPadding(new Insets(5,0,0,0));
         ar.setPadding(new Insets(5, 0, 0, 0));
+        elerheto.setPadding(new Insets(5, 0, 0, 0));
 
         // Sorok:
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
-        kepSor.setPadding(new Insets(10, 0, 0, 0));
+        kepSor.setPadding(new Insets(10, 35, 0, 0));
+        linkKepSor.setPadding(new Insets(10,0,0,0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
+        elerhetoSor.setPadding(new Insets(10, 130, 0, 0));
 
         // Vboxba a hboxok
-        kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor);
+        kisablakVbox.getChildren().addAll(nevSor, leirasSor, linkKepSor, kepSor, arSor, elerhetoSor);
 
         // new pizzadto
         PizzaDto pizzaDto = new PizzaDto();
@@ -380,6 +438,7 @@ public class FormsAndLists {
         pizzaDto.setDescription(leirasTextField);
         pizzaDto.setPicture(kepTextField);
         pizzaDto.setPrice(arField);
+        pizzaDto.setAvailable(elerhetoCheckBox);
         //Visszaadás
         return pizzaDto;
     }

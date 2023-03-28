@@ -90,10 +90,7 @@ public class LoginController {
 
             HttpResponse<String> response = httpClient.send(loginRequestPost, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println(loginRequestPost.headers() + "\n" + loginRequestPost.uri() + "Ez a header + uri");
-
             if (response.statusCode() == 200){
-                System.out.println("Successful token creation");
                 JwtResponse jwtResponse = new Gson().fromJson(response.body(), JwtResponse.class);
                 ApplicationConfiguration.setJwtResponse(jwtResponse);
                 newAblak();
