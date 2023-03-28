@@ -1,6 +1,7 @@
 package hu.pizza.pizzaproject.components;
 
 import hu.pizza.pizzaproject.model.*;
+import hu.pizza.pizzaproject.requests.ImgurRequests;
 import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
@@ -195,7 +196,9 @@ public class FormsAndLists {
                 Window owner = kilepesButton.getScene().getWindow();
                 showAlert(Alert.AlertType.ERROR, owner, "Használati hiba!", "Töltsön ki minden mezőt és töltsön fel egy képet!");
             } else {
-                Pizza newPizza = new Pizza(nevTextField.getText(), FilePathAsString.getFilePath(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
+                // Helyes generálás
+                ImgurRequests imgurRequests = new ImgurRequests();
+                Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
                 HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                 if (response.statusCode() == 200) {
                     Window window = adatokBox.getScene().getWindow();
@@ -377,9 +380,11 @@ public class FormsAndLists {
         feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
+        //TODO: az árat meg kell tudni jeleníteni
+        String price = String.valueOf(modifyingPizza.getPrice());
         // ar
         Label ar = new Label("ar:");
-        TextField arField = new TextField();
+        TextField arField = new TextField(price);
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 arField.setText(newValue.replaceAll("[^\\d]", ""));

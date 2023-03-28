@@ -3,6 +3,7 @@ package hu.pizza.pizzaproject.components;
 import hu.pizza.pizzaproject.Application;
 import hu.pizza.pizzaproject.model.*;
 import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
+import hu.pizza.pizzaproject.requests.ImgurRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.event.ActionEvent;
@@ -116,7 +117,7 @@ public class HomepageController {
             //dtobol a pizza adatok
             int updateId = modifyingPizza.getId();
             // Vizsgálni kell, hogy mi történt:
-            System.out.println("Pizza link: " + pizzaDto.getPicture().getText() + " Ez a filepath: " + FilePathAsString.getFilePath() );
+            System.out.println("Pizza link: " + pizzaDto.getPicture().getText() + " Ez a filepath: " + FilePathAsString.getFilePath());
             if (FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
                 // Nem változik a kép semmilyen módon (de lehet az alatta lévő meghívást használni, mivel ugyanazt a linket küldjük el)
                 System.out.println("Nem változik a kép");
@@ -132,7 +133,8 @@ public class HomepageController {
             if (!FilePathAsString.getFilePath().equals("") && modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
                 // Új képet kell feltölteni
                 System.out.println("Új kép path-je: " + FilePathAsString.getFilePath());
-                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), FilePathAsString.getFilePath(), pizzaDto.getDescription().getText(), Integer.parseInt(pizzaDto.getPrice().getText()), pizzaDto.getAvailable().isSelected());
+                ImgurRequests imgurRequests = new ImgurRequests();
+                Pizza readyPizza = new Pizza(updateId, pizzaDto.getName().getText(), imgurRequests.postImageToImgur(), pizzaDto.getDescription().getText(), Integer.parseInt(pizzaDto.getPrice().getText()), pizzaDto.getAvailable().isSelected());
                 pizzaModositasFelmasolas(readyPizza, updateId);
             }
             if (!FilePathAsString.getFilePath().equals("") && !modifyingPizza.getPicture().equals(pizzaDto.getPicture().getText())) {
