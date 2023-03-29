@@ -1,3 +1,7 @@
+.loginWindow{
+    -fx-background-image: url("jo.png");
+}
+
 .windowVbox{
     background-color: #5d5d5d;
 }
