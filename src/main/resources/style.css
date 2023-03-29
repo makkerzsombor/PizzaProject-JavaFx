@@ -1,10 +1,9 @@
-.nagyVbox{
-    -fx-background-image: url("bg1.png");
+.windowVbox{
+    background-color: #5d5d5d;
 }
 
 .koszones{
     -fx-text-fill: white;
-    -fx-background-color: black;
 }
 
 .gridpane{
@@ -19,4 +18,117 @@
 .gomb{
     -fx-text-fill: white;
     -fx-background-color: black;
+}
+.leaveButton{
+    -fx-text-fill: white;
+    -fx-background-color: #303030;
+    -fx-min-height: 50px;
+    -fx-min-width: 100px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+.leaveButton:hover{
+    -fx-background-color: #454545;
+    -fx-border-color: white;
+    -fx-border-width: 0px 0px 5px 0px;
+}
+
+.upperHbox{
+    -fx-background-color: #303030;
+}
+
+.leftVbox{
+    -fx-background-color: #2b2b2b;
+}
+
+.pizzaListButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.pizzaListButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: white;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.pizzaCreateButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.pizzaCreateButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: blue;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+
+.userListButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.userListButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: purple;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.deleteButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.deleteButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: red;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.modifyButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.modifyButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: orange;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.orderButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.orderButton:hover{
+    -fx-background-color: #3d3d3d;
+
+    -fx-border-color: green;
+    -fx-border-width: 0px 5px 0px 0px;
 }
