@@ -82,6 +82,7 @@ public class FormsAndLists {
                             order.getLocation() + " Összeg: " + order.getPrice();
                     Label label = new Label(orderElem);
                     Button readyButton = new Button("Elkészült");
+                    readyButton.getStyleClass().add("defaultButton");
                     readyButton.setId(String.valueOf(order.getId()));
                     readyButton.setOnAction((event) -> {
                         handleOrderDone(readyButton.getId());
@@ -89,7 +90,7 @@ public class FormsAndLists {
                     HBox elemSor = new HBox(label, readyButton);
                     elemSor.setSpacing(10);
                     elemSor.setAlignment(Pos.TOP_RIGHT);
-                    elemSor.setPadding(new Insets(5, 120, 5, 0));
+                    elemSor.setPadding(new Insets(5, 10, 5, 0));
                     label.setPadding(new Insets(5, 0, 0, 0));
                     hboxLista.getChildren().addAll(elemSor);
                     hboxLista.setAlignment(Pos.TOP_CENTER);
@@ -279,7 +280,7 @@ public class FormsAndLists {
         pizzaLista.getColumns().clear();
         pizzaLista.getItems().clear();
 
-        pizzaLista.getColumns().addAll(column1, column2, column3, column4, column5, column6);
+        pizzaLista.getColumns().addAll(column1, column2, column4, column5, column6, column3);
 
         List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
         // Listából tableViewba rakás

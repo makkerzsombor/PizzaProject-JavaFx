@@ -14,7 +14,7 @@
             <VBox alignment="TOP_CENTER" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="200.0" />
             <HBox alignment="TOP_RIGHT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
                <children>
-                  <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="koszones" text="Üdvözöljük kedves xy">
+                  <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="helloLabel" text="Üdvözöljük kedves xy">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
