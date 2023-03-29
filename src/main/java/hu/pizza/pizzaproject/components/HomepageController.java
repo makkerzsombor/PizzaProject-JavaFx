@@ -45,6 +45,8 @@ public class HomepageController {
         User user = userRequests.getUserInformation(USER_URL);
         // Felső labelbe név rakás
         felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
+        userLista.getStyleClass().add("userTable");
+        pizzaLista.getStyleClass().add("pizzaTable");
     }
 
     public void kilepesClick() {
@@ -105,7 +107,7 @@ public class HomepageController {
         PizzaDto pizzaDto = formsAndLists.pizzaUpdateForm(modifyingPizza);
         // Button létrehozása
         Button mentesButton = new Button("Mentés");
-        mentesButton.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-min-width: 70px;");
+        mentesButton.getStyleClass().add("defaultButton");
 
         HBox gombSor = new HBox(mentesButton);
         gombSor.setAlignment(Pos.TOP_CENTER);
@@ -168,7 +170,7 @@ public class HomepageController {
         UserDto userDto = formsAndLists.userUpdateForm(modifyingUser);
         // Gomb kreálás
         Button mentesButton = new Button("Mentés");
-        mentesButton.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-min-width: 70px");
+        mentesButton.getStyleClass().add("defaultButton");
 
         HBox gombSor = new HBox(mentesButton);
         gombSor.setAlignment(Pos.TOP_CENTER);

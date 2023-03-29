@@ -1,22 +1,237 @@
-.nagyVbox{
-    -fx-background-image: url("bg1.png");
+.loginWindow{
+    -fx-background-image: url("jo.png");
 }
 
-.koszones{
+.windowVbox{
+    background-color: #5d5d5d;
+}
+
+.helloLabel{
     -fx-text-fill: white;
-    -fx-background-color: black;
 }
 
-.gridpane{
-    -fx-background-image: url("bg1.png");
-}
-
-.belepes{
+.loginButton{
     -fx-text-fill: white;
-    -fx-background-color: black;
+    -fx-background-color: #303030;
+    -fx-font-size: 15px;
 }
 
-.gomb{
+.loginButton:hover{
+    -fx-background-color: #454545;
+}
+
+.defaultButton{
     -fx-text-fill: white;
-    -fx-background-color: black;
+    -fx-background-color: #303030;
+    -fx-min-width: 100px;
+    -fx-min-height: 25px;
+}
+
+.defaultButton:hover{
+    -fx-background-color: #454545;
+}
+
+.leaveButton{
+    -fx-text-fill: white;
+    -fx-background-color: #303030;
+    -fx-min-height: 49px;
+    -fx-min-width: 100px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+.leaveButton:hover{
+    -fx-background-color: #454545;
+    -fx-border-color: white;
+    -fx-border-width: 0px 0px 5px 0px;
+}
+
+.upperHbox{
+    -fx-background-color: #303030;
+}
+
+.leftVbox{
+    -fx-background-color: #2b2b2b;
+}
+
+.pizzaListButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.pizzaListButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: white;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.pizzaCreateButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.pizzaCreateButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: blue;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+
+.userListButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.userListButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: purple;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.deleteButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.deleteButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: red;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.modifyButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.modifyButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: orange;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.orderButton{
+    -fx-text-fill: white;
+    -fx-background-color: #2b2b2b;
+    -fx-min-height: 70px;
+    -fx-min-width: 200px;
+    -fx-padding: 5px;
+    -fx-font-size: 15px;
+}
+
+.orderButton:hover{
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: green;
+    -fx-border-width: 0px 5px 0px 0px;
+}
+
+.orderLabel{
+    -fx-padding: 20px;
+}
+
+.pizzaTable{
+    -fx-background-color: transparent;
+    -fx-min-height: 670px;
+}
+
+.pizzaTable .column-header-background .filler{
+    -fx-background-color: transparent;
+}
+
+.pizzaTable .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.pizzaTable .column-header {
+    -fx-background-color: #303030;
+}
+
+.pizzaTable .column-header .label{
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.pizzaTable .virtual-flow .scroll-bar:vertical,
+.pizzaTable .virtual-flow .scroll-bar:vertical .track,
+.pizzaTable .virtual-flow .scroll-bar:vertical .track-background,
+.pizzaTable .virtual-flow .scroll-bar:horizontal,
+.pizzaTable .virtual-flow .scroll-bar:horizontal .track,
+.pizzaTable .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #303030;
+}
+
+.pizzaTable .virtual-flow .scroll-bar .increment-button,
+.pizzaTable .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.pizzaTable .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  white;
+}
+.pizzaTable .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  white;
+}
+
+.userTable{
+    -fx-background-color: transparent;
+    -fx-min-height: 670px;
+}
+
+.userTable .column-header-background .filler{
+    -fx-background-color: transparent;
+}
+
+.userTable .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.userTable .column-header {
+    -fx-background-color: #303030;
+}
+
+.userTable .column-header .label{
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.userTable .virtual-flow .scroll-bar:vertical,
+.userTable .virtual-flow .scroll-bar:vertical .track,
+.userTable .virtual-flow .scroll-bar:vertical .track-background,
+.userTable .virtual-flow .scroll-bar:horizontal,
+.userTable .virtual-flow .scroll-bar:horizontal .track,
+.userTable .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #303030;
+}
+
+.userTable .virtual-flow .scroll-bar .increment-button,
+.userTable .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.userTable .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  white;
+}
+.userTable .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  white;
 }

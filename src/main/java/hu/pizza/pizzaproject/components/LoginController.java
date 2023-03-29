@@ -40,7 +40,7 @@ public class LoginController {
     @FXML
     private void initialize(){
         logoView.setImage(null);
-        Image kepem = new Image("kesz_arany_logo.png");
+        Image kepem = new Image("logoszoveg.png");
         logoView.setImage(kepem);
     }
 

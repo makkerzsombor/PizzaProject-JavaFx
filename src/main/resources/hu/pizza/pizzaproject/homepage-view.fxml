@@ -7,35 +7,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="nagyVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.components.HomepageController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="windowVbox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.pizza.pizzaproject.components.HomepageController">
    <children>
-      <HBox minHeight="120.0" prefHeight="150.0" prefWidth="1024.0" styleClass="hbox">
+      <HBox minHeight="50.0" prefHeight="50.0" prefWidth="1024.0" styleClass="upperHbox">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="200.0">
+            <VBox alignment="TOP_CENTER" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="200.0" />
+            <HBox alignment="TOP_RIGHT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
                <children>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaListing" prefWidth="120.0" styleClass="gomb" text="Pizza listázás">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaCreate" prefWidth="120.0" styleClass="gomb" text="Pizza hozzáadás">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin></Button>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#userListing" prefWidth="120.0" styleClass="gomb" text="User listázás">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin></Button>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#rendelesClick" prefWidth="120.0" styleClass="gomb" text="Rendelések">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <HBox alignment="TOP_RIGHT" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="824.0" spacing="20.0" styleClass="hbox">
-               <children>
-                  <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="koszones" text="Üdvözöljük kedves xy">
+                  <Label fx:id="felsoNev" alignment="CENTER_RIGHT" minHeight="30.0" styleClass="helloLabel" text="Üdvözöljük kedves xy">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -46,9 +25,9 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" styleClass="gomb" text="Kilépés">
+                  <Button fx:id="kilepesButton" minHeight="30.0" mnemonicParsing="false" onAction="#kilepesClick" styleClass="leaveButton" text="Kilépés">
                      <HBox.margin>
-                        <Insets right="10.0" top="10.0" />
+                        <Insets />
                      </HBox.margin>
                      <font>
                         <Font size="15.0" />
@@ -58,29 +37,42 @@
             </HBox>
          </children>
       </HBox>
-      <HBox maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="1024.0">
+      <HBox maxHeight="718.0" minHeight="718.0" prefHeight="718.0" prefWidth="1024.0">
          <children>
-            <VBox alignment="BOTTOM_CENTER" maxHeight="618.0" minHeight="618.0" prefHeight="618.0" prefWidth="200.0" spacing="20.0" styleClass="vbox">
+            <VBox alignment="BOTTOM_CENTER" maxHeight="718.0" minHeight="718.0" prefHeight="718.0" prefWidth="200.0" styleClass="leftVbox">
                <children>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#modositasClick" prefWidth="120.0" styleClass="gomb" text="Módosítás">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
-                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#torlesClick" prefWidth="120.0" styleClass="gomb" text="Törlés">
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaListing" prefWidth="120.0" styleClass="pizzaListButton" text="Pizza listázás">
                      <VBox.margin>
-                        <Insets bottom="100.0" />
+                        <Insets />
                      </VBox.margin>
-                     <font>
-                        <Font size="15.0" />
-                     </font>
                   </Button>
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#pizzaCreate" prefWidth="120.0" styleClass="pizzaCreateButton" text="Pizza hozzáadás">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#userListing" prefWidth="120.0" styleClass="userListButton" text="User listázás">
+                     <VBox.margin>
+                        <Insets bottom="148.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#rendelesClick" prefWidth="120.0" styleClass="orderButton" text="Rendelések">
+                     <VBox.margin>
+                        <Insets bottom="148.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#modositasClick" prefWidth="120.0" styleClass="modifyButton" text="Módosítás">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <Button layoutX="50.0" layoutY="703.0" maxWidth="120.0" minWidth="120.0" mnemonicParsing="false" onAction="#torlesClick" prefWidth="120.0" styleClass="deleteButton" text="Törlés" />
                </children>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="adatokBox" maxHeight="618.0" maxWidth="804.0" minHeight="618.0" prefHeight="618.0" prefWidth="804.0" styleClass="mainVbox">
+            <VBox fx:id="adatokBox" maxHeight="718.0" maxWidth="804.0" minHeight="718.0" prefHeight="718.0" prefWidth="804.0" styleClass="mainVbox">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></VBox>
