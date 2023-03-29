@@ -45,6 +45,8 @@ public class HomepageController {
         User user = userRequests.getUserInformation(USER_URL);
         // Felső labelbe név rakás
         felsoNev.setText("Üdvözöljük kedves " + user.getFirst_name());
+        userLista.getStyleClass().add("userTable");
+        pizzaLista.getStyleClass().add("pizzaTable");
     }
 
     public void kilepesClick() {

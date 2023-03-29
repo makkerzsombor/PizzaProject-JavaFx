@@ -147,3 +147,91 @@
 .orderLabel{
     -fx-padding: 20px;
 }
+
+.pizzaTable{
+    -fx-background-color: transparent;
+    -fx-min-height: 670px;
+}
+
+.pizzaTable .column-header-background .filler{
+    -fx-background-color: transparent;
+}
+
+.pizzaTable .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.pizzaTable .column-header {
+    -fx-background-color: #303030;
+}
+
+.pizzaTable .column-header .label{
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.pizzaTable .virtual-flow .scroll-bar:vertical,
+.pizzaTable .virtual-flow .scroll-bar:vertical .track,
+.pizzaTable .virtual-flow .scroll-bar:vertical .track-background,
+.pizzaTable .virtual-flow .scroll-bar:horizontal,
+.pizzaTable .virtual-flow .scroll-bar:horizontal .track,
+.pizzaTable .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #303030;
+}
+
+.pizzaTable .virtual-flow .scroll-bar .increment-button,
+.pizzaTable .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.pizzaTable .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  white;
+}
+.pizzaTable .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  white;
+}
+
+.userTable{
+    -fx-background-color: transparent;
+    -fx-min-height: 670px;
+}
+
+.userTable .column-header-background .filler{
+    -fx-background-color: transparent;
+}
+
+.userTable .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.userTable .column-header {
+    -fx-background-color: #303030;
+}
+
+.userTable .column-header .label{
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.userTable .virtual-flow .scroll-bar:vertical,
+.userTable .virtual-flow .scroll-bar:vertical .track,
+.userTable .virtual-flow .scroll-bar:vertical .track-background,
+.userTable .virtual-flow .scroll-bar:horizontal,
+.userTable .virtual-flow .scroll-bar:horizontal .track,
+.userTable .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #303030;
+}
+
+.userTable .virtual-flow .scroll-bar .increment-button,
+.userTable .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.userTable .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  white;
+}
+.userTable .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  white;
+}
