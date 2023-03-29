@@ -6,13 +6,14 @@
     -fx-text-fill: white;
 }
 
-.gridpane{
-    -fx-background-image: url("bg1.png");
+.loginButton{
+    -fx-text-fill: white;
+    -fx-background-color: #303030;
+    -fx-font-size: 15px;
 }
 
-.belepes{
-    -fx-text-fill: white;
-    -fx-background-color: black;
+.loginButton:hover{
+    -fx-background-color: #454545;
 }
 
 .gomb{
