@@ -16,14 +16,21 @@
     -fx-background-color: #454545;
 }
 
-.gomb{
+.defaultButton{
     -fx-text-fill: white;
-    -fx-background-color: black;
+    -fx-background-color: #303030;
+    -fx-min-width: 100px;
+    -fx-min-height: 25px;
 }
+
+.defaultButton:hover{
+    -fx-background-color: #454545;
+}
+
 .leaveButton{
     -fx-text-fill: white;
     -fx-background-color: #303030;
-    -fx-min-height: 50px;
+    -fx-min-height: 49px;
     -fx-min-width: 100px;
     -fx-padding: 5px;
     -fx-font-size: 15px;
@@ -129,7 +136,10 @@
 
 .orderButton:hover{
     -fx-background-color: #3d3d3d;
-
     -fx-border-color: green;
     -fx-border-width: 0px 5px 0px 0px;
+}
+
+.orderLabel{
+    -fx-padding: 20px;
 }

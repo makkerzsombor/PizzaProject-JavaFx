@@ -48,9 +48,11 @@ public class FormsAndLists {
         hboxLista.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         String orderElem = "";
         Label cim = new Label("Rendelések");
-        cim.setStyle("-fx-text-fill: White;");
+        cim.getStyleClass().add("orderLabel");
+        cim.setStyle("-fx-text-fill: black;");
         cim.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         HBox cimSor = new HBox(cim);
+        HBox.setMargin(cim, new Insets(10, 0, 10, 0));
         cimSor.setAlignment(Pos.TOP_CENTER);
 
         // Van e egyáltalán nem kész pizza
@@ -63,7 +65,7 @@ public class FormsAndLists {
         // Nincs mit megjeleniteni
         if (notDoneCounter == 0) {
             Label szoveg = new Label("Nincs készülő pizza!");
-            szoveg.setStyle("-fx-text-fill: White;");
+            szoveg.setStyle("-fx-text-fill: black;");
             szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
@@ -131,6 +133,7 @@ public class FormsAndLists {
         FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
 
         Button feltoltesButton = new Button("Kép kiválasztása");
+        feltoltesButton.getStyleClass().add("defaultButton");
         feltoltesButton.setOnAction((event) ->{
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(ex1, ex2);
@@ -138,14 +141,12 @@ public class FormsAndLists {
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null) {
                 FilePathAsString.setFilePath(selectedFile.getPath());
-                // TODO: FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
             }
         });
-        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
-        Label ar = new Label("ar:");
+        Label ar = new Label("ár:");
         TextField arField = new TextField();
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -156,6 +157,7 @@ public class FormsAndLists {
 
         // Létrehozás
         Button keszButton = new Button("Létrehozás");
+        keszButton.getStyleClass().add("defaultButton");
         HBox buttonSor = new HBox(keszButton);
         HBox.setMargin(keszButton, new Insets(0, 100, 10, 0));
 
@@ -189,7 +191,6 @@ public class FormsAndLists {
 
         // Vboxba a hboxok
         kisablakVbox.getChildren().addAll(nevSor, leirasSor, kepSor, arSor, buttonSor);
-        keszButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
 
         keszButton.setOnAction((event) -> {
             if (nevTextField.getText().equals("") || leirasTextField.getText().equals("") || FilePathAsString.getFilePath().equals("")) {
@@ -226,8 +227,8 @@ public class FormsAndLists {
         // Tábla cím
         Text text = new Text();
         text.setText("Pizza adatok");
-        VBox.setMargin(text, new Insets(0, 0, 10, 0));
-        text.setStyle("-fx-fill: white; ");
+        VBox.setMargin(text, new Insets(10, 0, 10, 0));
+        text.setStyle("-fx-fill: black; ");
         text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         adatokBox.getChildren().add(text);
         adatokBox.setAlignment(Pos.TOP_CENTER);
@@ -290,8 +291,8 @@ public class FormsAndLists {
         // Tábla cím
         Text text = new Text();
         text.setText("User adatok");
-        VBox.setMargin(text, new Insets(0, 0, 10, 0));
-        text.setStyle("-fx-fill: white; ");
+        VBox.setMargin(text, new Insets(10, 0, 10, 0));
+        text.setStyle("-fx-fill: black; ");
         text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         adatokBox.getChildren().add(text);
         adatokBox.setAlignment(Pos.TOP_CENTER);
@@ -377,10 +378,9 @@ public class FormsAndLists {
                 // FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
             }
         });
-        feltoltesButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        feltoltesButton.getStyleClass().add("defaultButton");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
-        //TODO: az árat meg kell tudni jeleníteni
         String price = String.valueOf(modifyingPizza.getPrice());
         // ar
         Label ar = new Label("ar:");
