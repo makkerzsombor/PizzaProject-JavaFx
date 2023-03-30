@@ -30,7 +30,7 @@ public class OrderRequests {
 
         HttpResponse<String> response = null;
         try {
-             response = requestHandler.sendGetAll(ORDER_URL + "/get-all", accessToken);
+             response = requestHandler.sendGetAll(ORDER_URL + "/get-new-orders", accessToken);
 
             // Parse the response body into a List<User> object using Gson
             Type orderListType = new TypeToken<List<Order>>(){}.getType();
