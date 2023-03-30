@@ -19,7 +19,7 @@ public class RefreshHandler {
         HttpRequest refreshRequest = null;
         try {
             refreshRequest = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/user/refresh"))
+                    .uri(new URI("http://localhost:8080/auth/refresh"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"refreshToken\":\"" + refreshToken + "\"}"))
                     .build();
