@@ -35,7 +35,7 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    private static final String LOGIN_API_URL = "http://localhost:8080/user";
+    private static final String LOGIN_API_URL = "http://localhost:8080/auth";
 
     @FXML
     private void initialize(){
