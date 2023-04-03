@@ -311,6 +311,7 @@ public class FormsAndLists {
 
         column2.setCellValueFactory(
                 new PropertyValueFactory<>("Email"));
+        column2.setMinWidth(317);
 
         // lastname
         TableColumn<User, String> column3 =
@@ -318,6 +319,7 @@ public class FormsAndLists {
 
         column3.setCellValueFactory(
                 new PropertyValueFactory<>("last_name"));
+        column3.setMinWidth(200);
 
         // firstname
         TableColumn<User, String> column4 =
@@ -325,6 +327,7 @@ public class FormsAndLists {
 
         column4.setCellValueFactory(
                 new PropertyValueFactory<>("first_name"));
+        column4.setMinWidth(200);
 
         // admin
         TableColumn<User, Boolean> column5 =
