@@ -54,23 +54,14 @@ public class FormsAndLists {
         HBox cimSor = new HBox(cim);
         HBox.setMargin(cim, new Insets(10, 0, 10, 0));
         cimSor.setAlignment(Pos.TOP_CENTER);
-
-        // Van e egyáltalán nem kész pizza
-        int notDoneCounter = 0;
-        for (Order value : orders) {
-            if (!value.isReady()) {
-                notDoneCounter++;
-            }
-        }
-        // Nincs mit megjeleniteni
-        if (notDoneCounter == 0) {
+        if (orders.size() == 0) {
             Label szoveg = new Label("Nincs készülő pizza!");
             szoveg.setStyle("-fx-text-fill: black;");
             szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
             return new VBox(semmiCim);
-        } else {
+        }else {
             for (Order order : orders) {
                 if (!order.isReady()) {
                     List<Long> ids = new ArrayList<>();
