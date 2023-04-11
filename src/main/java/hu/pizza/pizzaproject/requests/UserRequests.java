@@ -138,7 +138,7 @@ public class UserRequests {
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the original request with the new access token
-                    response = requestHandler.sendGet(USER_URL + "/data", accessToken);
+                    response = requestHandler.sendGet(USER_URL + "/get-all", accessToken);
                     Type userListType = new TypeToken<List<User>>(){}.getType();
                     userLista = converter.fromJson(response.body(), userListType);
                 } catch (IOException | InterruptedException e) {
