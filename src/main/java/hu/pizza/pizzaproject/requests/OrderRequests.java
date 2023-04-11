@@ -48,7 +48,7 @@ public class OrderRequests {
                 ApplicationConfiguration.setJwtResponse(newJwtResponse);
                 try {
                     // Retry the original request with the new access token
-                    response = requestHandler.sendGet(ORDER_URL + "/data", accessToken);
+                    response = requestHandler.sendGet(ORDER_URL + "/get-new-orders", accessToken);
                     Type orderListType = new TypeToken<List<Order>>(){}.getType();
                     orderLista = converter.fromJson(response.body(), orderListType);
                 } catch (IOException | InterruptedException e) {
