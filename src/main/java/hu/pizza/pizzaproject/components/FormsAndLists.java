@@ -192,7 +192,7 @@ public class FormsAndLists {
                 // Helyes generálás
                 ImgurRequests imgurRequests = new ImgurRequests();
                 try {
-                    Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
+                    Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), Integer.parseInt(arField.getText()), true, leirasTextField.getText());
                     HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                     if (response.statusCode() == 200) {
                         Window window = adatokBox.getScene().getWindow();
@@ -260,24 +260,24 @@ public class FormsAndLists {
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         columns.add(column2);
 
-        // description
-        TableColumn<Pizza, String> column3 = new TableColumn<>("Description");
-        column3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        // picture
+        TableColumn<Pizza, String> column3 = new TableColumn<>("Picture");
+        column3.setCellValueFactory(new PropertyValueFactory<>("picture"));
         columns.add(column3);
 
-        // picture
-        TableColumn<Pizza, String> column4 = new TableColumn<>("Picture");
-        column4.setCellValueFactory(new PropertyValueFactory<>("picture"));
+        // price
+        TableColumn<Pizza, Integer> column4 = new TableColumn<>("Price");
+        column4.setCellValueFactory(new PropertyValueFactory<>("price"));
         columns.add(column4);
 
-        // price
-        TableColumn<Pizza, Integer> column5 = new TableColumn<>("Price");
-        column5.setCellValueFactory(new PropertyValueFactory<>("price"));
+        // available
+        TableColumn<Pizza, Boolean> column5 = new TableColumn<>("Available");
+        column5.setCellValueFactory(new PropertyValueFactory<>("available"));
         columns.add(column5);
 
-        // available
-        TableColumn<Pizza, Boolean> column6 = new TableColumn<>("Available");
-        column6.setCellValueFactory(new PropertyValueFactory<>("available"));
+        // description
+        TableColumn<Pizza, String> column6 = new TableColumn<>("Description");
+        column6.setCellValueFactory(new PropertyValueFactory<>("description"));
         columns.add(column6);
 
         List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);

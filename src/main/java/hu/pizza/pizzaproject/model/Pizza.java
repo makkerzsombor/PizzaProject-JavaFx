@@ -17,7 +17,7 @@ public class Pizza {
     private String picture;
     private boolean available;
 
-    public Pizza(String name, String picture, String description, int price, boolean available) {
+    public Pizza(String name, String picture, int price, boolean available, String description) {
         this.name = name;
         this.picture = picture;
         this.description = description;
