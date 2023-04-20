@@ -2,11 +2,10 @@ package hu.pizza.pizzaproject.requests;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
-import hu.pizza.pizzaproject.auth.JwtResponse;
 import hu.pizza.pizzaproject.model.FilePathAsString;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,27 +16,34 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImgurRequests {
-    private String clientId = "40d626f0cab2fa5";
     public String postImageToImgur(){
         // String alapértelmezetten ""
         String responseString = "";
 
         // Ez a kép előkészítés
         Path path = Path.of(FilePathAsString.getFilePath());
-        byte[] imageData = null;
+        byte[] imageData;
         try {
             imageData = Files.readAllBytes(path);
         } catch (IOException e) {
             System.out.println("Nem okés valami a képpel!");
             throw new RuntimeException(e);
         }
-        if (imageData == null){
-            System.out.println("A kép null");
+
+        if (imageData.length > 10_000_000) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setHeaderText(null);
+                alert.setContentText("A kép mérete túl nagy (Max 10MB)!");
+                alert.showAndWait();
+            });
+            throw new RuntimeException();
         }
 
         // Ez a http request
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest uploadRequest = null;
+        HttpRequest uploadRequest;
         try {
             uploadRequest = HttpRequest.newBuilder()
                     .uri(new URI("https://api.imgur.com/3/image"))

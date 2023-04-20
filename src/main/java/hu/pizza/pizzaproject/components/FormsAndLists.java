@@ -20,8 +20,10 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
@@ -37,16 +39,13 @@ public class FormsAndLists {
     private final UserRequests userRequests = new UserRequests();
     private final PizzaRequests pizzaRequests = new PizzaRequests();
     private final OrderRequests orderRequests = new OrderRequests();
-    private final String ORDER_URL = "http://localhost:8080/order";
     private final String PIZZA_URL = "http://localhost:8080/pizza";
-    private final String USER_URL = "http://localhost:8080/user";
 
     public VBox orderListCreate(String BASE_URL) {
         orders.clear();
         orders.addAll(orderRequests.getallOrderRequest(BASE_URL));
         VBox hboxLista = new VBox();
         hboxLista.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
-        String orderElem = "";
         Label cim = new Label("Rendelések");
         cim.getStyleClass().add("orderLabel");
         cim.setStyle("-fx-text-fill: black;");
@@ -61,19 +60,27 @@ public class FormsAndLists {
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
             return new VBox(semmiCim);
-        }else {
+        } else {
             for (Order order : orders) {
                 if (!order.isReady()) {
                     List<Long> ids = new ArrayList<>();
-                    for (var i = 0; i < order.getOrderPizzas().size(); i++){
+                    for (var i = 0; i < order.getOrderPizzas().size(); i++) {
                         ids.add(order.getOrderPizzas().get(i).getId());
                     }
-                    orderElem = "userId: " + order.getUser_id() + " pizzaIds: " + ids + " Időpont: " +
-                            order.getOrder_date() + " Telefon: " + order.getPhone_number() + " Cím: " +
-                            order.getLocation() + " Összeg: " + order.getPrice();
+                    String pattern = "yyyy MMMM dd HH:mm:ss";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("hu", "HU"));
+                    String formattedDate = simpleDateFormat.format(order.getOrder_date());
+                    String orderElem = "Felhasználó azonosító: " + order.getUser_id() + "\t" +
+                            "Pizzák: " + ids + "\t" +
+                            "Dátum: " + formattedDate + "\n" +
+                            "Telefon szám: " + order.getPhone_number() + "\t" +
+                            "Kiszállítási cím: " + order.getLocation() + "\t" +
+                            "Összeg: " + order.getPrice();
                     Label label = new Label(orderElem);
+                    label.setAlignment(Pos.CENTER_LEFT);
                     Button readyButton = new Button("Elkészült");
                     readyButton.getStyleClass().add("defaultButton");
+                    readyButton.getStyleClass().add("readyButton");
                     readyButton.setId(String.valueOf(order.getId()));
                     readyButton.setOnAction((event) -> {
                         handleOrderDone(readyButton.getId());
@@ -96,6 +103,7 @@ public class FormsAndLists {
 
     public void handleOrderDone(String elem) {
         long index = Integer.parseInt(elem.substring(0, 1));
+        String ORDER_URL = "http://localhost:8080/order";
         HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
         if (response.statusCode() == 200) {
             adatokBox.getChildren().clear();
@@ -126,15 +134,7 @@ public class FormsAndLists {
 
         Button feltoltesButton = new Button("Kép kiválasztása");
         feltoltesButton.getStyleClass().add("defaultButton");
-        feltoltesButton.setOnAction((event) ->{
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(ex1, ex2);
-            Window window = kilepesButton.getScene().getWindow();
-            File selectedFile = fileChooser.showOpenDialog(window);
-            if (selectedFile != null) {
-                FilePathAsString.setFilePath(selectedFile.getPath());
-            }
-        });
+        buttonInit(kilepesButton, ex1, ex2, feltoltesButton);
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
@@ -142,7 +142,7 @@ public class FormsAndLists {
         TextField arField = new TextField();
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                arField.setText(newValue.replaceAll("[^\\d]", ""));
+                arField.setText(newValue.replaceAll("\\D", ""));
             }
         });
         HBox arSor = new HBox(10, ar, arField);
@@ -191,148 +191,135 @@ public class FormsAndLists {
             } else {
                 // Helyes generálás
                 ImgurRequests imgurRequests = new ImgurRequests();
-                Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
-                HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
-                if (response.statusCode() == 200) {
-                    Window window = adatokBox.getScene().getWindow();
-                    System.out.println("Ez a filepath: " + FilePathAsString.getFilePath());
-                    showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
-                    // táblázatból törlés
-                    pizzaLista.getItems().clear();
-                    // lista firssitése
-                    adatokBox.getChildren().clear();
-                    adatokBox.getChildren().add(createPizzaList(pizzaLista));
-                } else if (response.statusCode() == 409) {
-                    Window window = adatokBox.getScene().getWindow();
-                    showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Ilyen nevű pizza már létezik!");
-                } else {
-                    System.out.println(response.statusCode());
-                    Window window = adatokBox.getScene().getWindow();
-                    showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Dolgozunk rajta!");
+                try {
+                    Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
+                    HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
+                    if (response.statusCode() == 200) {
+                        Window window = adatokBox.getScene().getWindow();
+                        System.out.println("Ez a filepath: " + FilePathAsString.getFilePath());
+                        showAlert(Alert.AlertType.CONFIRMATION, window, "Sikeres létrehozás", "Az adott pizzát sikeresen létrehoztuk");
+                        // táblázatból törlés
+                        pizzaLista.getItems().clear();
+                        // lista firssitése
+                        adatokBox.getChildren().clear();
+                        adatokBox.getChildren().add(createPizzaList(pizzaLista));
+                    } else if (response.statusCode() == 409) {
+                        Window window = adatokBox.getScene().getWindow();
+                        showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Ilyen nevű pizza már létezik!");
+                    } else {
+                        System.out.println(response.statusCode());
+                        Window window = adatokBox.getScene().getWindow();
+                        showAlert(Alert.AlertType.CONFIRMATION, window, "Hiba történt", "Dolgozunk rajta!");
+                    }
+                } catch (RuntimeException e) {
+                    System.out.println("Kép mérete nagyobb a megengedettnél!");
                 }
             }
         });
         return kisablakVbox;
     }
 
-    public TableView createPizzaList(TableView<Pizza> pizzaLista) {
-        // Tábla cím
-        Text text = new Text();
-        text.setText("Pizza adatok");
-        VBox.setMargin(text, new Insets(10, 0, 10, 0));
-        text.setStyle("-fx-fill: black; ");
-        text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
-        adatokBox.getChildren().add(text);
-        adatokBox.setAlignment(Pos.TOP_CENTER);
-
-        // id
-        TableColumn<Pizza, Integer> column1 =
-                new TableColumn<>("Id");
-
-        column1.setCellValueFactory(
-                new PropertyValueFactory<>("Id"));
-
-        // name
-        TableColumn<Pizza, String> column2 =
-                new TableColumn<>("Name");
-
-        column2.setCellValueFactory(
-                new PropertyValueFactory<>("name"));
-
-        // description
-        TableColumn<Pizza, String> column3 =
-                new TableColumn<>("Description");
-
-        column3.setCellValueFactory(
-                new PropertyValueFactory<>("description"));
-
-        // picture
-        TableColumn<Pizza, String> column4 =
-                new TableColumn<>("Picture");
-
-        column4.setCellValueFactory(
-                new PropertyValueFactory<>("picture"));
-
-        // price
-        TableColumn<Pizza, Integer> column5 =
-                new TableColumn<>("Price");
-
-        column5.setCellValueFactory(
-                new PropertyValueFactory<>("price"));
-
-        // available
-        TableColumn<Pizza, Boolean> column6 =
-                new TableColumn<>("Available");
-
-        column6.setCellValueFactory(
-                new PropertyValueFactory<>("available"));
-
-        //elözetes törlések
-        pizzaLista.getColumns().clear();
-        pizzaLista.getItems().clear();
-
-        pizzaLista.getColumns().addAll(column1, column2, column4, column5, column6, column3);
-
-        List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
-        // Listából tableViewba rakás
-        pizzaLista.setItems(FXCollections.observableArrayList(pizzaListaKesz));
-        return pizzaLista;
+    private void buttonInit(Button kilepesButton, FileChooser.ExtensionFilter ex1, FileChooser.ExtensionFilter ex2, Button feltoltesButton) {
+        feltoltesButton.setOnAction((event) -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            Window window = kilepesButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(window);
+            if (selectedFile != null) {
+                FilePathAsString.setFilePath(selectedFile.getPath());
+            }
+        });
     }
 
-    public TableView createUserList(TableView<User> userLista) {
+    private <T> TableView<T> createTable(TableView<T> table, String title, List<TableColumn<T, ?>> columns, List<T> items) {
         // Tábla cím
         Text text = new Text();
-        text.setText("User adatok");
+        text.setText(title);
         VBox.setMargin(text, new Insets(10, 0, 10, 0));
         text.setStyle("-fx-fill: black; ");
         text.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
         adatokBox.getChildren().add(text);
         adatokBox.setAlignment(Pos.TOP_CENTER);
 
-        // id
-        TableColumn<User, Integer> column1 =
-                new TableColumn<>("Id");
+        table.getColumns().setAll(columns);
+        table.setItems(FXCollections.observableArrayList(items));
 
-        column1.setCellValueFactory(
-                new PropertyValueFactory<>("Id"));
+        return table;
+    }
+
+
+    public TableView<Pizza> createPizzaList(TableView<Pizza> pizzaLista) {
+        List<TableColumn<Pizza, ?>> columns = new ArrayList<>();
+
+        // id
+        TableColumn<Pizza, Integer> column1 = new TableColumn<>("Id");
+        column1.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columns.add(column1);
+
+        // name
+        TableColumn<Pizza, String> column2 = new TableColumn<>("Name");
+        column2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columns.add(column2);
+
+        // description
+        TableColumn<Pizza, String> column3 = new TableColumn<>("Description");
+        column3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        columns.add(column3);
+
+        // picture
+        TableColumn<Pizza, String> column4 = new TableColumn<>("Picture");
+        column4.setCellValueFactory(new PropertyValueFactory<>("picture"));
+        columns.add(column4);
+
+        // price
+        TableColumn<Pizza, Integer> column5 = new TableColumn<>("Price");
+        column5.setCellValueFactory(new PropertyValueFactory<>("price"));
+        columns.add(column5);
+
+        // available
+        TableColumn<Pizza, Boolean> column6 = new TableColumn<>("Available");
+        column6.setCellValueFactory(new PropertyValueFactory<>("available"));
+        columns.add(column6);
+
+        List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
+        return createTable(pizzaLista, "Pizza adatok", columns, pizzaListaKesz);
+    }
+
+    public TableView<User> createUserList(TableView<User> userLista) {
+        List<TableColumn<User, ?>> columns = new ArrayList<>();
+
+        // id
+        TableColumn<User, Integer> column1 = new TableColumn<>("Id");
+        column1.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columns.add(column1);
 
         // email
-        TableColumn<User, String> column2 =
-                new TableColumn<>("Email");
-
-        column2.setCellValueFactory(
-                new PropertyValueFactory<>("Email"));
+        TableColumn<User, String> column2 = new TableColumn<>("Email");
+        column2.setCellValueFactory(new PropertyValueFactory<>("Email"));
         column2.setMinWidth(317);
+        columns.add(column2);
 
         // lastname
-        TableColumn<User, String> column3 =
-                new TableColumn<>("Lastname");
-
-        column3.setCellValueFactory(
-                new PropertyValueFactory<>("last_name"));
+        TableColumn<User, String> column3 = new TableColumn<>("Lastname");
+        column3.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         column3.setMinWidth(200);
+        columns.add(column3);
 
         // firstname
-        TableColumn<User, String> column4 =
-                new TableColumn<>("Firstname");
-
-        column4.setCellValueFactory(
-                new PropertyValueFactory<>("first_name"));
+        TableColumn<User, String> column4 = new TableColumn<>("Firstname");
+        column4.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         column4.setMinWidth(200);
+        columns.add(column4);
 
         // admin
-        TableColumn<User, Boolean> column5 =
-                new TableColumn<>("Role");
+        TableColumn<User, Boolean> column5 = new TableColumn<>("Role");
+        column5.setCellValueFactory(new PropertyValueFactory<>("admin"));
+        columns.add(column5);
 
-        column5.setCellValueFactory(
-                new PropertyValueFactory<>("admin"));
 
-        userLista.getColumns().addAll(column1, column2, column3, column4, column5);
-
-        List<User> UserListaKesz = userRequests.getallUserRequest(USER_URL);
-        // Listából tableViewba rakás
-        userLista.setItems(FXCollections.observableArrayList(UserListaKesz));
-        return userLista;
+        String USER_URL = "http://localhost:8080/user";
+        List<User> userListaKesz = userRequests.getallUserRequest(USER_URL);
+        return createTable(userLista, "Felhasználói adatok", columns, userListaKesz);
     }
 
     public PizzaDto pizzaUpdateForm(Pizza modifyingPizza) {
@@ -359,20 +346,11 @@ public class FormsAndLists {
 
         // újkép feltöltése:
         Label kep = new Label("Új kép feltöltése:");
-        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files","*.png", "*.jpg");
-        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files","*.*");
+        FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg");
+        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
 
         Button feltoltesButton = new Button("Új kép kiválasztása");
-        feltoltesButton.setOnAction((event) ->{
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(ex1, ex2);
-            Window window = feltoltesButton.getScene().getWindow();
-            File selectedFile = fileChooser.showOpenDialog(window);
-            if (selectedFile != null) {
-                FilePathAsString.setFilePath(selectedFile.getPath());
-                // FilePathAsString.getFilePath();-el lehet lekérni az adott stringet
-            }
-        });
+        buttonInit(feltoltesButton, ex1, ex2, feltoltesButton);
         feltoltesButton.getStyleClass().add("defaultButton");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
@@ -382,18 +360,14 @@ public class FormsAndLists {
         TextField arField = new TextField(price);
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                arField.setText(newValue.replaceAll("[^\\d]", ""));
+                arField.setText(newValue.replaceAll("\\D", ""));
             }
         });
         HBox arSor = new HBox(10, ar, arField);
 
         Label elerheto = new Label("Elérhető: ");
         CheckBox elerhetoCheckBox = new CheckBox();
-        if (modifyingPizza.isAvailable()) {
-            elerhetoCheckBox.setSelected(true);
-        } else {
-            elerhetoCheckBox.setSelected(false);
-        }
+        elerhetoCheckBox.setSelected(modifyingPizza.isAvailable());
         HBox elerhetoSor = new HBox(10, elerheto, elerhetoCheckBox);
 
         // kialakítás design:
@@ -415,7 +389,7 @@ public class FormsAndLists {
         nev.setPadding(new Insets(5, 0, 0, 0));
         leiras.setPadding(new Insets(5, 0, 0, 0));
         kep.setPadding(new Insets(5, 0, 0, 0));
-        linkKep.setPadding(new Insets(5,0,0,0));
+        linkKep.setPadding(new Insets(5, 0, 0, 0));
         ar.setPadding(new Insets(5, 0, 0, 0));
         elerheto.setPadding(new Insets(5, 0, 0, 0));
 
@@ -423,7 +397,7 @@ public class FormsAndLists {
         nevSor.setPadding(new Insets(10, 0, 0, 0));
         leirasSor.setPadding(new Insets(10, 0, 0, 0));
         kepSor.setPadding(new Insets(10, 35, 0, 0));
-        linkKepSor.setPadding(new Insets(10,0,0,0));
+        linkKepSor.setPadding(new Insets(10, 0, 0, 0));
         arSor.setPadding(new Insets(10, 0, 0, 0));
         elerhetoSor.setPadding(new Insets(10, 130, 0, 0));
 
@@ -444,6 +418,7 @@ public class FormsAndLists {
     }
 
     public UserDto userUpdateForm(User modifyingUser) {
+        System.out.println(modifyingUser.toString());
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         VBox kisablakVbox = new VBox(10);
 
@@ -526,5 +501,4 @@ public class FormsAndLists {
         userDto.setAdmin(adminCheckbox);
         return userDto;
     }
-
 }

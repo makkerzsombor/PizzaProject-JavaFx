@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import hu.pizza.pizzaproject.model.Order;
 import hu.pizza.pizzaproject.auth.ApplicationConfiguration;
 import hu.pizza.pizzaproject.auth.JwtResponse;
-import hu.pizza.pizzaproject.model.User;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -28,7 +27,7 @@ public class OrderRequests {
         // Gson létrehozása (kiolvasáshoz)
         Gson converter = new Gson();
 
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
              response = requestHandler.sendGetAll(ORDER_URL + "/get-new-orders", accessToken);
 
@@ -78,7 +77,7 @@ public class OrderRequests {
         String jsonBody = converter.toJson(readyOrder);
 
         // Send the PUT request to "/order/{orderId}"
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
             response = requestHandler.sendPut(ORDER_URL + '/' + updateId, accessToken, jsonBody);
         } catch (IOException | InterruptedException e) {

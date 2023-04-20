@@ -16,7 +16,7 @@ public class RefreshHandler {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         // Prepare the request
-        HttpRequest refreshRequest = null;
+        HttpRequest refreshRequest;
         try {
             refreshRequest = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:8080/auth/refresh"))

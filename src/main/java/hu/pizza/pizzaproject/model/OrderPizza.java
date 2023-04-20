@@ -1,4 +1,4 @@
-package hu.pizza.pizzaproject.auth;
+package hu.pizza.pizzaproject.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class JwtResponse {
-    private String accessToken;
-    private String refreshToken;
+public class OrderPizza {
+    private Long id;
+    private Pizza pizza;
 }
