@@ -41,6 +41,11 @@ public class FormsAndLists {
     private final OrderRequests orderRequests = new OrderRequests();
     private final String PIZZA_URL = "http://localhost:8080/pizza";
 
+    /**
+     *
+     * @param BASE_URL
+     * @return
+     */
     public VBox orderListCreate(String BASE_URL) {
         orders.clear();
         orders.addAll(orderRequests.getallOrderRequest(BASE_URL));
@@ -68,11 +73,11 @@ public class FormsAndLists {
 
             //Userid
             TableColumn<Order, Long> column1 = new TableColumn<>("Felhasználó Id");
-            column1.setCellValueFactory(new PropertyValueFactory<>("user_id"));
+            column1.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
             //Pizza id
-            TableColumn<Order, List<Long>> column2 = new TableColumn<>("Pizza Id-k");
-            column2.setCellValueFactory(new PropertyValueFactory<>("orderPizzas"));
+            TableColumn<Order, String> column2 = new TableColumn<>("Pizza Id-k");
+            column2.setCellValueFactory(new PropertyValueFactory<>("pizzaIdk"));
 
             //Idopont
             TableColumn<Order, Date> column3 = new TableColumn<>("Dátum");
