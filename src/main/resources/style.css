@@ -239,3 +239,48 @@
 .readyButton {
     -fx-alignment: center;
 }
+
+.orderTable{
+    -fx-background-color: transparent;
+    -fx-min-height: 620px;
+    -fx-max-height: 630px;
+}
+
+.orderTable .column-header-background .filler{
+    -fx-background-color: transparent;
+}
+
+.orderTable .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.orderTable .column-header {
+    -fx-background-color: #303030;
+}
+
+.orderTable .column-header .label{
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.orderTable .virtual-flow .scroll-bar:vertical,
+.orderTable .virtual-flow .scroll-bar:vertical .track,
+.orderTable .virtual-flow .scroll-bar:vertical .track-background,
+.orderTable .virtual-flow .scroll-bar:horizontal,
+.orderTable .virtual-flow .scroll-bar:horizontal .track,
+.orderTable .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: #303030;
+}
+
+.orderTable .virtual-flow .scroll-bar .increment-button,
+.orderTable .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.orderTable .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  white;
+}
+.orderTable .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  white;
+}

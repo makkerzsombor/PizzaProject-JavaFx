@@ -6,6 +6,7 @@ import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,10 +22,7 @@ import javafx.stage.Window;
 import java.io.File;
 import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
@@ -53,52 +51,62 @@ public class FormsAndLists {
         HBox cimSor = new HBox(cim);
         HBox.setMargin(cim, new Insets(10, 0, 10, 0));
         cimSor.setAlignment(Pos.TOP_CENTER);
-        if (orders.size() == 0) {
+
+        //TODO: Leellenörzés hogy nem e null a lista
+        if (orders.size() < 1) {
             Label szoveg = new Label("Nincs készülő pizza!");
             szoveg.setStyle("-fx-text-fill: black;");
             szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
             return new VBox(semmiCim);
-        } else {
-            for (Order order : orders) {
-                if (!order.isReady()) {
-                    List<Long> ids = new ArrayList<>();
-                    for (var i = 0; i < order.getOrderPizzas().size(); i++) {
-                        ids.add(order.getOrderPizzas().get(i).getId());
-                    }
-                    String pattern = "yyyy MMMM dd HH:mm:ss";
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("hu", "HU"));
-                    String formattedDate = simpleDateFormat.format(order.getOrder_date());
-                    String orderElem = "Felhasználó azonosító: " + order.getUser_id() + "\t" +
-                            "Pizzák: " + ids + "\t" +
-                            "Dátum: " + formattedDate + "\n" +
-                            "Telefon szám: " + order.getPhone_number() + "\t" +
-                            "Kiszállítási cím: " + order.getLocation() + "\t" +
-                            "Összeg: " + order.getPrice();
-                    Label label = new Label(orderElem);
-                    label.setAlignment(Pos.CENTER_LEFT);
-                    Button readyButton = new Button("Elkészült");
-                    readyButton.getStyleClass().add("defaultButton");
-                    readyButton.getStyleClass().add("readyButton");
-                    readyButton.setId(String.valueOf(order.getId()));
-                    readyButton.setOnAction((event) -> {
-                        handleOrderDone(readyButton.getId());
-                    });
-                    HBox elemSor = new HBox(label, readyButton);
-                    elemSor.setSpacing(10);
-                    elemSor.setAlignment(Pos.TOP_RIGHT);
-                    elemSor.setPadding(new Insets(5, 10, 5, 0));
-                    label.setPadding(new Insets(5, 0, 0, 0));
-                    hboxLista.getChildren().addAll(elemSor);
-                    hboxLista.setAlignment(Pos.TOP_CENTER);
-                }
-            }
-            VBox kesz = new VBox();
-            VBox cimPLuszLista = new VBox(cimSor, hboxLista);
-            kesz.getChildren().add(cimPLuszLista);
-            return kesz;
+        }else{
+            //Van készülő pizza
         }
+
+        //Create table
+        TableView orderTable = new TableView();
+
+        //Userid
+        TableColumn<Order, Integer> column1 = new TableColumn<>("User Id");
+        column1.setCellValueFactory(new PropertyValueFactory<>("user_id"));
+
+        //Pizza id
+        TableColumn<Order, List<Integer>> column2 = new TableColumn<>("Pizza Ids");
+        column2.setCellValueFactory(new PropertyValueFactory<>("orderPizzas"));
+
+        //Idopont
+        TableColumn<Order, Date> column3 = new TableColumn<>("Date");
+        column3.setCellValueFactory(new PropertyValueFactory<>("order_date"));
+
+        //Telefon
+        TableColumn<Order, String> column4 = new TableColumn<>("Telephone");
+        column4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+
+        //Cím
+        TableColumn<Order, String> column5 = new TableColumn<>("Location");
+        column5.setCellValueFactory(new PropertyValueFactory<>("location"));
+
+        //Osszeg
+        TableColumn<Order, Integer> column6 = new TableColumn<>("Price");
+        column6.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //Elkészült gomb
+        Button elkeszultgomb = new Button("Elkészült");
+        //elkeszultgomb.setId(String.valueOf(orders.get().getId()));
+
+        orderTable.getColumns().addAll(column1, column2, column3, column4, column5, column6);
+        orderTable.setItems(FXCollections.observableList(orders));
+        //Stílus hozzáadása
+        orderTable.getStyleClass().add("orderTable");
+
+        //hboxlistába berakni a tableview-ot
+        hboxLista.getChildren().add(orderTable);
+
+        // return table in vbox
+        VBox kesz = new VBox();
+        kesz.getChildren().addAll(cimSor, hboxLista);
+        return kesz;
     }
 
     public void handleOrderDone(String elem) {
@@ -372,9 +380,8 @@ public class FormsAndLists {
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
         kisablakVbox.setAlignment(Pos.TOP_CENTER);
-
-        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
-        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+        kisablakVbox.setPadding(new Insets(0, 250, 10, 0));
+        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px; ");
 
         // Hboxok
         nevSor.setAlignment(Pos.TOP_RIGHT);
@@ -463,7 +470,7 @@ public class FormsAndLists {
         adatokBox.setAlignment(Pos.CENTER);
         kisablakVbox.setAlignment(Pos.TOP_CENTER);
 
-        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
+        kisablakVbox.setPadding(new Insets(0, 250, 10, 0));
         kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
 
         // Hboxok
