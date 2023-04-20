@@ -80,7 +80,7 @@ public class LoginController {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         // Loginrequest (POST)
-        HttpRequest loginRequestPost = null;
+        HttpRequest loginRequestPost;
         try {
             loginRequestPost = HttpRequest.newBuilder()
                     .uri(new URI(LOGIN_API_URL + "/admin-login"))

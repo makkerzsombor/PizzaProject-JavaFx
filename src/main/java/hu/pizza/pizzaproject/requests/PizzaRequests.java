@@ -26,7 +26,7 @@ public class PizzaRequests {
         String jsonBody = converter.toJson(newPizza);
 
         // Send the POST request to "/pizza/add-pizza"
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
             response = requestHandler.sendPost(PIZZA_URL + "/add-pizza", accessToken, jsonBody);
         } catch (IOException | InterruptedException e) {
@@ -53,7 +53,7 @@ public class PizzaRequests {
         return response;
     }
 
-    public HttpResponse<String> updatePizzaRequest(Pizza readyPizza, int updateId, String PIZZA_URL) {
+    public HttpResponse<String> updatePizzaRequest(Pizza readyPizza, Long updateId, String PIZZA_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
         String accessToken = jwtResponse.getAccessToken();
@@ -67,7 +67,7 @@ public class PizzaRequests {
         String jsonBody = converter.toJson(readyPizza);
 
         // Send the PUT request to "/users/{userId}"
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
             response = requestHandler.sendPut(PIZZA_URL + '/' + updateId, accessToken, jsonBody);
         } catch (IOException | InterruptedException e) {

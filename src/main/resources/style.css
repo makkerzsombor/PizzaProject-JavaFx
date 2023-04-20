@@ -235,3 +235,7 @@
 .userTable .virtual-flow .scroll-bar:horizontal .thumb {
     -fx-background-color:  white;
 }
+
+.readyButton {
+    -fx-alignment: center;
+}
