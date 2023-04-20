@@ -57,13 +57,13 @@ public class LoginController {
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
         if (emailField.getText().isEmpty()) {
-            showAlert(owner, "Form Error!",
-                    "Please enter your email first!");
+            showAlert(owner, "Form Hiba!",
+                    "Kérlek írd be az emailed!");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(owner, "Form Error!",
-                    "Please enter a password first!");
+            showAlert(owner, "Form Hiba!",
+                    "Kérlek írd be a jelszavad!");
             return;
         }
 
@@ -95,11 +95,11 @@ public class LoginController {
                 ApplicationConfiguration.setJwtResponse(jwtResponse);
                 newAblak();
             }else if(response.statusCode() == 404){
-                showAlert(owner, "Form Error!",
-                        "Your email/password is incorrect");
+                showAlert(owner, "Form Hiba!",
+                        "Az email/jelszó párosod nem egyezik!");
             }else if(response.statusCode() == 403){
-                showAlert(owner, "Login Error!",
-                        "You might lack Admin rigths!");
+                showAlert(owner, "Belépési Hiba!",
+                        "Nincsen admin jogod!");
             }else{
                 System.out.println(response.statusCode());
             }

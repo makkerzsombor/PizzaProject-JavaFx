@@ -138,7 +138,7 @@ public class FormsAndLists {
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
-        Label ar = new Label("ár:");
+        Label ar = new Label("Ár:");
         TextField arField = new TextField();
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -246,7 +246,6 @@ public class FormsAndLists {
 
         return table;
     }
-
 
     public TableView<Pizza> createPizzaList(TableView<Pizza> pizzaLista) {
         List<TableColumn<Pizza, ?>> columns = new ArrayList<>();
@@ -356,7 +355,7 @@ public class FormsAndLists {
 
         String price = String.valueOf(modifyingPizza.getPrice());
         // ar
-        Label ar = new Label("ar:");
+        Label ar = new Label("Ár:");
         TextField arField = new TextField(price);
         arField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -365,7 +364,7 @@ public class FormsAndLists {
         });
         HBox arSor = new HBox(10, ar, arField);
 
-        Label elerheto = new Label("Elérhető: ");
+        Label elerheto = new Label("Elérhető:");
         CheckBox elerhetoCheckBox = new CheckBox();
         elerhetoCheckBox.setSelected(modifyingPizza.isAvailable());
         HBox elerhetoSor = new HBox(10, elerheto, elerhetoCheckBox);
@@ -424,13 +423,13 @@ public class FormsAndLists {
 
         // Firtsname
         Label firstName = new Label();
-        firstName.setText("Firstname:");
+        firstName.setText("Keresztnév:");
         TextField firstNameTextField = new TextField();
         HBox firstNameSor = new HBox(10, firstName, firstNameTextField);
 
         // Lastsname
         Label lastName = new Label();
-        lastName.setText("Lastname:");
+        lastName.setText("Vezetéknév:");
         TextField lastNameTextField = new TextField();
         HBox lastNameSor = new HBox(10, lastName, lastNameTextField);
 
@@ -442,7 +441,7 @@ public class FormsAndLists {
 
         // Password
         Label password = new Label();
-        password.setText("Password:");
+        password.setText("Jelszó:");
         TextField passwordTextField = new TextField();
         HBox passwordSor = new HBox(10, password, passwordTextField);
 
@@ -489,7 +488,7 @@ public class FormsAndLists {
         adminSor.setPadding(new Insets(10, 0, 10, 0));
 
         // Vboxba a hboxok
-        kisablakVbox.getChildren().addAll(firstNameSor, lastNameSor, emailSor, passwordSor, adminSor);
+        kisablakVbox.getChildren().addAll(lastNameSor, firstNameSor, emailSor, passwordSor, adminSor);
         // new userdto
         UserDto userDto = new UserDto();
         // feltöltés
