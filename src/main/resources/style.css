@@ -284,3 +284,14 @@
 .orderTable .virtual-flow .scroll-bar:horizontal .thumb {
     -fx-background-color:  white;
 }
+.defaultDoneButton{
+    -fx-text-fill: white;
+    -fx-background-color: #303030;
+    -fx-min-width: 100px;
+    -fx-max-height: 10px;
+    -fx-padding: -1px;
+}
+
+.defaultDoneButton:hover{
+    -fx-background-color: #454545;
+}

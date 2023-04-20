@@ -6,6 +6,7 @@ import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.net.http.HttpResponse;
@@ -52,7 +54,7 @@ public class FormsAndLists {
         HBox.setMargin(cim, new Insets(10, 0, 10, 0));
         cimSor.setAlignment(Pos.TOP_CENTER);
 
-        //TODO: Leellenörzés hogy nem e null a lista
+        //Üres lista ellenőrzés
         if (orders.size() < 1) {
             Label szoveg = new Label("Nincs készülő pizza!");
             szoveg.setStyle("-fx-text-fill: black;");
@@ -61,61 +63,84 @@ public class FormsAndLists {
             semmiCim.setAlignment(Pos.TOP_CENTER);
             return new VBox(semmiCim);
         }else{
-            //Van készülő pizza
-        }
+            //Create table
+            TableView orderTable = new TableView();
 
-        //Create table
-        TableView orderTable = new TableView();
+            //Userid
+            TableColumn<Order, Integer> column1 = new TableColumn<>("User Id");
+            column1.setCellValueFactory(new PropertyValueFactory<>("user_id"));
 
-        //Userid
-        TableColumn<Order, Integer> column1 = new TableColumn<>("User Id");
-        column1.setCellValueFactory(new PropertyValueFactory<>("user_id"));
+            //Pizza id
+            TableColumn<Order, List<Integer>> column2 = new TableColumn<>("Pizza Ids");
+            column2.setCellValueFactory(new PropertyValueFactory<>("orderPizzas"));
 
-        //Pizza id
-        TableColumn<Order, List<Integer>> column2 = new TableColumn<>("Pizza Ids");
-        column2.setCellValueFactory(new PropertyValueFactory<>("orderPizzas"));
+            //Idopont
+            TableColumn<Order, Date> column3 = new TableColumn<>("Date");
+            column3.setCellValueFactory(new PropertyValueFactory<>("order_date"));
 
-        //Idopont
-        TableColumn<Order, Date> column3 = new TableColumn<>("Date");
-        column3.setCellValueFactory(new PropertyValueFactory<>("order_date"));
+            //Telefon
+            TableColumn<Order, String> column4 = new TableColumn<>("Telephone");
+            column4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
 
-        //Telefon
-        TableColumn<Order, String> column4 = new TableColumn<>("Telephone");
-        column4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+            //Cím
+            TableColumn<Order, String> column5 = new TableColumn<>("Location");
+            column5.setCellValueFactory(new PropertyValueFactory<>("location"));
 
-        //Cím
-        TableColumn<Order, String> column5 = new TableColumn<>("Location");
-        column5.setCellValueFactory(new PropertyValueFactory<>("location"));
+            //Osszeg
+            TableColumn<Order, Integer> column6 = new TableColumn<>("Price");
+            column6.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        //Osszeg
-        TableColumn<Order, Integer> column6 = new TableColumn<>("Price");
-        column6.setCellValueFactory(new PropertyValueFactory<>("price"));
+            //Elkészült gomb
+            TableColumn<Order, Void> column7 = new TableColumn<>("Done");
+            Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
+                @Override
+                public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
+                    final TableCell<Order, Void> cell = new TableCell<>() {
+                        private final Button btn = new Button("Elkészült");
+                        {
+                            btn.getStyleClass().add("defaultDoneButton");
+                            btn.setOnAction((ActionEvent event) -> {
+                                long index = getTableView().getItems().get(getIndex()).getId();
+                                System.out.println(index);
+                                String ORDER_URL = "http://localhost:8080/order";
+                                HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
+                                if (response.statusCode() == 200) {
+                                    adatokBox.getChildren().clear();
+                                    adatokBox.getChildren().add(orderListCreate(ORDER_URL));
+                                }
+                            });
+                        }
 
-        //Elkészült gomb
-        Button elkeszultgomb = new Button("Elkészült");
-        //elkeszultgomb.setId(String.valueOf(orders.get().getId()));
+                        @Override
+                        public void updateItem(Void item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                            } else {
+                                Order order = getTableView().getItems().get(getIndex());
+                                btn.setId(String.valueOf(order.getId())); // set the id of the button to the order id
+                                setGraphic(btn);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
+            column7.setCellFactory(cellFactory);
 
-        orderTable.getColumns().addAll(column1, column2, column3, column4, column5, column6);
-        orderTable.setItems(FXCollections.observableList(orders));
-        //Stílus hozzáadása
-        orderTable.getStyleClass().add("orderTable");
 
-        //hboxlistába berakni a tableview-ot
-        hboxLista.getChildren().add(orderTable);
+            orderTable.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7);
+            orderTable.setItems(FXCollections.observableList(orders));
+            //Stílus hozzáadása
+            orderTable.getStyleClass().add("orderTable");
 
-        // return table in vbox
-        VBox kesz = new VBox();
-        kesz.getChildren().addAll(cimSor, hboxLista);
-        return kesz;
-    }
+            //hboxlistába berakni a tableview-ot
+            hboxLista.getChildren().add(orderTable);
 
-    public void handleOrderDone(String elem) {
-        long index = Integer.parseInt(elem.substring(0, 1));
-        String ORDER_URL = "http://localhost:8080/order";
-        HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
-        if (response.statusCode() == 200) {
-            adatokBox.getChildren().clear();
-            adatokBox.getChildren().add(orderListCreate(ORDER_URL));
+            // return table in vbox
+            VBox kesz = new VBox();
+            kesz.getChildren().addAll(cimSor, hboxLista);
+            return kesz;
         }
     }
 
