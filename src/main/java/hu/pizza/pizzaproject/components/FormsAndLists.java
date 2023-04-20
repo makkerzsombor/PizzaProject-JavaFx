@@ -67,31 +67,31 @@ public class FormsAndLists {
             TableView orderTable = new TableView();
 
             //Userid
-            TableColumn<Order, Integer> column1 = new TableColumn<>("User Id");
+            TableColumn<Order, Long> column1 = new TableColumn<>("Felhasználó Id");
             column1.setCellValueFactory(new PropertyValueFactory<>("user_id"));
 
             //Pizza id
-            TableColumn<Order, List<Integer>> column2 = new TableColumn<>("Pizza Ids");
+            TableColumn<Order, List<Long>> column2 = new TableColumn<>("Pizza Id-k");
             column2.setCellValueFactory(new PropertyValueFactory<>("orderPizzas"));
 
             //Idopont
-            TableColumn<Order, Date> column3 = new TableColumn<>("Date");
+            TableColumn<Order, Date> column3 = new TableColumn<>("Dátum");
             column3.setCellValueFactory(new PropertyValueFactory<>("order_date"));
 
             //Telefon
-            TableColumn<Order, String> column4 = new TableColumn<>("Telephone");
+            TableColumn<Order, String> column4 = new TableColumn<>("Telefonszám");
             column4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
 
             //Cím
-            TableColumn<Order, String> column5 = new TableColumn<>("Location");
+            TableColumn<Order, String> column5 = new TableColumn<>("Hely");
             column5.setCellValueFactory(new PropertyValueFactory<>("location"));
 
             //Osszeg
-            TableColumn<Order, Integer> column6 = new TableColumn<>("Price");
+            TableColumn<Order, Integer> column6 = new TableColumn<>("Ár");
             column6.setCellValueFactory(new PropertyValueFactory<>("price"));
 
             //Elkészült gomb
-            TableColumn<Order, Void> column7 = new TableColumn<>("Done");
+            TableColumn<Order, Void> column7 = new TableColumn<>("Kész");
             Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
                 @Override
                 public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
@@ -289,27 +289,27 @@ public class FormsAndLists {
         columns.add(column1);
 
         // name
-        TableColumn<Pizza, String> column2 = new TableColumn<>("Name");
+        TableColumn<Pizza, String> column2 = new TableColumn<>("Név");
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         columns.add(column2);
 
         // picture
-        TableColumn<Pizza, String> column3 = new TableColumn<>("Picture");
+        TableColumn<Pizza, String> column3 = new TableColumn<>("kép");
         column3.setCellValueFactory(new PropertyValueFactory<>("picture"));
         columns.add(column3);
 
         // price
-        TableColumn<Pizza, Integer> column4 = new TableColumn<>("Price");
+        TableColumn<Pizza, Integer> column4 = new TableColumn<>("Ár");
         column4.setCellValueFactory(new PropertyValueFactory<>("price"));
         columns.add(column4);
 
         // available
-        TableColumn<Pizza, Boolean> column5 = new TableColumn<>("Available");
+        TableColumn<Pizza, Boolean> column5 = new TableColumn<>("Elérhető");
         column5.setCellValueFactory(new PropertyValueFactory<>("available"));
         columns.add(column5);
 
         // description
-        TableColumn<Pizza, String> column6 = new TableColumn<>("Description");
+        TableColumn<Pizza, String> column6 = new TableColumn<>("Leírás");
         column6.setCellValueFactory(new PropertyValueFactory<>("description"));
         columns.add(column6);
 
@@ -332,19 +332,19 @@ public class FormsAndLists {
         columns.add(column2);
 
         // lastname
-        TableColumn<User, String> column3 = new TableColumn<>("Lastname");
+        TableColumn<User, String> column3 = new TableColumn<>("Vezetéknév");
         column3.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         column3.setMinWidth(200);
         columns.add(column3);
 
         // firstname
-        TableColumn<User, String> column4 = new TableColumn<>("Firstname");
+        TableColumn<User, String> column4 = new TableColumn<>("Keresztnév");
         column4.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         column4.setMinWidth(200);
         columns.add(column4);
 
         // admin
-        TableColumn<User, Boolean> column5 = new TableColumn<>("Role");
+        TableColumn<User, Boolean> column5 = new TableColumn<>("Szerep");
         column5.setCellValueFactory(new PropertyValueFactory<>("admin"));
         columns.add(column5);
 
