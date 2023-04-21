@@ -90,6 +90,8 @@ public class FormsAndLists {
             //Cím
             TableColumn<Order, String> column5 = new TableColumn<>("Hely");
             column5.setCellValueFactory(new PropertyValueFactory<>("location"));
+            column5.setMaxWidth(189);
+            column5.setMinWidth(189);
 
             //Osszeg
             TableColumn<Order, Integer> column6 = new TableColumn<>("Ár");
