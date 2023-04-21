@@ -16,6 +16,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImgurRequests {
+    /**
+     * Imgur API-ra kép feltöltés POST requestje.
+     * Ellenőrzi, hogy a kép nem nagyobb, mint 10MB.
+     * @return Response Státuszkódot ad vissza.
+     */
     public String postImageToImgur(){
         // String alapértelmezetten ""
         String responseString = "";

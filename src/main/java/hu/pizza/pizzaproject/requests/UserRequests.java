@@ -14,7 +14,13 @@ import java.util.List;
 
 
 public class UserRequests {
-
+    /**
+     * Ez a funkció kezeli a felhasználók módosítását PUT request.
+     * @param readyUser Az éppen módosítandó tulajdonságai(id nélkül).
+     * @param updateId Az éppen módosítandó felhasználó id-je.
+     * @param USER_URL String link as alap felhasználói endpointokhoz "http://localhost:8080/user".
+     * @return Http választ küld ad vissza a kérésnek megfelelően.
+     */
     public HttpResponse<String> updateUserRequest(User readyUser, Long updateId, String USER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -53,10 +59,14 @@ public class UserRequests {
                 }
             }
         }
-
         return response;
     }
 
+    /**
+     * A belépett felhasználó adatait lekérő GET request.
+     * @param USER_URL String link as alap felhasználói endpointokhoz "http://localhost:8080/user".
+     * @return A belépett felhasználó felhasználó típusú adatait küldi vissza.
+     */
     public User getUserInformation(String USER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -94,13 +104,16 @@ public class UserRequests {
                 }
             }
         }
-
         // Parse the response body into a User object using Gson then return
         System.out.println(response.body());
         return converter.fromJson(response.body(), User.class);
     }
 
-
+    /**
+     * Az összes adatbázisban megtalálható felhasználót lekérő funkció GET request.
+     * @param USER_URL USER_URL String link as alap felhasználói endpointokhoz "http://localhost:8080/user".
+     * @return Felhasználókból álló listát ad vissza.
+     */
     public List<User> getallUserRequest(String USER_URL){
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -147,10 +160,15 @@ public class UserRequests {
                 }
             }
         }
-
         return userLista;
     }
 
+    /**
+     * Egy adott felhasználó törlésére szolgáló DELETE request.
+     * @param USER_URL USER_URL USER_URL String link as alap felhasználói endpointokhoz "http://localhost:8080/user".
+     * @param userId A törlendő felhasználó id-je.
+     * @return A törlés sikereségéről küld Http választ vissza.
+     */
     public HttpResponse<String> deleteUserRequest(String USER_URL, long userId){
         // Tokenek kiolvasása
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -184,7 +202,6 @@ public class UserRequests {
                 }
             }
         }
-
         return response;
     }
 }

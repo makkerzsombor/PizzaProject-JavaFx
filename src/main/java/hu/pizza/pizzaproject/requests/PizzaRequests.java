@@ -12,6 +12,12 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class PizzaRequests {
+    /**
+     * Új pizza létrehozására szolgáló POST request.
+     * @param PIZZA_URL String "http://localhost:8080/pizza" alap pizza műveletekhez szükséges.
+     * @param newPizza A formból kiszedett Pizza típusú változó(Ez kerül feltöltésre).
+     * @return A pizza létrehozásáról kapott választ küldi nekünk vissza.
+     */
     public HttpResponse<String> addPizzaRequest(String PIZZA_URL, Pizza newPizza) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -53,6 +59,13 @@ public class PizzaRequests {
         return response;
     }
 
+    /**
+     * Pizza módosítására szolgáló PUT request.
+     * @param readyPizza A módosított pizza adatai(id nélkül, mert azt nem akarjuk változtatni).
+     * @param updateId A módosított pizza id-je.
+     * @param PIZZA_URL String "http://localhost:8080/pizza" alap pizza műveletekhez szükséges.
+     * @return A pizza módosításáról kapott választ küldi nekünk vissza.
+     */
     public HttpResponse<String> updatePizzaRequest(Pizza readyPizza, Long updateId, String PIZZA_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -95,6 +108,11 @@ public class PizzaRequests {
         return response;
     }
 
+    /**
+     * Lekéri az összes pizzát az adatbázisból a backend "http://localhost:8080/pizza/get-all" végpontját használva GET request.
+     * @param BASE_URL String "http://localhost:8080/pizza" alap pizza műveletekhez szükséges.
+     * @return Pizza típusú pizzákból álló listát ad vissza.
+     */
     public List<Pizza> getAllPizzaRequest(String BASE_URL) {
 
         // Lista<Pizza>

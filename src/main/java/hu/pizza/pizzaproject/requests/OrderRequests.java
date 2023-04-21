@@ -12,6 +12,11 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class OrderRequests {
+    /**
+     * Az összes rendelést lekérő GET request a backend "get-new-orders" végpontjáról.
+     * @param ORDER_URL String rendelések alap urljét tartalmazza "http://localhost:8080/order".
+     * @return Rendelésekből álló listát hoz létre és ad vissza.
+     */
     public List<Order> getallOrderRequest(String ORDER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
@@ -60,6 +65,13 @@ public class OrderRequests {
         // Lista visszaküldés
         return orderLista;
     }
+
+    /**
+     * Egy adott rendelésnek a státuszát változtató PUT request (false-ról true-ra).
+     * @param updateId Az adott rendelés id-ja LONG.
+     * @param ORDER_URL String rendelések alap urljét tartalmazza "http://localhost:8080/order".
+     * @return Az adott rendelés request státuszának megváltoztatása után HTTPresponse-t adja vissza.
+     */
     public HttpResponse<String> updateReadyStatus(Long updateId, String ORDER_URL) {
         // Get access and refresh tokens
         JwtResponse jwtResponse = ApplicationConfiguration.getJwtResponse();
