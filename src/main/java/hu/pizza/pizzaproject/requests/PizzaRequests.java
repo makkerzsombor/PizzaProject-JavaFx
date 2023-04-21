@@ -11,6 +11,9 @@ import java.lang.reflect.Type;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+/**
+ * Pizzakérés osztály.
+ */
 public class PizzaRequests {
     /**
      * Új pizza létrehozására szolgáló POST request.

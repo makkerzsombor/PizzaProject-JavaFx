@@ -12,7 +12,9 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Felhasználókérés osztály.
+ */
 public class UserRequests {
     /**
      * Ez a funkció kezeli a felhasználók módosítását PUT request.

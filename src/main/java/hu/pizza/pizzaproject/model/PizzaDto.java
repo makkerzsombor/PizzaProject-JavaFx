@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * PizzaDto osztály.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

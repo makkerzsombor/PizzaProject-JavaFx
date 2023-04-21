@@ -26,6 +26,9 @@ import java.util.*;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
+/**
+ * FormsAndLists osztály.
+ */
 public class FormsAndLists {
     /**
      * VBox ebbe rakjuk bele az itt létre hozott formokat, listákat, egyéb javafx elemeket.

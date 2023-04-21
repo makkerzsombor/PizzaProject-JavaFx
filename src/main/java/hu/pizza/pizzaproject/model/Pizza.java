@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Pizza osztály.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,5 +1,8 @@
 package hu.pizza.pizzaproject.auth;
 
+/**
+ * ApplikációKonfigurációs osztály.
+ */
 public abstract class ApplicationConfiguration {
     /**
      * Akárhonna lekérhető JWTResponse típusú változó.

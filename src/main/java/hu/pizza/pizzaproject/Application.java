@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Applikláció osztály.
+ */
 public class Application extends javafx.application.Application {
     /**
      * Ez a funkció indítja el a programunkat.

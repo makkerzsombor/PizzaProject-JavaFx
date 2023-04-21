@@ -15,6 +15,9 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * ImgurKérés osztály.
+ */
 public class ImgurRequests {
     /**
      * Imgur API-ra kép feltöltés POST requestje.

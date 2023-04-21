@@ -2,6 +2,9 @@ package hu.pizza.pizzaproject.model;
 
 import lombok.*;
 
+/**
+ * Felhasználó osztály.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
