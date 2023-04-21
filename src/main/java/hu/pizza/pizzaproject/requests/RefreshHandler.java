@@ -11,6 +11,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class RefreshHandler {
+    /**
+     * Amennyiben lejárt az accesstoken új tokent kér és frissíti a már meglévőt POST request, ehhez refreshtokent használ.
+     * @param refreshToken A belépett felhasználó refreshtokenje.
+     * @return Az új accesstokent adja vissza.
+     */
     public static JwtResponse refresh(String refreshToken) {
         // HttpClient
         HttpClient httpClient = HttpClient.newHttpClient();

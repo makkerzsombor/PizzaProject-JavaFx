@@ -10,6 +10,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class OrderPizza {
+    /**
+     * Rendelés id-t tartalmazó változó.
+     */
     private Long id;
+    /**
+     * Pizza tárolására Pizza típusú változó.
+     */
     private Pizza pizza;
 }

@@ -25,18 +25,34 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class LoginController {
-
+    /**
+     * Ez a logonkat tartalmazó ImageView.
+     */
     @FXML
     private ImageView logoView;
+    /**
+     * Ez az emailt tartalmazó TextField.
+     */
     @FXML
     private TextField emailField;
+    /**
+     * Ez a jelszót tartalmazó TextField.
+     */
     @FXML
     private PasswordField passwordField;
+    /**
+     * Gomb aminek lenyomásával betud lépni.
+     */
     @FXML
     private Button loginButton;
-
+    /**
+     * Loginhoz szükséges link.
+     */
     private static final String LOGIN_API_URL = "http://localhost:8080/auth";
 
+    /**
+     * Program futtatása után elinduló funkció, ami beteszi a logónkat az InageViewba.
+     */
     @FXML
     private void initialize(){
         logoView.setImage(null);
@@ -44,6 +60,12 @@ public class LoginController {
         logoView.setImage(kepem);
     }
 
+    /**
+     * Ez a függvény felelős a felugró hiba üzenetekért.
+     * @param owner A felugró ablak elhelyezéért felelős Node.
+     * @param title A felugró ablak címe.
+     * @param message A felugró ablak üzenete.
+     */
     private static void showAlert(Window owner, String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -52,7 +74,9 @@ public class LoginController {
         alert.initOwner(owner);
         alert.show();
     }
-
+    /**
+     * Belépés gomb lenyomásáért felelős funkció.
+     */
     public void loginClick() {
         // üres Field ellenőrzés
         Window owner = loginButton.getScene().getWindow();
@@ -108,6 +132,9 @@ public class LoginController {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * Fő ablakot megjelenítő funkció.
+     */
     private void newAblak(){
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("homepage-view.fxml"));
         Scene scene;

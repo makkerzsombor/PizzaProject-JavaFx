@@ -8,6 +8,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Application extends javafx.application.Application {
+    /**
+     * Ez a funkció indítja el a programunkat.
+     * @param stage Ablakon belüli GUI elem, amire megjelenik a programunk.
+     * @throws IOException Amennyiben nem sikerült a stage-et beolvasnia IOException-t dob.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("login-view.fxml"));
