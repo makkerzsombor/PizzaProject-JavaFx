@@ -7,7 +7,6 @@ import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -23,7 +22,6 @@ import javafx.util.Callback;
 
 import java.io.File;
 import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
@@ -42,9 +40,10 @@ public class FormsAndLists {
     private final String PIZZA_URL = "http://localhost:8080/pizza";
 
     /**
-     *
-     * @param BASE_URL
-     * @return
+     * Létrehozza az order táblázatot, abból a listából, amit a backendtől kapunk vissza.
+     * Amennyiben nincs készülő pizza egy text-et dob vissza "nincs készülő pizza" felírattal
+     * @param BASE_URL Egy String "http://localhost:8080/order" ami a backend endpointja.
+     * @return Egy VBox-ot add vissza, amit meg jelenít a kezelőfelület ablakon.
      */
     public VBox orderListCreate(String BASE_URL) {
         orders.clear();
