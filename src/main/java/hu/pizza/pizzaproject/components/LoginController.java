@@ -24,6 +24,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+/**
+ * Belépéskontroller osztály.
+ */
 public class LoginController {
     /**
      * Ez a logonkat tartalmazó ImageView.

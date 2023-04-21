@@ -10,6 +10,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+/**
+ * RefreshKezelő osztály.
+ */
 public class RefreshHandler {
     /**
      * Amennyiben lejárt az accesstoken új tokent kér és frissíti a már meglévőt POST request, ehhez refreshtokent használ.

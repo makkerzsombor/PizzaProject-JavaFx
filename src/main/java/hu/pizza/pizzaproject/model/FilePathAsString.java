@@ -1,5 +1,8 @@
 package hu.pizza.pizzaproject.model;
 
+/**
+ * FájlÚtSzövegként osztály.
+ */
 public abstract class FilePathAsString {
     /**
      * Egy String változó ami az adott kép elérési útvonalát tárolja.

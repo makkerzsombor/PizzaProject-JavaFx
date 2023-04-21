@@ -21,6 +21,9 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.net.http.HttpResponse;
 
+/**
+ * Homepagekontroller osztály.
+ */
 public class HomepageController {
     /**
      * Ez a VBox felelős a különféle Formok, listák és táblázatok megjelenítéséért.

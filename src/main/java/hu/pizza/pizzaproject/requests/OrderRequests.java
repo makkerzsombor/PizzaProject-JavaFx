@@ -11,6 +11,9 @@ import java.lang.reflect.Type;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+/**
+ * RendelésKérés osztály.
+ */
 public class OrderRequests {
     /**
      * Az összes rendelést lekérő GET request a backend "get-new-orders" végpontjáról.
