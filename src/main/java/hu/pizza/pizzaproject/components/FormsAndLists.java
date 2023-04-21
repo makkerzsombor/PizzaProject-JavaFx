@@ -27,16 +27,38 @@ import java.util.*;
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
 public class FormsAndLists {
+    /**
+     * VBox ebbe rakjuk bele az itt létre hozott formokat, listákat, egyéb javafx elemeket.
+     */
     private final VBox adatokBox;
 
+    /**
+     * FormsandLists konstruktora.
+     * @param adatokBox VBox-ot vár amibe belerakja az itt elkészült elemeket.
+     */
     public FormsAndLists(VBox adatokBox) {
         this.adatokBox = adatokBox;
     }
 
+    /**
+     * Rendelések listája.
+     */
     private static final List<Order> orders = new ArrayList<>();
+    /**
+     * Felhasználó kérések osztálya példányosítva.
+     */
     private final UserRequests userRequests = new UserRequests();
+    /**
+     * Pizza kérések osztálya példányosítva.
+     */
     private final PizzaRequests pizzaRequests = new PizzaRequests();
+    /**
+     * Rendelések kérések osztálya példányosítva.
+     */
     private final OrderRequests orderRequests = new OrderRequests();
+    /**
+     * Pizza kérésekhez tartozó alap link.
+     */
     private final String PIZZA_URL = "http://localhost:8080/pizza";
 
     /**
@@ -150,6 +172,12 @@ public class FormsAndLists {
         }
     }
 
+    /**
+     * Pizza létrehozáshoz használt funkció, ami egy formot hoz létre egy VBoxon belülre.
+     * @param kilepesButton Stage-en megtalálható elem, a pontos elhelyezés érdekében.
+     * @param pizzaLista Pizza típusú pizzák listája.
+     * @return Vbox-ot ad vissza, amiben megtalálható a pizza létregozási form.
+     */
     public VBox createPizza(Button kilepesButton, TableView<Pizza> pizzaLista) {
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)
         FilePathAsString.setFilePath("");
@@ -258,6 +286,13 @@ public class FormsAndLists {
         return kisablakVbox;
     }
 
+    /**
+     *
+     * @param kilepesButton Stage-en megtalálható elem, a pontos elhelyezés érdekében.
+     * @param ex1 Képfájlok filtere csakis kép fájlokat lehet látni.
+     * @param ex2 Filtere akármilyen kiterjesztésű fájlokat lehet látni.
+     * @param feltoltesButton Gomb aminek a lenyomásával képet tudunk kiválasztani a gépről feltöltésre.
+     */
     private void buttonInit(Button kilepesButton, FileChooser.ExtensionFilter ex1, FileChooser.ExtensionFilter ex2, Button feltoltesButton) {
         feltoltesButton.setOnAction((event) -> {
             FileChooser fileChooser = new FileChooser();
@@ -270,6 +305,15 @@ public class FormsAndLists {
         });
     }
 
+    /**
+     * Ez a funkció hozza létre a Pizza, illetve a Felhasználó táblázatokat.
+     * @param table TableView, ami akármilyen adatokal dolgozhat.
+     * @param title String ez lesz a tábla címe/neve.
+     * @param columns TableColumn Lista, ami elfogad az oszlopnak Pizza és Felhasználó típusú adatokat is.
+     * @param items Lista ami akármilyen adatokat tartalmazhat.
+     * @return TableView-t ad vissza a megfelelő típusokkal és elemekkel.
+     * @param <T> Lehet Pizza/Felhasználó típusú adat.
+     */
     private <T> TableView<T> createTable(TableView<T> table, String title, List<TableColumn<T, ?>> columns, List<T> items) {
         // Tábla cím
         Text text = new Text();
@@ -286,6 +330,11 @@ public class FormsAndLists {
         return table;
     }
 
+    /**
+     * Ez a funkció kéri le az összes pizza adatát majd küldi tovább a createTable funkciónak, hogy az létre hozza a táblázatot.
+     * @param pizzaLista Pizza típusú adatokat tartalmazó TableView.
+     * @return Vissza adja a createTabletől visszakapott TableView-t és ezt továbbítja;
+     */
     public TableView<Pizza> createPizzaList(TableView<Pizza> pizzaLista) {
         List<TableColumn<Pizza, ?>> columns = new ArrayList<>();
 
@@ -323,6 +372,11 @@ public class FormsAndLists {
         return createTable(pizzaLista, "Pizza adatok", columns, pizzaListaKesz);
     }
 
+    /**
+     * Ez a funkció kéri le az összes felhasználó adatát majd küldi tovább a createTable funkciónak, hogy az létre hozza a táblázatot.
+     * @param userLista Felhasználó típusú adatokat tartalmazó TableView.
+     * @return Vissza adja a createTabletől visszakapott TableView-t és ezt továbbítja;
+     */
     public TableView<User> createUserList(TableView<User> userLista) {
         List<TableColumn<User, ?>> columns = new ArrayList<>();
 
@@ -360,6 +414,11 @@ public class FormsAndLists {
         return createTable(userLista, "Felhasználói adatok", columns, userListaKesz);
     }
 
+    /**
+     * Ez a funkció hozza létre a módosítandó pizza formot.
+     * @param modifyingPizza Ez a módosítandó pizza adatait tartalmazó pizza típusú változó.
+     * @return PizzaDto típusú adatot ad vissza.
+     */
     public PizzaDto pizzaUpdateForm(Pizza modifyingPizza) {
         FilePathAsString.setFilePath("");
         VBox kisablakVbox = new VBox(10);
@@ -454,6 +513,11 @@ public class FormsAndLists {
         return pizzaDto;
     }
 
+    /**
+     * Ez a funkció hozza létre a módosítandó felhasználó formot.
+     * @param modifyingUser Ez a módosítandó felhasználó adatait tartalmazó felhasználó típusú változó.
+     * @return UserDto típusú adatot ad vissza.
+     */
     public UserDto userUpdateForm(User modifyingUser) {
         System.out.println(modifyingUser.toString());
         // Sceneben form létrehozása (A keszButton kell, mert csak így lehet margint állítani)

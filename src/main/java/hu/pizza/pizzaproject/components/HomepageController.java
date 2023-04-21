@@ -22,21 +22,50 @@ import java.io.IOException;
 import java.net.http.HttpResponse;
 
 public class HomepageController {
+    /**
+     * Ez a VBox felelős a különféle Formok, listák és táblázatok megjelenítéséért.
+     */
     @FXML
     private VBox adatokBox = new VBox();
+    /**
+     * Egy gomb, amivel kitudunk lépni.
+     */
     @FXML
     private Button kilepesButton;
+    /**
+     * Egy Label, amiben a belépett felhasználó keresztneve szerepel.
+     */
     @FXML
     private Label felsoNev;
+    /**
+     * Felhasználókat tartalmazó TableView.
+     */
     @FXML
     private final TableView<User> userLista = new TableView<>();
+    /**
+     * Pizzákat tartalmazó TableView.
+     */
     @FXML
     private final TableView<Pizza> pizzaLista = new TableView<>();
+    /**
+     * Felhasználók kezelésére használt link.
+     */
     private final String USER_URL = "http://localhost:8080/user";
+    /**
+     * Felhasználókkal kapcsolatos kérésekre használt UserRequest osztály.
+     */
     private final UserRequests userRequests = new UserRequests();
+    /**
+     * Pizzákkal kapcsolatos kérésekre használt PizzaRequest osztály.
+     */
     private final PizzaRequests pizzaRequests = new PizzaRequests();
+    /**
+     * Ez a boolean mutatja meg, hogy éppen melyik TableView van megnyitva(usertáblázat = true, pizzatáblázat = false).
+     */
     private boolean userTable;
-
+    /**
+     * Lefutáskor elinduló funkció,ami a felső labelbe berakja a belépett felhasználó keresztnevét.
+     */
     @FXML
     private void initialize() {
         User user = userRequests.getUserInformation(USER_URL);
@@ -46,6 +75,9 @@ public class HomepageController {
         pizzaLista.getStyleClass().add("pizzaTable");
     }
 
+    /**
+     * Kiléptett a belépés ablakra és törli a felhasználói Tokeneket.
+     */
     public void kilepesClick() {
         ApplicationConfiguration.setJwtResponse(null);
 
@@ -71,6 +103,9 @@ public class HomepageController {
         stagebezaras.close();
     }
 
+    /**
+     * Leellőrzi, hogy melyik táblázat van megnyitva és alapján küldi módosítási form létrehozásához kérést.
+     */
     public void modositasClick() {
         if (userTable) {
             int selectedIndex = userLista.getSelectionModel().getSelectedIndex();
@@ -95,7 +130,10 @@ public class HomepageController {
             }
         }
     }
-
+    /**
+     * Ez a funkció rakja bele az adatokVBox-ba a pizza módosítás formot.
+     * @param modifyingPizza Kijelölt Pizza típusú pizza.
+     */
     private void pizzaModositasFormCreate(Pizza modifyingPizza) {
         // FormsandLists
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
@@ -150,6 +188,11 @@ public class HomepageController {
         });
     }
 
+    /**
+     * Ez a funkció tölti fel a már módosított pizza adatait azt adatbázisba.
+     * @param readyPizza Módosítandó pizza adatai.
+     * @param updateId Módosítandó pizza id-je
+     */
     private void pizzaModositasFelmasolas(Pizza readyPizza, Long updateId) {
         // Modositas
         String PIZZA_URL = "http://localhost:8080/pizza";
@@ -165,6 +208,10 @@ public class HomepageController {
         pizzaListCreate();
     }
 
+    /**
+     * Ez a funkció rakja bele az adatokVBox-ba a felhasználó módosítás formot.
+     * @param modifyingUser Kijelölt Felhaszáló típusú felhasználó.
+     */
     private void userModositasFormCreate(User modifyingUser) {
         // FormsandLists
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
@@ -220,6 +267,11 @@ public class HomepageController {
         });
     }
 
+    /**
+     * Beírt email ellenőrzése.
+     * @param email String megadott email.
+     * @return Boolean, hogy megfelelő-e az email formája.
+     */
     private boolean isValidEmail(String email) {
         if (email == null) {
             return false;
@@ -231,6 +283,11 @@ public class HomepageController {
         return email.matches(emailRegex);
     }
 
+    /**
+     * Ez a funkció tölti fel a már módosított felhasználó adatait azt adatbázisba.
+     * @param readyUser Módosítandó felhasználó adatai.
+     * @param updateId Módosítandó felhasználó id-je
+     */
     private void userModositasFelmasolas(User readyUser, Long updateId) {
         // Modositas
         HttpResponse<String> response = userRequests.updateUserRequest(readyUser, updateId, USER_URL);
@@ -244,7 +301,13 @@ public class HomepageController {
         // Táblázat újra generálása
         userListCreate();
     }
-
+    /**
+     * Ez a funkció hozza létre a különböző felugró (figyelmeztető/hiba) ablakokat.
+     * @param alertType Az alert typusát kell megadni.
+     * @param owner Az alert elhelyezéséért felelős Node.
+     * @param title Az alert címe.
+     * @param message Az alert üzenete.
+     */
     public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -253,7 +316,10 @@ public class HomepageController {
         alert.initOwner(owner);
         alert.show();
     }
-
+    /**
+     * Megnézi, hogy melyik tábla kijelölve, amenyiben nincs kijelölve semmi hibát dob, amennyiben pizza van kijelölve hibát dob.
+     * Amennyiben felhasználó volt kijelölve meghívja a megerősítoAlert-et.
+     */
     public void torlesClick() {
         if (userTable) {
             // Kijelölés ellenőrzése
@@ -271,6 +337,11 @@ public class HomepageController {
         }
     }
 
+    /**
+     * Ezen az ablakon döntheti el, hogy az adott felhasználót tényleges szeretné-e törölni.
+     * @param owner Az alert elhelyezéséért felelős Node.
+     * @param selectedIndex A kijelölt felhasználó indexe a atáblázatból.
+     */
     private void megerositoAlert(Window owner, long selectedIndex) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Biztos!");
@@ -293,6 +364,10 @@ public class HomepageController {
         }
     }
 
+    /**
+     * Ez a funkció küldi el a kérést, hogy az adott felhasználót a backend törölje az adatbázisból.
+     * @param selectedIndex A kijelölt felhasználó indexe a atáblázatból.
+     */
     private void userVeglegesTorles(long selectedIndex) {
         // Törlés
         HttpResponse<String> response = userRequests.deleteUserRequest(USER_URL, selectedIndex);
@@ -307,25 +382,36 @@ public class HomepageController {
         userListCreate();
     }
 
+    /**
+     * A megjelenítő VBox tartalmát eltávolítjuk.
+     */
     private void adatokBoxClear() {
         adatokBox.getChildren().clear();
     }
-
+    /**
+     * Ez a funkció hívja meg a pizzaTáblázat létrehozását.
+     */
     public void pizzaListing() {
         pizzaListCreate();
     }
-
+    /**
+     * Ez a funkció hívja meg a pizzaForm létrehozását, amiben új pizzát tud készíteni.
+     */
     public void pizzaCreate() {
         addPizzaFormCreate();
     }
-
+    /**
+     * Ez a funkció hívja meg a pizza módosítás form létrehozását.
+     */
     private void addPizzaFormCreate() {
         adatokBoxClear();
         //Létrehozott formandlist
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBox.getChildren().add(formsAndLists.createPizza(kilepesButton, pizzaLista));
     }
-
+    /**
+     * Ez a funkció hívja meg a felhasználóTáblázat létrehozását.
+     */
     private void userListCreate() {
         userTable = true;
         adatokBoxClear();
@@ -335,7 +421,9 @@ public class HomepageController {
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBox.getChildren().add(formsAndLists.createUserList(userLista));
     }
-
+    /**
+     * Ez a funkció hívja meg a pizzaTáblázat létrehozását.
+     */
     private void pizzaListCreate() {
         userTable = false;
         adatokBoxClear();
@@ -344,15 +432,22 @@ public class HomepageController {
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBox.getChildren().add(formsAndLists.createPizzaList(pizzaLista));
     }
-
+    /**
+     * Ez a funkció hívja meg a felhasználóTáblázat létrehozását.
+     */
     public void userListing() {
         userListCreate();
     }
-
+    /**
+     * Rendelések kilistázása.
+     */
     public void rendelesClick() {
         rendelesFormFrissites();
     }
 
+    /**
+     * Rendelések frissítése.
+     */
     public void rendelesFormFrissites() {
         FormsAndLists formsAndLists = new FormsAndLists(adatokBox);
         adatokBoxClear();
