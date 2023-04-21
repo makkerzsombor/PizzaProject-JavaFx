@@ -6,6 +6,8 @@ import hu.pizza.pizzaproject.requests.OrderRequests;
 import hu.pizza.pizzaproject.requests.PizzaRequests;
 import hu.pizza.pizzaproject.requests.UserRequests;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -17,14 +19,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import static hu.pizza.pizzaproject.components.HomepageController.showAlert;
 
@@ -41,6 +41,11 @@ public class FormsAndLists {
     private final OrderRequests orderRequests = new OrderRequests();
     private final String PIZZA_URL = "http://localhost:8080/pizza";
 
+    /**
+     *
+     * @param BASE_URL
+     * @return
+     */
     public VBox orderListCreate(String BASE_URL) {
         orders.clear();
         orders.addAll(orderRequests.getallOrderRequest(BASE_URL));
@@ -53,61 +58,96 @@ public class FormsAndLists {
         HBox cimSor = new HBox(cim);
         HBox.setMargin(cim, new Insets(10, 0, 10, 0));
         cimSor.setAlignment(Pos.TOP_CENTER);
-        if (orders.size() == 0) {
+
+        //Üres lista ellenőrzés
+        if (orders.size() < 1) {
             Label szoveg = new Label("Nincs készülő pizza!");
             szoveg.setStyle("-fx-text-fill: black;");
             szoveg.setFont(Font.font("Segoe UI", FontWeight.BOLD, 15));
             VBox semmiCim = new VBox(cim, szoveg);
             semmiCim.setAlignment(Pos.TOP_CENTER);
             return new VBox(semmiCim);
-        } else {
-            for (Order order : orders) {
-                if (!order.isReady()) {
-                    List<Long> ids = new ArrayList<>();
-                    for (var i = 0; i < order.getOrderPizzas().size(); i++) {
-                        ids.add(order.getOrderPizzas().get(i).getId());
-                    }
-                    String pattern = "yyyy MMMM dd HH:mm:ss";
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("hu", "HU"));
-                    String formattedDate = simpleDateFormat.format(order.getOrder_date());
-                    String orderElem = "Felhasználó azonosító: " + order.getUser_id() + "\t" +
-                            "Pizzák: " + ids + "\t" +
-                            "Dátum: " + formattedDate + "\n" +
-                            "Telefon szám: " + order.getPhone_number() + "\t" +
-                            "Kiszállítási cím: " + order.getLocation() + "\t" +
-                            "Összeg: " + order.getPrice();
-                    Label label = new Label(orderElem);
-                    label.setAlignment(Pos.CENTER_LEFT);
-                    Button readyButton = new Button("Elkészült");
-                    readyButton.getStyleClass().add("defaultButton");
-                    readyButton.getStyleClass().add("readyButton");
-                    readyButton.setId(String.valueOf(order.getId()));
-                    readyButton.setOnAction((event) -> {
-                        handleOrderDone(readyButton.getId());
-                    });
-                    HBox elemSor = new HBox(label, readyButton);
-                    elemSor.setSpacing(10);
-                    elemSor.setAlignment(Pos.TOP_RIGHT);
-                    elemSor.setPadding(new Insets(5, 10, 5, 0));
-                    label.setPadding(new Insets(5, 0, 0, 0));
-                    hboxLista.getChildren().addAll(elemSor);
-                    hboxLista.setAlignment(Pos.TOP_CENTER);
-                }
-            }
-            VBox kesz = new VBox();
-            VBox cimPLuszLista = new VBox(cimSor, hboxLista);
-            kesz.getChildren().add(cimPLuszLista);
-            return kesz;
-        }
-    }
+        }else{
+            //Create table
+            TableView orderTable = new TableView();
 
-    public void handleOrderDone(String elem) {
-        long index = Integer.parseInt(elem.substring(0, 1));
-        String ORDER_URL = "http://localhost:8080/order";
-        HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
-        if (response.statusCode() == 200) {
-            adatokBox.getChildren().clear();
-            adatokBox.getChildren().add(orderListCreate(ORDER_URL));
+            //Userid
+            TableColumn<Order, Long> column1 = new TableColumn<>("Felhasználó Id");
+            column1.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+            //Pizza id
+            TableColumn<Order, String> column2 = new TableColumn<>("Pizza Id-k");
+            column2.setCellValueFactory(new PropertyValueFactory<>("pizzaIdk"));
+
+            //Idopont
+            TableColumn<Order, Date> column3 = new TableColumn<>("Dátum");
+            column3.setCellValueFactory(new PropertyValueFactory<>("order_date"));
+
+            //Telefon
+            TableColumn<Order, String> column4 = new TableColumn<>("Telefonszám");
+            column4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+
+            //Cím
+            TableColumn<Order, String> column5 = new TableColumn<>("Hely");
+            column5.setCellValueFactory(new PropertyValueFactory<>("location"));
+            column5.setMaxWidth(189);
+            column5.setMinWidth(189);
+
+            //Osszeg
+            TableColumn<Order, Integer> column6 = new TableColumn<>("Ár");
+            column6.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+            //Elkészült gomb
+            TableColumn<Order, Void> column7 = new TableColumn<>("Kész");
+            Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
+                @Override
+                public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
+                    final TableCell<Order, Void> cell = new TableCell<>() {
+                        private final Button btn = new Button("Elkészült");
+                        {
+                            btn.getStyleClass().add("defaultDoneButton");
+                            btn.setOnAction((ActionEvent event) -> {
+                                long index = getTableView().getItems().get(getIndex()).getId();
+                                System.out.println(index);
+                                String ORDER_URL = "http://localhost:8080/order";
+                                HttpResponse<String> response = orderRequests.updateReadyStatus(index, ORDER_URL);
+                                if (response.statusCode() == 200) {
+                                    adatokBox.getChildren().clear();
+                                    adatokBox.getChildren().add(orderListCreate(ORDER_URL));
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void updateItem(Void item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                            } else {
+                                Order order = getTableView().getItems().get(getIndex());
+                                btn.setId(String.valueOf(order.getId())); // set the id of the button to the order id
+                                setGraphic(btn);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
+            column7.setCellFactory(cellFactory);
+
+
+            orderTable.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7);
+            orderTable.setItems(FXCollections.observableList(orders));
+            //Stílus hozzáadása
+            orderTable.getStyleClass().add("orderTable");
+
+            //hboxlistába berakni a tableview-ot
+            hboxLista.getChildren().add(orderTable);
+
+            // return table in vbox
+            VBox kesz = new VBox();
+            kesz.getChildren().addAll(cimSor, hboxLista);
+            return kesz;
         }
     }
 
@@ -192,7 +232,7 @@ public class FormsAndLists {
                 // Helyes generálás
                 ImgurRequests imgurRequests = new ImgurRequests();
                 try {
-                    Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), leirasTextField.getText(), Integer.parseInt(arField.getText()), true);
+                    Pizza newPizza = new Pizza(nevTextField.getText(), imgurRequests.postImageToImgur(), Integer.parseInt(arField.getText()), true, leirasTextField.getText());
                     HttpResponse<String> response = pizzaRequests.addPizzaRequest(PIZZA_URL, newPizza);
                     if (response.statusCode() == 200) {
                         Window window = adatokBox.getScene().getWindow();
@@ -256,28 +296,28 @@ public class FormsAndLists {
         columns.add(column1);
 
         // name
-        TableColumn<Pizza, String> column2 = new TableColumn<>("Name");
+        TableColumn<Pizza, String> column2 = new TableColumn<>("Név");
         column2.setCellValueFactory(new PropertyValueFactory<>("name"));
         columns.add(column2);
 
-        // description
-        TableColumn<Pizza, String> column3 = new TableColumn<>("Description");
-        column3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        // picture
+        TableColumn<Pizza, String> column3 = new TableColumn<>("kép");
+        column3.setCellValueFactory(new PropertyValueFactory<>("picture"));
         columns.add(column3);
 
-        // picture
-        TableColumn<Pizza, String> column4 = new TableColumn<>("Picture");
-        column4.setCellValueFactory(new PropertyValueFactory<>("picture"));
+        // price
+        TableColumn<Pizza, Integer> column4 = new TableColumn<>("Ár");
+        column4.setCellValueFactory(new PropertyValueFactory<>("price"));
         columns.add(column4);
 
-        // price
-        TableColumn<Pizza, Integer> column5 = new TableColumn<>("Price");
-        column5.setCellValueFactory(new PropertyValueFactory<>("price"));
+        // available
+        TableColumn<Pizza, Boolean> column5 = new TableColumn<>("Elérhető");
+        column5.setCellValueFactory(new PropertyValueFactory<>("available"));
         columns.add(column5);
 
-        // available
-        TableColumn<Pizza, Boolean> column6 = new TableColumn<>("Available");
-        column6.setCellValueFactory(new PropertyValueFactory<>("available"));
+        // description
+        TableColumn<Pizza, String> column6 = new TableColumn<>("Leírás");
+        column6.setCellValueFactory(new PropertyValueFactory<>("description"));
         columns.add(column6);
 
         List<Pizza> pizzaListaKesz = pizzaRequests.getAllPizzaRequest(PIZZA_URL);
@@ -299,19 +339,19 @@ public class FormsAndLists {
         columns.add(column2);
 
         // lastname
-        TableColumn<User, String> column3 = new TableColumn<>("Lastname");
+        TableColumn<User, String> column3 = new TableColumn<>("Vezetéknév");
         column3.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         column3.setMinWidth(200);
         columns.add(column3);
 
         // firstname
-        TableColumn<User, String> column4 = new TableColumn<>("Firstname");
+        TableColumn<User, String> column4 = new TableColumn<>("Keresztnév");
         column4.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         column4.setMinWidth(200);
         columns.add(column4);
 
         // admin
-        TableColumn<User, Boolean> column5 = new TableColumn<>("Role");
+        TableColumn<User, Boolean> column5 = new TableColumn<>("Szerep");
         column5.setCellValueFactory(new PropertyValueFactory<>("admin"));
         columns.add(column5);
 
@@ -372,9 +412,8 @@ public class FormsAndLists {
         // kialakítás design:
         adatokBox.setAlignment(Pos.CENTER);
         kisablakVbox.setAlignment(Pos.TOP_CENTER);
-
-        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
-        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+        kisablakVbox.setPadding(new Insets(0, 250, 10, 0));
+        kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px; ");
 
         // Hboxok
         nevSor.setAlignment(Pos.TOP_RIGHT);
@@ -463,7 +502,7 @@ public class FormsAndLists {
         adatokBox.setAlignment(Pos.CENTER);
         kisablakVbox.setAlignment(Pos.TOP_CENTER);
 
-        kisablakVbox.setPadding(new Insets(0, 320, 10, 0));
+        kisablakVbox.setPadding(new Insets(0, 250, 10, 0));
         kisablakVbox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
 
         // Hboxok

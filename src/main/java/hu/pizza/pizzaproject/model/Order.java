@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -11,7 +12,7 @@ import java.util.List;
 @ToString
 public class Order {
     private Long id;
-    private Long user_id;
+    private Long userId;
     private String location;
     private Date order_date;
     private int price;
@@ -22,5 +23,9 @@ public class Order {
     public Order(Long id, boolean ready) {
         this.id = id;
         this.ready = ready;
+    }
+
+    public String getPizzaIdk(){
+        return orderPizzas.stream().map(orderPizza -> orderPizza.getId().toString()).collect(Collectors.joining(", "));
     }
 }
