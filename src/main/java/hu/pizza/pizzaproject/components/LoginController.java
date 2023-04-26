@@ -71,8 +71,7 @@ public class LoginController {
      */
     private static void showAlert(Window owner, String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setHeaderText(title);
         alert.setContentText(message);
         alert.initOwner(owner);
         alert.show();
@@ -127,12 +126,18 @@ public class LoginController {
             }else if(response.statusCode() == 403){
                 showAlert(owner, "Belépési Hiba!",
                         "Nincsen admin jogod!");
-            }else{
+            }else if(response.statusCode() == 500) {
+                showAlert(owner, "Adatbázis hiba!",
+                        "Nincsen elindítva az adatbázis!");
+            }else {
                 System.out.println(response.statusCode());
             }
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Nem fut a backend!");
+            alert.setContentText("Indítsa el a backend alkalmazást");
+            alert.show();
         }
     }
     /**
