@@ -313,8 +313,7 @@ public class HomepageController {
      */
     public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setHeaderText(title);
         alert.setContentText(message);
         alert.initOwner(owner);
         alert.show();

@@ -200,11 +200,10 @@ public class FormsAndLists {
         Label kep = new Label("Kép:");
         // Extension filter
         FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg");
-        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
 
         Button feltoltesButton = new Button("Kép kiválasztása");
         feltoltesButton.getStyleClass().add("defaultButton");
-        buttonInit(kilepesButton, ex1, ex2, feltoltesButton);
+        buttonInit(kilepesButton, ex1, feltoltesButton);
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
         // ar
@@ -293,13 +292,12 @@ public class FormsAndLists {
      *
      * @param kilepesButton Stage-en megtalálható elem, a pontos elhelyezés érdekében.
      * @param ex1 Képfájlok filtere csakis kép fájlokat lehet látni.
-     * @param ex2 Filtere akármilyen kiterjesztésű fájlokat lehet látni.
      * @param feltoltesButton Gomb aminek a lenyomásával képet tudunk kiválasztani a gépről feltöltésre.
      */
-    private void buttonInit(Button kilepesButton, FileChooser.ExtensionFilter ex1, FileChooser.ExtensionFilter ex2, Button feltoltesButton) {
+    private void buttonInit(Button kilepesButton, FileChooser.ExtensionFilter ex1, Button feltoltesButton) {
         feltoltesButton.setOnAction((event) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(ex1, ex2);
+            fileChooser.getExtensionFilters().addAll(ex1);
             Window window = kilepesButton.getScene().getWindow();
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null) {
@@ -447,10 +445,9 @@ public class FormsAndLists {
         // újkép feltöltése:
         Label kep = new Label("Új kép feltöltése:");
         FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg");
-        FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("All Files", "*.*");
 
         Button feltoltesButton = new Button("Új kép kiválasztása");
-        buttonInit(feltoltesButton, ex1, ex2, feltoltesButton);
+        buttonInit(feltoltesButton, ex1, feltoltesButton);
         feltoltesButton.getStyleClass().add("defaultButton");
         HBox kepSor = new HBox(10, kep, feltoltesButton);
 
