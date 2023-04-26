@@ -12,7 +12,7 @@ A projekt Java 11-ben íródott. A futtatáshoz szükséges:
 - Adatbázis kezelő: [MariaDB](https://mariadb.org/)
 - Csomagkezelő: [Maven](https://mvnrepository.com/artifact/org.springframework.boot)
 
-### Telepítés
+### Forditás/Telepítés
 Ha nincs telepítve az alkalmazás, akkor a következő lépéseket kell végrehajtani:
 
 - Klónozza le a projektet a Gitből a következő paranccsal:
